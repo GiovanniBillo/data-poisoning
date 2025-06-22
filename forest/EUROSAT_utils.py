@@ -26,7 +26,7 @@ def transform_batch(example, transform):
     return example
 
 def prepare_dataset():
-    ds = load_dataset("blanchon/EuroSAT_RGB")
+    ds = load_dataset("blanchon/EuroSAT_RGB", download_mode="force_redownload")
     ds["train"] = ds["train"].map(lambda x: transform_batch(x, train_transform))
     ds["test"] = ds["test"].map(lambda x: transform_batch(x, test_transform))
     ds["train"].set_format(type='torch', columns=['image', 'label'])
