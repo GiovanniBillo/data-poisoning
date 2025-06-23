@@ -14,7 +14,8 @@ def options():
     ###########################################################################
     # Central:
     parser.add_argument('--net', default='ResNet18', type=lambda s: [str(item) for item in s.split(',')])
-    parser.add_argument('--dataset', default='CIFAR10', type=str, choices=['CIFAR10', 'CIFAR100', 'ImageNet', 'ImageNet1k', 'MNIST', 'TinyImageNet', 'EUROSAT']) # added EUROSAT options
+    # parser.add_argument('--dataset', default='CIFAR10', type=str, choices=['CIFAR10', 'CIFAR100', 'ImageNet', 'ImageNet1k', 'MNIST', 'TinyImageNet', 'EUROSAT']) # added EUROSAT options
+    parser.add_argument('--dataset', default='CIFAR10', type=str, choices=['CIFAR10', 'CIFAR100', 'ImageNet', 'ImageNet1k', 'MNIST', 'TinyImageNet']) # added EUROSAT options
     parser.add_argument('--recipe', default='gradient-matching', type=str, choices=['gradient-matching', 'gradient-matching-private', 'gradient-matching-mt',
                                                                                     'watermark', 'poison-frogs', 'metapoison', 'hidden-trigger',
                                                                                     'metapoison-v2', 'metapoison-v3', 'bullseye', 'patch',

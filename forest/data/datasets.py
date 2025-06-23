@@ -16,7 +16,7 @@ from torchvision.datasets.utils import verify_str_arg
 import warnings
 warnings.filterwarnings("ignore", "(Possibly )?corrupt EXIF data", UserWarning)
 
-from ..EUROSAT_utils import get_EUROSAT
+# from ..EUROSAT_utils import get_EUROSAT
 
 def construct_datasets(dataset, data_path, normalize=True):
     """Construct datasets with appropriate transforms."""
@@ -70,26 +70,26 @@ def construct_datasets(dataset, data_path, normalize=True):
         else:
             data_mean, data_std = tiny_imagenet_mean, tiny_imagenet_std
     # adding EUROSAT dataset to the options
-    elif dataset == 'EUROSAT':
-        # trainset = get_EUROSAT(train=True)
-        # # trainset = ImageNet1k(root=data_path, split='train', download=False, transform=transforms.ToTensor())
-        # if eurosat_mean is None:
-        #     cc = torch.cat([trainset][i][0].reshape(3, -1) for i in range(len(trainset))], dim=1)
-        #     data_mean = torch.mean(cc, dim=1).tolist()
-        #     data_std = torch.std(cc, dim=1).tolist()
-        # else:
-        #     data_mean, data_std = eurosat_mean, eurosat_std
-        trainset = get_EUROSAT(train=True)
+    # elif dataset == 'EUROSAT':
+    #     # trainset = get_EUROSAT(train=True)
+    #     # # trainset = ImageNet1k(root=data_path, split='train', download=False, transform=transforms.ToTensor())
+    #     # if eurosat_mean is None:
+    #     #     cc = torch.cat([trainset][i][0].reshape(3, -1) for i in range(len(trainset))], dim=1)
+    #     #     data_mean = torch.mean(cc, dim=1).tolist()
+    #     #     data_std = torch.std(cc, dim=1).tolist()
+    #     # else:
+    #     #     data_mean, data_std = eurosat_mean, eurosat_std
+    #     trainset = get_EUROSAT(train=True)
 
-        if eurosat_mean is None:
-            # Compute mean/std safely
-            cc = torch.cat([
-                trainset[i][0].reshape(3, -1) for i in range(min(500, len(trainset)))
-            ], dim=1)
-            data_mean = torch.mean(cc, dim=1).tolist()
-            data_std = torch.std(cc, dim=1).tolist()
-        else:
-            data_mean, data_std = eurosat_mean, eurosat_std
+    #     if eurosat_mean is None:
+    #         # Compute mean/std safely
+    #         cc = torch.cat([
+    #             trainset[i][0].reshape(3, -1) for i in range(min(500, len(trainset)))
+    #         ], dim=1)
+    #         data_mean = torch.mean(cc, dim=1).tolist()
+    #         data_std = torch.std(cc, dim=1).tolist()
+    #     else:
+    #         data_mean, data_std = eurosat_mean, eurosat_std
 
     else:
         raise ValueError(f'Invalid dataset {dataset} given.')
@@ -149,8 +149,8 @@ def construct_datasets(dataset, data_path, normalize=True):
         validset = ImageNet1k(root=data_path, split='val', download=False, transform=transform_valid)
 
     # adding EUROSAT dataset to the options
-    elif dataset == 'EUROSAT':
-        validset = get_EUROSAT(train=False) 
+    # elif dataset == 'EUROSAT':
+    #     validset = get_EUROSAT(train=False) 
     if normalize:
         validset.data_mean = data_mean
         validset.data_std = data_std
@@ -519,13 +519,13 @@ class TinyImageNet(torch.utils.data.Dataset):
 
         return target, index
 
-class EUROSAT(torch.utils.data.Dataset):
-    def __init__(self):
-        print("the EUROSAT dataset wrapper is not yet implemented")
-        pass
-    def __len__(self):
-        print("the EUROSAT dataset wrapper is not yet implemented")
-        pass
-    def __getitem__(self):
-        print("the EUROSAT dataset wrapper is not yet implemented")
-        pass
+# class EUROSAT(torch.utils.data.Dataset):
+#     def __init__(self):
+#         print("the EUROSAT dataset wrapper is not yet implemented")
+#         pass
+#     def __len__(self):
+#         print("the EUROSAT dataset wrapper is not yet implemented")
+#         pass
+#     def __getitem__(self):
+#         print("the EUROSAT dataset wrapper is not yet implemented")
+#         pass

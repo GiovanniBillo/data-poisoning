@@ -75,21 +75,21 @@ def get_model(model_name, dataset_name, pretrained=False):
                 model = getattr(torchvision.models, model_name.lower())(pretrained=pretrained, **extra_args)
             except AttributeError:
                 raise NotImplementedError(f'ImageNet model {model_name} not found at torchvision.models.')
-    elif 'EUROSAT' in dataset_name:
-        in_channels = 3
-        num_classes = 200
+    # elif 'EUROSAT' in dataset_name:
+    #     in_channels = 3
+    #     num_classes = 10
 
-        if 'VGG16' in model_name:
-            model = VGG('VGG16-TI', in_channels=in_channels, num_classes=num_classes)
-        elif 'ResNet' in model_name:
-            model = resnet_picker(model_name, dataset_name)
-        elif 'GoogleNet' in model_name:
-            raise NotImplementedError(f'EUROSAT model {model_name} not found at torchvision.models.')
-        else:
-            raise ValueError(f'Model {model_name} not implemented for TinyImageNet')
+    #     if 'VGG16' in model_name:
+    #         model = VGG('VGG16-TI', in_channels=in_channels, num_classes=num_classes)
+    #     elif 'ResNet' in model_name:
+    #         model = resnet_picker(model_name, dataset_name)
+    #     elif 'GoogleNet' in model_name:
+    #         raise NotImplementedError(f'EUROSAT model {model_name} not found at torchvision.models.')
+    #     else:
+    #         raise ValueError(f'Model {model_name} not implemented for TinyImageNet')
 
-    else:
-        raise NotImplementedError(f"Unable to get model for {model_name}, {dataset_name}: not yet implemented.")
+    # else:
+    #     raise NotImplementedError(f"Unable to get model for {model_name}, {dataset_name}: not yet implemented.")
     return model
 
 
@@ -213,10 +213,10 @@ def resnet_picker(arch, dataset):
     elif dataset == 'TinyImageNet':
         num_classes = 200
         initial_conv = [7, 2, 3]
-    elif dataset == 'EUROSAT':
-        # !!! TODO not sure if this is right for what we aim to do. During training I used the 
-        num_classes = 10
-        initial_conv = [3, 1, 1]
+    # elif dataset == 'EUROSAT':
+    #     # !!! TODO not sure if this is right for what we aim to do. During training I used the 
+    #     num_classes = 10
+        # initial_conv = [3, 1, 1]
     else:
         raise ValueError(f'Unknown dataset {dataset} for ResNet.')
 

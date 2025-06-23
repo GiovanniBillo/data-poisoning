@@ -170,10 +170,10 @@ class _Kettle():
                 params = dict(source_size=64, target_size=64, shift=64 // 4, fliplr=True)
             elif 'ImageNet' in self.args.dataset:
                 params = dict(source_size=224, target_size=224, shift=224 // 4, fliplr=True)
-            elif 'EUROSAT' in self.args.dataset:
-                params = dict(source_size=64, target_size=64, shift=64 // 4, fliplr=True)
-            else:
-                raise NotImplementedError(f"Augmentations not setup for {self.args.dataset}")
+            # elif 'EUROSAT' in self.args.dataset:
+            #     params = dict(source_size=64, target_size=64, shift=64 // 4, fliplr=True)
+            # else:
+            #     raise NotImplementedError(f"Augmentations not setup for {self.args.dataset}")
 
             if self.augmentations == 'default':
                 self.augment = RandomTransform(**params, mode='bilinear')
