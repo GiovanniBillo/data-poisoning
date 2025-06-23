@@ -97,7 +97,8 @@ class EuroSATDataset(Dataset):
 
 
 def get_EUROSAT(train=True):
-    ds = load_dataset("blanchon/EuroSAT_RGB", download_mode="force_redownload")
+    ds = load_dataset("blanchon/EuroSAT_RGB") 
+    # ds = load_dataset("blanchon/EuroSAT_RGB", download_mode="force_redownload")
     if train:
         return EuroSATDataset(ds["train"], transform=train_transform)
     else:
