@@ -71,14 +71,6 @@ def construct_datasets(dataset, data_path, normalize=True):
             data_mean, data_std = tiny_imagenet_mean, tiny_imagenet_std
     # adding EUROSAT dataset to the options
     elif dataset == 'EUROSAT':
-        # trainset = get_EUROSAT(train=True)
-        # # trainset = ImageNet1k(root=data_path, split='train', download=False, transform=transforms.ToTensor())
-        # if eurosat_mean is None:
-        #     cc = torch.cat([trainset][i][0].reshape(3, -1) for i in range(len(trainset))], dim=1)
-        #     data_mean = torch.mean(cc, dim=1).tolist()
-        #     data_std = torch.std(cc, dim=1).tolist()
-        # else:
-        #     data_mean, data_std = eurosat_mean, eurosat_std
         trainset = get_EUROSAT(train=True)
 
         if eurosat_mean is None:
@@ -519,13 +511,3 @@ class TinyImageNet(torch.utils.data.Dataset):
 
         return target, index
 
-class EUROSAT(torch.utils.data.Dataset):
-    def __init__(self):
-        print("the EUROSAT dataset wrapper is not yet implemented")
-        pass
-    def __len__(self):
-        print("the EUROSAT dataset wrapper is not yet implemented")
-        pass
-    def __getitem__(self):
-        print("the EUROSAT dataset wrapper is not yet implemented")
-        pass

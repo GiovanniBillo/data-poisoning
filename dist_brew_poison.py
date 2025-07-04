@@ -18,8 +18,10 @@ torch.multiprocessing.set_sharing_strategy(forest.consts.SHARING_STRATEGY)
 
 # Parse input arguments
 args = forest.options().parse_args()
+model_name = args.net[0]
+print("THESE ARE THE ARGUMENTS:", model_name, args)
 # Parse training strategy
-defs = forest.training_strategy(args)
+defs = forest.hyperparameters.training_strategy(model_name, args)
 # 100% reproducibility?
 if args.deterministic:
     forest.utils.set_deterministic()
