@@ -8,6 +8,8 @@ from collections import OrderedDict
 
 from .mobilenet import MobileNetV2
 from .vgg import VGG
+#ANDREA
+from .HG import HG
 
 
 def get_model(model_name, dataset_name, pretrained=False):
@@ -81,7 +83,9 @@ def get_model(model_name, dataset_name, pretrained=False):
         in_channels = 3
         num_classes = 10 
         
-        if model_name == 'ConvNet': 
+        if model_name == "HG":
+            model = HG(num_classes)
+        elif model_name == 'ConvNet': 
             model = EUROSAT_convnet() 
         # if 'VGG16' in model_name:
         #     model = VGG('VGG16-TI', in_channels=in_channels, num_classes=num_classes)

@@ -6,9 +6,6 @@ BRITTLE_NETS = ['convnet', 'mobilenet', 'vgg', 'alexnet']  # handled with lower 
 
 def training_strategy(model_name, args):
     """Parse training strategy."""
-
-    args.optimization = "custom"
-
     if args.optimization == 'conservative':
         defaults = CONSERVATIVE
     elif args.optimization == 'private-gaussian':
@@ -17,7 +14,7 @@ def training_strategy(model_name, args):
         defaults = PRIVACY_LAPLACIAN
     elif args.optimization == 'adversarial':
         defaults = ADVERSARIAL
-    elif args.optimization == 'custom':
+    elif args.optimization == 'basic':
         defaults = BASIC
     elif args.optimization == 'defensive':
         defaults = DEFENSE
@@ -94,6 +91,17 @@ class Hyperparameters:
     def asdict(self):
         return asdict(self)
 
+CUSTOM = Hyperparameters(
+    name = "custom",
+    lr =1e-02,
+    epochs = 100,
+    batch size = 16,
+    optimizer = "SGD",
+    scheduler = "",
+    weight_decay = 1e-06,
+    augmentation = TRUE,
+    privacy = dict(clip=None, noise=None, dist)
+    )
 
 CONSERVATIVE = Hyperparameters(
     name='conservative',
@@ -151,20 +159,18 @@ PRIVACY_LAPLACIAN = Hyperparameters(
 """Most simple stochastic gradient descent.
 
 This setup resembles the training procedure in MetaPoison.
-
-CHANGED TO CUSTOM
 """
 BASIC = Hyperparameters(
-    name='custom',
-    lr=1e-02,
-    epochs=100,
-    batch_size=16,
-    optimizer='SGD',
+    name='basic',
+    lr=0.1,
+    epochs=80,
+    batch_size=128,
+    optimizer='SGD-basic',
     scheduler='none',
-    weight_decay=1e-06,
+    weight_decay=0,
     augmentations=False,
     privacy=dict(clip=None, noise=None, distribution=None),
-    validate=16,
+    validate=10,
     novel_defense=dict(type='', strength=16.0, target_selection='sep-half', steps=5),
     mixing_method=dict(type='', strength=0.0, correction=False),
     adaptive_attack=True,
