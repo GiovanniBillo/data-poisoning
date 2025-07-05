@@ -7,8 +7,6 @@ BRITTLE_NETS = ['convnet', 'mobilenet', 'vgg', 'alexnet']  # handled with lower 
 def training_strategy(model_name, args):
     """Parse training strategy."""
 
-    args.optimization = "custom"
-
     if args.optimization == 'conservative':
         defaults = CONSERVATIVE
     elif args.optimization == 'private-gaussian':
@@ -160,7 +158,7 @@ BASIC = Hyperparameters(
     epochs=100,
     batch_size=16,
     optimizer='SGD',
-    scheduler='none',
+    scheduler='plateau',
     weight_decay=1e-06,
     augmentations=False,
     privacy=dict(clip=None, noise=None, distribution=None),
