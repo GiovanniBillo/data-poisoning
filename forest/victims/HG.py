@@ -36,12 +36,8 @@ class HG(nn.Module):
             nn.ReLU()
         )
 
-        # --- Decoder Path ---
-        # Note: We are discarding the decoder for classification.
-        # If this were for segmentation, we would build the up-sampling path here.
 
         # --- Classifier Head ---
-        # This replaces the entire decoder and the flawed final layers.
         self.pool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Sequential(
             nn.Linear(256, 128), # From bottleneck's 256 channels
@@ -66,20 +62,3 @@ class HG(nn.Module):
         
         return out
 
-# --- Example of usage ---
-if __name__ == "__main__":
-    # Create a dummy input tensor (e.g., batch_size=4, 3 channels, 64x64 image)
-    dummy_input = torch.randn(4, 3, 64, 64)
-    
-    # Instantiate the model for 10 classes
-    model = HG_Corrected(num_classes=10)
-    
-    # Get the output
-    output = model(dummy_input)
-    
-    print(f"Input shape: {dummy_input.shape}")
-    print(f"Model Architecture:\n{model}")
-    print(f"Output shape: {output.shape}") # Should be [4, 10]
-    
-    assert output.shape == (4, 10)
-    print("\nModel forward pass successful!")

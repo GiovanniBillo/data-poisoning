@@ -158,7 +158,7 @@ BASIC = Hyperparameters(
     epochs=100,
     batch_size=16,
     optimizer='SGD',
-    scheduler='plateau',
+    scheduler='linear',
     weight_decay=1e-06,
     augmentations=False,
     privacy=dict(clip=None, noise=None, distribution=None),
