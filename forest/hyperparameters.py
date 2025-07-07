@@ -18,6 +18,8 @@ def training_strategy(model_name, args):
         defaults = BASIC
     elif args.optimization == 'defensive':
         defaults = DEFENSE
+    elif args.optimization == "custom"
+        defaults = CUSTOM
     else:
         raise ValueError(f'Unknown opt. strategy {args.optimization}.')
     defs = Hyperparameters(**defaults.asdict())
@@ -203,3 +205,17 @@ DEFENSE = Hyperparameters(
     adaptive_attack=True,
     defend_features_only=False,
 )
+
+"""Specify custom hyperparameters for the EUROSAT convnet."""
+CUSTOM = Hyperparameters(
+    name = "custom",
+    lr =1e-02,
+    epochs = 100,
+    batch size = 16,
+    optimizer = "SGD",
+    scheduler = "plateau",
+    weight_decay = 1e-06,
+    augmentations = TRUE,
+    privacy = dict(clip=None, noise=None, dist),
+    validate=16
+    )

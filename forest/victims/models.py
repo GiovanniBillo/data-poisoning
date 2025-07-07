@@ -8,6 +8,7 @@ from collections import OrderedDict
 
 from .mobilenet import MobileNetV2
 from .vgg import VGG
+from .HG import HG
 
 
 def get_model(model_name, dataset_name, pretrained=False):
@@ -77,12 +78,11 @@ def get_model(model_name, dataset_name, pretrained=False):
                 raise NotImplementedError(f'ImageNet model {model_name} not found at torchvision.models.')
     elif 'EUROSAT' in dataset_name:
 
-        # TODO: fill out with the actual model (tested by Andrea) and put meaningful parameters         
         in_channels = 3
         num_classes = 10 
         
         if model_name == 'ConvNet': 
-            model = EUROSAT_convnet() 
+            model = EUROSAT_convnet(num_classes) 
         # if 'VGG16' in model_name:
         #     model = VGG('VGG16-TI', in_channels=in_channels, num_classes=num_classes)
         elif 'ResNet' in model_name:
@@ -131,34 +131,13 @@ def convnet(width=32, in_channels=3, num_classes=10, **kwargs):
     ]))
     return model
 
-# TODO
 # Placeholder for the actual CNN to be tested and poisoned for the eurosat dataset
-def EUROSAT_convnet(width=32, in_channels=3, num_classes=10, **kwargs):
+def EUROSAT_convnet(num_classes):
     """
     Placeholder for a custom ConvNet architecture.
     Replace the layers below with your specific design.
     """
-    model = nn.Sequential(OrderedDict([
-        ('conv0', nn.Conv2d(in_channels, 1 * width, kernel_size=3, padding=1)),
-        ('relu0', nn.ReLU()),
-        
-        ('conv1', nn.Conv2d(1 * width, 2 * width, kernel_size=3, padding=1)),
-        ('relu1', nn.ReLU()),
-        
-        ('conv2', nn.Conv2d(2 * width, 2 * width, kernel_size=3, padding=1)),
-        ('relu2', nn.ReLU()),
-        
-        ('conv3', nn.Conv2d(2 * width, 4 * width, kernel_size=3, padding=1)),
-        ('relu3', nn.ReLU()),
-        ('pool3', nn.MaxPool2d(kernel_size=3)),
-        
-        ('conv4', nn.Conv2d(4 * width, 4 * width, kernel_size=3, padding=1)),
-        ('relu4', nn.ReLU()),
-        ('pool4', nn.MaxPool2d(kernel_size=3)),
-        
-        ('flatten', nn.Flatten()),
-        ('linear', nn.Linear(36 * width, num_classes))
-    ]))
+    model = HG(num_classes) 
     
     return model
 
