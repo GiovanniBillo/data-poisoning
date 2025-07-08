@@ -3,7 +3,7 @@
 import torch
 
 from collections import defaultdict
-from torch.optim.lr_scheduller import ReduceLROnPlateau
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
@@ -309,7 +309,7 @@ def get_optimizers(model, args, defs):
         scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=defs.lr / 100, max_lr=defs.lr,
                                                       step_size_up=effective_batches // 2,
                                                       cycle_momentum=True if defs.optimizer in ['SGD'] else False)
-   elif defs.scheduler == "plateau":
+    elif defs.scheduler == "plateau":
         scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5)
 
     elif defs.scheduler == 'linear':

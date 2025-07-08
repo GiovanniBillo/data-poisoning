@@ -1,4 +1,4 @@
 --dataset=EUROSAT
 --optimization=custom
---net=convnet
---deterministic=True
+--net=ConvNet
+--deterministic

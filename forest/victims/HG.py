@@ -83,4 +83,3 @@ if __name__ == "__main__":
     
     assert output.shape == (4, 10)
     print("\nModel forward pass successful!")
->>>>>>> remotes/origin/andrea

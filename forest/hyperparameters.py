@@ -19,7 +19,7 @@ def training_strategy(model_name, args):
         defaults = BASIC
     elif args.optimization == 'defensive':
         defaults = DEFENSE
-    elif args.optimization == "custom"
+    elif args.optimization == "custom":
         defaults = CUSTOM
     else:
         raise ValueError(f'Unknown opt. strategy {args.optimization}.')
@@ -109,7 +109,7 @@ CONSERVATIVE = Hyperparameters(
     novel_defense=dict(type='', strength=16.0, target_selection='sep-half', steps=5),
     mixing_method=dict(type='', strength=0.0, correction=False),
     adaptive_attack=True,
-    defend_features_only=False,
+    defend_features_only=False
 )
 
 
@@ -127,7 +127,7 @@ PRIVACY_GAUSSIAN = Hyperparameters(
     novel_defense=dict(type='', strength=16.0, target_selection='sep-half', steps=5),
     mixing_method=dict(type='', strength=0.0, correction=False),
     adaptive_attack=True,
-    defend_features_only=False,
+    defend_features_only=False
 )
 
 
@@ -145,7 +145,7 @@ PRIVACY_LAPLACIAN = Hyperparameters(
     novel_defense=dict(type='', strength=16.0, target_selection='sep-half', steps=5),
     mixing_method=dict(type='', strength=0.0, correction=False),
     adaptive_attack=True,
-    defend_features_only=False,
+    defend_features_only=False
 )
 
 """Most simple stochastic gradient descent.
@@ -168,7 +168,7 @@ BASIC = Hyperparameters(
     novel_defense=dict(type='', strength=16.0, target_selection='sep-half', steps=5),
     mixing_method=dict(type='', strength=0.0, correction=False),
     adaptive_attack=True,
-    defend_features_only=False,
+    defend_features_only=False
 )
 
 
@@ -187,7 +187,7 @@ ADVERSARIAL = Hyperparameters(
     novel_defense=dict(type='adversarial-evasion', strength=8.0, target_selection='sep-p128', steps=5),
     mixing_method=dict(type='', strength=0.0, correction=False),
     adaptive_attack=True,
-    defend_features_only=False,
+    defend_features_only=False
 )
 
 """Implement novel defensive training to defend against the poisoning.
@@ -206,7 +206,7 @@ DEFENSE = Hyperparameters(
     novel_defense=dict(type='adversarial-wb-recombine', strength=16.0, target_selection='sep-half', steps=5),
     mixing_method=dict(type='', strength=0.0, correction=False),
     adaptive_attack=True,
-    defend_features_only=False,
+    defend_features_only=False
 )
 
 """Specify custom hyperparameters for the EUROSAT convnet."""
@@ -214,11 +214,17 @@ CUSTOM = Hyperparameters(
     name = "custom",
     lr =1e-02,
     epochs = 100,
-    batch size = 16,
+    batch_size = 16,
     optimizer = "SGD",
     scheduler = "plateau",
     weight_decay = 1e-06,
-    augmentations = TRUE,
-    privacy = dict(clip=None, noise=None, dist),
-    validate=16
+    augmentations = True,
+    privacy=dict(clip=None, noise=None, distribution=None),
+    validate=16,
+    novel_defense=dict(type='', strength=16.0,
+    target_selection='sep-half', steps=5),
+    mixing_method=dict(type='',
+    strength=0.0, correction=False),
+    adaptive_attack=True,
+    defend_features_only=False
     )
