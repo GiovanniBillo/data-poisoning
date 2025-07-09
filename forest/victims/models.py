@@ -8,6 +8,7 @@ from collections import OrderedDict
 
 from .mobilenet import MobileNetV2
 from .vgg import VGG
+#ANDREA
 from .HG import HG
 
 
@@ -41,6 +42,8 @@ def get_model(model_name, dataset_name, pretrained=False):
             model = VGG(model_name)
         elif model_name == 'MobileNetV2':
             model = MobileNetV2(num_classes=num_classes, train_dp=0, test_dp=0, droplayer=0, bdp=0)
+        elif model_name == "HG" and dataset_name != "MINST":
+            model = HG(num_classes)
         else:
             raise ValueError(f'Architecture {model_name} not implemented for dataset {dataset_name}.')
 
@@ -50,6 +53,8 @@ def get_model(model_name, dataset_name, pretrained=False):
 
         if 'VGG16' in model_name:
             model = VGG('VGG16-TI', in_channels=in_channels, num_classes=num_classes)
+        elif model_name == "HG":
+            model = HG(num_classes)
         elif 'ResNet' in model_name:
             model = resnet_picker(model_name, dataset_name)
         else:
@@ -66,6 +71,8 @@ def get_model(model_name, dataset_name, pretrained=False):
                 model = EfficientNet.from_name(model_name.lower())
         elif model_name == 'Linear':
             model = linear_model(dataset_name, num_classes=num_classes)
+        elif model_name == "HG":
+            model = HG(num_classes)
         else:
             if 'densenet' in model_name.lower():
                 extra_args = dict(memory_efficient=False)  # memory_efficient->checkpointing -> incompatible with autograd.grad
@@ -77,12 +84,13 @@ def get_model(model_name, dataset_name, pretrained=False):
             except AttributeError:
                 raise NotImplementedError(f'ImageNet model {model_name} not found at torchvision.models.')
     elif 'EUROSAT' in dataset_name:
-
         in_channels = 3
         num_classes = 10 
         
-        if model_name == 'ConvNet': 
-            model = EUROSAT_convnet(num_classes) 
+        if model_name == "HG":
+            model = HG(num_classes)
+        elif model_name == 'ConvNet': 
+            model = EUROSAT_convnet() 
         # if 'VGG16' in model_name:
         #     model = VGG('VGG16-TI', in_channels=in_channels, num_classes=num_classes)
         elif 'ResNet' in model_name:
@@ -131,13 +139,34 @@ def convnet(width=32, in_channels=3, num_classes=10, **kwargs):
     ]))
     return model
 
+# TODO
 # Placeholder for the actual CNN to be tested and poisoned for the eurosat dataset
-def EUROSAT_convnet(num_classes):
+def EUROSAT_convnet(width=32, in_channels=3, num_classes=10, **kwargs):
     """
     Placeholder for a custom ConvNet architecture.
     Replace the layers below with your specific design.
     """
-    model = HG(num_classes) 
+    model = nn.Sequential(OrderedDict([
+        ('conv0', nn.Conv2d(in_channels, 1 * width, kernel_size=3, padding=1)),
+        ('relu0', nn.ReLU()),
+        
+        ('conv1', nn.Conv2d(1 * width, 2 * width, kernel_size=3, padding=1)),
+        ('relu1', nn.ReLU()),
+        
+        ('conv2', nn.Conv2d(2 * width, 2 * width, kernel_size=3, padding=1)),
+        ('relu2', nn.ReLU()),
+        
+        ('conv3', nn.Conv2d(2 * width, 4 * width, kernel_size=3, padding=1)),
+        ('relu3', nn.ReLU()),
+        ('pool3', nn.MaxPool2d(kernel_size=3)),
+        
+        ('conv4', nn.Conv2d(4 * width, 4 * width, kernel_size=3, padding=1)),
+        ('relu4', nn.ReLU()),
+        ('pool4', nn.MaxPool2d(kernel_size=3)),
+        
+        ('flatten', nn.Flatten()),
+        ('linear', nn.Linear(36 * width, num_classes))
+    ]))
     
     return model
 
