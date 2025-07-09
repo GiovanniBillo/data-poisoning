@@ -90,6 +90,21 @@ class _VictimSingle(_VictimBase):
     def load_feature_representation(self):
         self.model = copy.deepcopy(self.clean_model)
 
+    def save_model(self, path):
+        """Save model state_dict, handling DataParallel if needed."""
+        state_dict = self.model.module.state_dict() if isinstance(self.model, torch.nn.DataParallel) else self.model.state_dict()
+        torch.save(state_dict, path)
+        print(f"[✓] Model saved to {path}")
+
+    def load_model(self, path):
+        """Load model state_dict, handling DataParallel if needed."""
+        checkpoint = torch.load(path, map_location=self.setup['device'])
+        if isinstance(self.model, torch.nn.DataParallel):
+            self.model.module.load_state_dict(checkpoint)
+        else:
+            self.model.load_state_dict(checkpoint)
+        print(f"[✓] Model loaded from {path}")
+
 
     """ METHODS FOR (CLEAN) TRAINING AND TESTING OF BREWED POISONS"""
 

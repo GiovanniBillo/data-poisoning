@@ -50,20 +50,35 @@ class HG(nn.Module):
             nn.Linear(128, num_classes)
         )
 
-    def forward(self, x):
-        # Encoder Path
+        self.embeddings_clean = [] 
+        self.embeddings_poisoned = []
+
+    def forward(self, x, batch_idx, is_poisoned):
+        current_embeddings = dict()
+
         x1 = self.initial_layer(x)
+        current_embeddings['layer1'] = x1.detach().cpu()
+
         x2 = self.down_block1(x1)
+        current_embeddings['layer2'] = x2.detach().cpu()
+
         x3 = self.down_block2(x2)
-        
-        # Bottleneck
+        current_embeddings['layer3'] = x3.detach().cpu()
+
         x_mid = self.bottleneck(x3)
-        
-        # Classification Head
+        current_embeddings['bottleneck'] = x_mid.detach().cpu()
+
         out = self.pool(x_mid)
         out = torch.flatten(out, 1)
         out = self.fc(out)
-        
+        current_embeddings['fc_out'] = out.detach().cpu()
+
+        # Append to the correct list
+        if is_poisoned:
+            self.embeddings_poisoned.append(current_embeddings)
+        else:
+            self.embeddings_clean.append(current_embeddings)
+
         return out
 
 # --- Example of usage ---

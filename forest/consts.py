@@ -22,3 +22,5 @@ tiny_imagenet_mean = [0.4789886474609375, 0.4457630515098572, 0.3944724500179291
 tiny_imagenet_std = [0.27698642015457153, 0.2690644860267639, 0.2820819020271301]
 eurosat_mean=None
 eurosat_std=None
+
+EMBEDDINGS_DIR = "../embeddings"

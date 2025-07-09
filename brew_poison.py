@@ -15,7 +15,7 @@ This script goes through the following steps:
 - For finetuning/transfer settings, the pretrained model from 2) is used as a "base model" and later trainings only retrain
   starting from this base model.
 """
-
+import os
 import torch
 
 import datetime
@@ -28,6 +28,10 @@ torch.multiprocessing.set_sharing_strategy(forest.consts.SHARING_STRATEGY)
 
 # Parse input arguments
 args = forest.options().parse_args()
+
+# make dir to save script checkpoint
+os.makedirs(args.modelsave_path, exist_ok=True)
+
 # 100% reproducibility?
 if args.deterministic:
     forest.utils.set_deterministic()
@@ -44,7 +48,21 @@ if __name__ == "__main__":
     witch.patch_targets(data)
 
     start_time = time.time()
-    if args.pretrained_model:
+    # if args.pretrained_model:
+    #     print('Loading pretrained model...')
+    #     stats_clean = None
+    # elif args.skip_clean_training:
+    #     print('Skipping clean training...')
+    #     stats_clean = None
+    # else:
+    #     stats_clean = model.train(data, max_epoch=args.max_epoch)
+    clean_model_ckpt = os.path.join(args.modelsave_path, "clean_model.pth")
+
+    if os.path.exists(clean_model_ckpt) and not args.force_recompute:
+        print("[✓] Loading clean model from disk...")
+        model.model.load_model(clean_model_ckpt)
+        stats_clean = None
+    elif args.pretrained_model:
         print('Loading pretrained model...')
         stats_clean = None
     elif args.skip_clean_training:
@@ -52,11 +70,24 @@ if __name__ == "__main__":
         stats_clean = None
     else:
         stats_clean = model.train(data, max_epoch=args.max_epoch)
+        model.model.save_model(clean_model_ckpt)
+
     train_time = time.time()
 
-    poison_delta = witch.brew(model, data)
-    brew_time = time.time()
+    poison_path = os.path.join(args.modelsave_path, "poison_delta.pth")
+    os.makedirs(args.modelsave_path, exist_ok=True)
 
+    if os.path.exists(poison_path) and not args.force_recompute:
+        print("[✓] Loading poison delta from disk...")
+        poison_delta = torch.load(poison_path, map_location=args.device if hasattr(args, 'device') else 'cpu')
+    else:
+        print("[⏳] Brewing poison data...")
+        poison_delta = witch.brew(model, data)
+        torch.save(poison_delta, poison_path)
+        # Optional: also export full poison data if needed
+        data.export_poison(poison_delta, path=poison_path, mode="full")
+    brew_time = time.time()
+     
     # Optional: apply a filtering defense
     if args.filter_defense != '':
         # Crucially any filtering defense would not have access to the final clean model used by the attacker,

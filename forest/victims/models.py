@@ -90,7 +90,7 @@ def get_model(model_name, dataset_name, pretrained=False):
         elif 'GoogleNet' in model_name:
             raise NotImplementedError(f'EUROSAT model {model_name} not found at torchvision.models.')
         else:
-            raise ValueError(f'Model {model_name} not implemented for TinyImageNet')
+            raise ValueError(f'Model {model_name} not implemented for EUROSAT')
 
     else:
         raise NotImplementedError(f"Unable to get model for {model_name}, {dataset_name}: not yet implemented.")

@@ -136,5 +136,8 @@ def options():
     # Distributed Computations
     parser.add_argument("--local_rank", default=None, type=int, help='Distributed rank. This is an INTERNAL ARGUMENT! '
                                                                      'Only the launch utility should set this argument!')
+    parser.add_argument('--checkpoint_dir', type=str, default='./checkpoints', help='Directory for saving/loading checkpoints')
+    parser.add_argument('--force_recompute', action='store_true', help='Force retraining even if checkpoint exists')
+
 
     return parser

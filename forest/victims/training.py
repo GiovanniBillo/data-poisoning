@@ -15,6 +15,7 @@ torch.backends.cudnn.benchmark = BENCHMARK
 
 def run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, scheduler, loss_fn, pretraining_phase=False):
 
+
     epoch_loss, total_preds, correct_preds = 0, 0, 0
 
     if pretraining_phase:
@@ -36,14 +37,15 @@ def run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, schedul
     # Compute flag to activate defenses:
     # Here we are writing these conditions out explicitely:
     if poison_delta is None:  # this is the case if the training set is clean
+        is_poisoned = False
         if defs.adaptive_attack:
             activate_defenses = True
         else:
             activate_defenses = False
     else:  # this is a poisoned training set
+        is_poisoned = True
         if defs.defend_features_only:
             activate_defenses = False
-        else:
             activate_defenses = True
 
     for batch, (inputs, labels, ids) in enumerate(train_loader):
@@ -115,9 +117,16 @@ def run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, schedul
                 labels = torch.cat((labels, temp_true_labels))
 
         # Do normal model updates, possibly on modified inputs
-        outputs = model(inputs)
+        # outputs = model(inputs, batch_idx)
+        outputs = model(inputs, batch, is_poisoned)
         loss, preds = criterion(outputs, labels)
         correct_preds += preds
+        
+        # save the model embeddings
+        # if poisoned_delta is None:
+        #     torch.save(model.embeddings, f"{EMBEDDINGS_DIR}{model.__name__}_CLEAN_embeddings_batch{batch}.pth") 
+        # elif poisoned_delta is not None:
+        #     torch.save(model.embeddings, f"{EMBEDDINGS_DIR}{model.__name__}_POISONED_embeddings_batch{batch}.pth") 
 
         total_preds += labels.shape[0]
         differentiable_params = [p for p in model.parameters() if p.requires_grad]

@@ -6,7 +6,7 @@ from .models import get_model
 from .training import get_optimizers, run_step
 from ..hyperparameters import training_strategy
 from ..utils import average_dicts
-from ..consts import BENCHMARK, SHARING_STRATEGY
+from ..consts import BENCHMARK, SHARING_STRATEGY, EMBEDDINGS_DIR
 torch.backends.cudnn.benchmark = BENCHMARK
 torch.multiprocessing.set_sharing_strategy(SHARING_STRATEGY)
 
@@ -92,6 +92,14 @@ class _VictimBase:
     def load_feature_representation(self):
         raise NotImplementedError()
 
+    def save_model(self, path):
+        """Save the model weights to the given path."""
+        raise NotImplementedError()
+
+    def load_model(self, path):
+        """Load the model weights from the given path."""
+        raise NotImplementedError()
+
 
     """ METHODS FOR (CLEAN) TRAINING AND TESTING OF BREWED POISONS"""
 
@@ -116,7 +124,7 @@ class _VictimBase:
                 # Finetune from base model
                 print(f'Training clean {self.args.scenario} model on top of {self.args.pretrain_dataset} base model.')
                 stats_clean = self._iterate(kettle, poison_delta=None, max_epoch=max_epoch)
-
+        # TODO: put self.model.load_state_dict() here?
         return stats_clean
 
     def retrain(self, kettle, poison_delta):
@@ -188,3 +196,8 @@ class _VictimBase:
         """Single epoch. Can't say I'm a fan of this interface, but ..."""
         run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, scheduler,
                  loss_fn=self.loss_fn, pretraining_phase=pretraining_phase)
+        # After training loop ends
+        torch.save(model.embeddings_clean, f"{EMBEDDINGS_DIR}/embeddings_clean_epoch{epoch}.pth")
+        torch.save(model.embeddings_poisoned, f"{EMBEDDINGS_DIR}/embeddings_poisoned_epoch{epoch}.pth")
+
+
