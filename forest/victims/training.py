@@ -37,13 +37,11 @@ def run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, schedul
     # Compute flag to activate defenses:
     # Here we are writing these conditions out explicitely:
     if poison_delta is None:  # this is the case if the training set is clean
-        is_poisoned = False
         if defs.adaptive_attack:
             activate_defenses = True
         else:
             activate_defenses = False
     else:  # this is a poisoned training set
-        is_poisoned = True
         if defs.defend_features_only:
             activate_defenses = False
             activate_defenses = True
@@ -118,7 +116,7 @@ def run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, schedul
 
         # Do normal model updates, possibly on modified inputs
         # outputs = model(inputs, batch_idx)
-        outputs = model(inputs, batch, is_poisoned)
+        outputs = model(inputs)
         loss, preds = criterion(outputs, labels)
         correct_preds += preds
         

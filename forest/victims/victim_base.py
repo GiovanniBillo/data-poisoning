@@ -5,7 +5,7 @@ import torch
 from .models import get_model
 from .training import get_optimizers, run_step
 from ..hyperparameters import training_strategy
-from ..utils import average_dicts
+from ..utils import average_dicts, unwrap_model
 from ..consts import BENCHMARK, SHARING_STRATEGY, EMBEDDINGS_DIR
 torch.backends.cudnn.benchmark = BENCHMARK
 torch.multiprocessing.set_sharing_strategy(SHARING_STRATEGY)
@@ -197,7 +197,11 @@ class _VictimBase:
         run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, scheduler,
                  loss_fn=self.loss_fn, pretraining_phase=pretraining_phase)
         # After training loop ends
-        torch.save(model.embeddings_clean, f"{EMBEDDINGS_DIR}/embeddings_clean_epoch{epoch}.pth")
-        torch.save(model.embeddings_poisoned, f"{EMBEDDINGS_DIR}/embeddings_poisoned_epoch{epoch}.pth")
+        model_unwrapped = unwrap_model(model)
+        print("POISONED DELTA IS ", poison_delta)
+        if poison_delta is None:
+            torch.save(model_unwrapped.embeddings, f"{EMBEDDINGS_DIR}/embeddings_CLEAN_epoch{epoch}.pth")
+        else:
+            torch.save(model_unwrapped.embeddings, f"{EMBEDDINGS_DIR}/embeddings_POISONED_epoch{epoch}.pth")
 
 

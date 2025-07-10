@@ -23,4 +23,5 @@ tiny_imagenet_std = [0.27698642015457153, 0.2690644860267639, 0.2820819020271301
 eurosat_mean=None
 eurosat_std=None
 
-EMBEDDINGS_DIR = "../embeddings"
+EMBEDDINGS_DIR = "/u/dssc/gbillo/my-data-poisoning/embeddings"
+
