@@ -199,9 +199,10 @@ class _VictimBase:
         # After training loop ends
         model_unwrapped = unwrap_model(model)
         print("POISONED DELTA IS ", poison_delta)
-        if poison_delta is None:
-            torch.save(model_unwrapped.embeddings, f"{EMBEDDINGS_DIR}/embeddings_CLEAN_epoch{epoch}.pth")
-        else:
-            torch.save(model_unwrapped.embeddings, f"{EMBEDDINGS_DIR}/embeddings_POISONED_epoch{epoch}.pth")
+        if epoch % 20  == 0:
+            if poison_delta is None:
+                torch.save(model_unwrapped.embeddings, f"{EMBEDDINGS_DIR}/embeddings_CLEAN_epoch{epoch}.pth")
+            else:
+                torch.save(model_unwrapped.embeddings, f"{EMBEDDINGS_DIR}/embeddings_POISONED_epoch{epoch}.pth")
 
 

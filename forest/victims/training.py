@@ -10,7 +10,7 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from .utils import print_and_save_stats
 from .batched_attacks import construct_attack
 
-from ..consts import NON_BLOCKING, BENCHMARK
+from ..consts import NON_BLOCKING, BENCHMARK, EMBEDDINGS_DIR
 torch.backends.cudnn.benchmark = BENCHMARK
 
 def run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, scheduler, loss_fn, pretraining_phase=False):
@@ -33,6 +33,23 @@ def run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, schedul
         attacker = construct_attack(defs.novel_defense, model, loss_fn, kettle.dm, kettle.ds,
                                     tau=kettle.args.tau, init='randn', optim='signAdam',
                                     num_classes=len(kettle.trainset.classes), setup=kettle.setup)
+    print("THIS IS INSIDE TRAINSET:", train_loader)
+    imgs_train = [img for img, label, idx in train_loader]
+    labels_train = [label for img, label, idx in train_loader]
+
+    imgs_val = [img for img, label, idx in valid_loader]
+    labels_val = [label for img, label, idx in valid_loader]
+
+    # Concatenate all batches into tensors
+    train_imgs_tensor = torch.cat(imgs_train, dim=0)     # shape: [N, C, H, W]
+    train_labels_tensor = torch.cat(labels_train, dim=0) # shape: [N]
+
+    valid_imgs_tensor = torch.cat(imgs_val, dim=0)     # shape: [N, C, H, W]
+    valid_labels_tensor = torch.cat(labels_val, dim=0) # shape: [N]
+
+    # Save both tensors together
+    torch.save({'images': train_imgs_tensor, 'labels': train_labels_tensor}, f"${EMBEDDINGS_DIR}/train_samples.pth")
+    torch.save({'images': valid_imgs_tensor, 'labels': valid_labels_tensor}, f"${EMBEDDINGS_DIR}/valid_samples.pth")
 
     # Compute flag to activate defenses:
     # Here we are writing these conditions out explicitely:
@@ -120,12 +137,6 @@ def run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, schedul
         loss, preds = criterion(outputs, labels)
         correct_preds += preds
         
-        # save the model embeddings
-        # if poisoned_delta is None:
-        #     torch.save(model.embeddings, f"{EMBEDDINGS_DIR}{model.__name__}_CLEAN_embeddings_batch{batch}.pth") 
-        # elif poisoned_delta is not None:
-        #     torch.save(model.embeddings, f"{EMBEDDINGS_DIR}{model.__name__}_POISONED_embeddings_batch{batch}.pth") 
-
         total_preds += labels.shape[0]
         differentiable_params = [p for p in model.parameters() if p.requires_grad]
 

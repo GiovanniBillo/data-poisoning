@@ -5,7 +5,7 @@ NORMALIZE = True  # Normalize all datasets
 PIN_MEMORY = True
 NON_BLOCKING = True
 BENCHMARK = True
-MAX_THREADING = 40
+MAX_THREADING = 50 
 SHARING_STRATEGY = 'file_descriptor'  # file_system or file_descriptor
 
 DISTRIBUTED_BACKEND = 'gloo'  # nccl would be faster, but require gpu-transfers for indexing and stuff

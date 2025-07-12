@@ -10,6 +10,7 @@ import socket
 import datetime
 import time
 
+import os
 
 import torch
 import forest
@@ -26,8 +27,15 @@ defs = forest.hyperparameters.training_strategy(model_name, args)
 if args.deterministic:
     forest.utils.set_deterministic()
 
+# if args.local_rank is None:
+#     raise ValueError('This script should only be launched via the pytorch launch utility!')
+
 if args.local_rank is None:
-    raise ValueError('This script should only be launched via the pytorch launch utility!')
+    env_local_rank = os.environ.get("LOCAL_RANK")
+    if env_local_rank is not None:
+        args.local_rank = int(env_local_rank)
+    else:
+        raise ValueError("local_rank not set. Use torchrun or pass --local_rank.")
 
 
 if __name__ == "__main__":

@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     if os.path.exists(clean_model_ckpt) and not args.force_recompute:
         print("[✓] Loading clean model from disk...")
-        model.model.load_model(clean_model_ckpt)
+        model.load_model(clean_model_ckpt)
         stats_clean = None
     elif args.pretrained_model:
         print('Loading pretrained model...')
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         stats_clean = None
     else:
         stats_clean = model.train(data, max_epoch=args.max_epoch)
-        model.model.save_model(clean_model_ckpt)
+        model.save_model(clean_model_ckpt)
 
     train_time = time.time()
 

@@ -99,13 +99,23 @@ echo "OMP_NUM_THREADS: $OMP_NUM_THREADS">> "$LOGFILE"
 # Torch-specific settings
 export TORCH_DISTRIBUTED_DEBUG=DETAIL  # Helps with debugging
 
-echo "Launching torchrun..." >&2
-echo "Command to be executed: torchrun ... dist_brew_poison.py ${BREW_ARGS[*]}"
-# torchrun \
-#   --nproc_per_node="$SLURM_GPUS_ON_NODE" \
-#   --nnodes="$SLURM_JOB_NUM_NODES" \
-#   --node_rank="$SLURM_NODEID" \
-#   --master_addr="$MASTER_ADDR" \
-#   --master_port="$MASTER_PORT" \
-#   dist_brew_poison.py "${BREW_ARGS[@]}" >> "logs/train_${SLURM_JOB_ID}.log" 2>&1
-torchrun dist_brew_poison.py "${BREW_ARGS[@]}" >> "logs/train_${SLURM_JOB_ID}.log" 2>&1 
+echo "Launching torchrun..." >&2 >> "$LOGFILE"
+echo "Command to be executed: " >> "$LOGFILE" 
+echo "torchrun \
+  --nproc_per_node=$SLURM_GPUS_ON_NODE \
+  --nnodes=$SLURM_JOB_NUM_NODES \
+  --node_rank=$SLURM_NODEID \
+  --master_addr=$MASTER_ADDR \
+  --master_port=$MASTER_PORT \
+  dist_brew_poison.py  ${BREW_ARGS[@]}" >> "logs/train_${SLURM_JOB_ID}.log" >> "$LOGFILE"
+echo " --local_rank=$SLURM_LOCALID will be passed directly in the script"
+
+torchrun \
+  --nproc_per_node="$SLURM_GPUS_ON_NODE" \
+  --nnodes="$SLURM_JOB_NUM_NODES" \
+  --node_rank="$SLURM_NODEID" \
+  --master_addr="$MASTER_ADDR" \
+  --master_port="$MASTER_PORT" \
+  dist_brew_poison.py "${BREW_ARGS[@]}" >> "logs/train_${SLURM_JOB_ID}.log" 2>&1
+# torchrun --nproc_per_node=2 dist_brew_poison.py "${BREW_ARGS[@]}" >> "logs/train_${SLURM_JOB_ID}.log" 2>&1 
+
