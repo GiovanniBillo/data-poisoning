@@ -124,7 +124,6 @@ class _VictimBase:
                 # Finetune from base model
                 print(f'Training clean {self.args.scenario} model on top of {self.args.pretrain_dataset} base model.')
                 stats_clean = self._iterate(kettle, poison_delta=None, max_epoch=max_epoch)
-        # TODO: put self.model.load_state_dict() here?
         return stats_clean
 
     def retrain(self, kettle, poison_delta):
@@ -198,11 +197,21 @@ class _VictimBase:
                  loss_fn=self.loss_fn, pretraining_phase=pretraining_phase)
         # After training loop ends
         model_unwrapped = unwrap_model(model)
-        print("POISONED DELTA IS ", poison_delta)
         if epoch % 20  == 0:
             if poison_delta is None:
                 torch.save(model_unwrapped.embeddings, f"{EMBEDDINGS_DIR}/embeddings_CLEAN_epoch{epoch}.pth")
+                # TODO try to refactor the code to log stuff directly like in the exercise
+                # torch.save(model_unwrapped.embeddings_initial_layer, f"{EMBEDDINGS_DIR}/embeddings_initial_layer_CLEAN_epoch{epoch}.pth")
+                # torch.save(model_unwrapped.embeddings_down_block1, f"{EMBEDDINGS_DIR}/embeddings_down_block1_CLEAN_epoch{epoch}.pth")
+                # torch.save(model_unwrapped.embeddings_down_block2, f"{EMBEDDINGS_DIR}/embeddings_down_block2_CLEAN_epoch{epoch}.pth")
+                # torch.save(model_unwrapped.embeddings_bottleneck, f"{EMBEDDINGS_DIR}/embeddings_bottleneck_CLEAN_epoch{epoch}.pth")
+                # torch.save(model_unwrapped.embeddings_fc, f"{EMBEDDINGS_DIR}/embeddings_fc_CLEAN_epoch{epoch}.pth")
             else:
                 torch.save(model_unwrapped.embeddings, f"{EMBEDDINGS_DIR}/embeddings_POISONED_epoch{epoch}.pth")
-
+                # TODO try to refactor the code to log stuff directly like in the exercise
+                # torch.save(model_unwrapped.embeddings_initial_layer, f"{EMBEDDINGS_DIR}/embeddings_initial_layer_POISONED_epoch{epoch}.pth")
+                # torch.save(model_unwrapped.embeddings_down_block1, f"{EMBEDDINGS_DIR}/embeddings_down_block1_POISONED_epoch{epoch}.pth")
+                # torch.save(model_unwrapped.embeddings_down_block2, f"{EMBEDDINGS_DIR}/embeddings_down_block2_POISONED_epoch{epoch}.pth")
+                # torch.save(model_unwrapped.embeddings_bottleneck, f"{EMBEDDINGS_DIR}/embeddings_bottleneck_POISONED_epoch{epoch}.pth")
+                # torch.save(model_unwrapped.embeddings_fc, f"{EMBEDDINGS_DIR}/embeddings_fc_POISONED_epoch{epoch}.pth")
 

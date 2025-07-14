@@ -30,6 +30,7 @@ torch.multiprocessing.set_sharing_strategy(forest.consts.SHARING_STRATEGY)
 args = forest.options().parse_args()
 
 # make dir to save script checkpoint
+print("the modelsave_path is:", args.modelsave_path)
 os.makedirs(args.modelsave_path, exist_ok=True)
 
 # 100% reproducibility?
@@ -80,12 +81,14 @@ if __name__ == "__main__":
     if os.path.exists(poison_path) and not args.force_recompute:
         print("[✓] Loading poison delta from disk...")
         poison_delta = torch.load(poison_path, map_location=args.device if hasattr(args, 'device') else 'cpu')
+    # TODO: add option to skip JUST the poisoning part.
     else:
         print("[⏳] Brewing poison data...")
         poison_delta = witch.brew(model, data)
         torch.save(poison_delta, poison_path)
+
         # Optional: also export full poison data if needed
-        data.export_poison(poison_delta, path=poison_path, mode="full")
+        data.export_poison(poison_delta, path=args.modelsave_path, mode="full")
     brew_time = time.time()
      
     # Optional: apply a filtering defense

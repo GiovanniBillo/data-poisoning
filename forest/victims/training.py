@@ -1,6 +1,7 @@
 """Repeatable code parts concerning optimization and training schedules."""
 
 import torch
+import os
 
 from collections import defaultdict
 from torch.optim.lr_scheduler import ReduceLROnPlateau
@@ -33,23 +34,26 @@ def run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, schedul
         attacker = construct_attack(defs.novel_defense, model, loss_fn, kettle.dm, kettle.ds,
                                     tau=kettle.args.tau, init='randn', optim='signAdam',
                                     num_classes=len(kettle.trainset.classes), setup=kettle.setup)
-    print("THIS IS INSIDE TRAINSET:", train_loader)
-    imgs_train = [img for img, label, idx in train_loader]
-    labels_train = [label for img, label, idx in train_loader]
+    if not os.path.exists(f"{EMBEDDINGS_DIR}/train_samples.pth"):
+        imgs_train = [img for img, label, idx in train_loader]
+        labels_train = [label for img, label, idx in train_loader]
 
-    imgs_val = [img for img, label, idx in valid_loader]
-    labels_val = [label for img, label, idx in valid_loader]
 
-    # Concatenate all batches into tensors
-    train_imgs_tensor = torch.cat(imgs_train, dim=0)     # shape: [N, C, H, W]
-    train_labels_tensor = torch.cat(labels_train, dim=0) # shape: [N]
+        # Concatenate all batches into tensors
+        train_imgs_tensor = torch.cat(imgs_train, dim=0)     # shape: [N, C, H, W]
+        train_labels_tensor = torch.cat(labels_train, dim=0) # shape: [N]
 
-    valid_imgs_tensor = torch.cat(imgs_val, dim=0)     # shape: [N, C, H, W]
-    valid_labels_tensor = torch.cat(labels_val, dim=0) # shape: [N]
+        # Save both tensors together
+        torch.save({'images': train_imgs_tensor, 'labels': train_labels_tensor}, f"{EMBEDDINGS_DIR}/train_samples.pth")
 
-    # Save both tensors together
-    torch.save({'images': train_imgs_tensor, 'labels': train_labels_tensor}, f"${EMBEDDINGS_DIR}/train_samples.pth")
-    torch.save({'images': valid_imgs_tensor, 'labels': valid_labels_tensor}, f"${EMBEDDINGS_DIR}/valid_samples.pth")
+    if not os.path.exists(f"{EMBEDDINGS_DIR}/valid_samples.pth"):
+        imgs_val = [img for img, label, idx in valid_loader]
+        labels_val = [label for img, label, idx in valid_loader]
+
+        valid_imgs_tensor = torch.cat(imgs_val, dim=0)     # shape: [N, C, H, W]
+        valid_labels_tensor = torch.cat(labels_val, dim=0) # shape: [N]
+
+        torch.save({'images': valid_imgs_tensor, 'labels': valid_labels_tensor}, f"{EMBEDDINGS_DIR}/valid_samples.pth")
 
     # Compute flag to activate defenses:
     # Here we are writing these conditions out explicitely:
@@ -61,6 +65,7 @@ def run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, schedul
     else:  # this is a poisoned training set
         if defs.defend_features_only:
             activate_defenses = False
+        else:
             activate_defenses = True
 
     for batch, (inputs, labels, ids) in enumerate(train_loader):

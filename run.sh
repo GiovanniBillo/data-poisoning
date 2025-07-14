@@ -4,9 +4,10 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=48
 #SBATCH --gpus=2
+#SBATCH --mem=128G
 #SBATCH --partition=GPU
 #SBATCH --account=dssc
-#SBATCH --time=01:00:00
+#SBATCH --time=02:00:00
 #SBATCH --output=logs/train_%j.out
 #SBATCH --error=logs/train_%j.err
 

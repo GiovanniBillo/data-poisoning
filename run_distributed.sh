@@ -3,6 +3,7 @@
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1              # One process per node; torchrun handles GPU spawning
 #SBATCH --cpus-per-task=48               # Adapt to your CPU count
+#SBATCH --mem=128G
 #SBATCH --gpus-per-node=2                # Important: use this (not --gpus=V100:2)
 #SBATCH --partition=GPU
 #SBATCH --account=dssc

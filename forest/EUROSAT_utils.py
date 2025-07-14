@@ -10,6 +10,7 @@ train_transform = transforms.Compose([
         shear=0.2,  # Shear range of 0.2 radians (~11.5 degrees)
         scale=(0.8, 1.2)  # Random zoom between 80%-120%
     ),
+    # TODO: correct these normalizations?
     transforms.Normalize(mean=[0.485, 0.456, 0.406],  # ImageNet stats
                         std=[0.229, 0.224, 0.225])
 ])
@@ -17,6 +18,7 @@ train_transform = transforms.Compose([
 # Validation transforms (no augmentation)
 test_transform = transforms.Compose([
     transforms.ToTensor(),
+    # TODO: correct these normalizations?
     transforms.Normalize(mean=[0.485, 0.456, 0.406],
                         std=[0.229, 0.224, 0.225])
 ])

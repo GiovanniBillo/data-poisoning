@@ -37,7 +37,7 @@ def options():
     parser.add_argument('--table_path', default='tables/', type=str)
     parser.add_argument('--poison_path', default='poisons/', type=str)
     parser.add_argument('--data_path', default='~/data', type=str)
-    parser.add_argument('--modelsave_path', default='./models/', type=str)
+    parser.add_argument('--modelsave_path', default='models/', type=str)
     ###########################################################################
 
     # Mixing defense
@@ -139,5 +139,6 @@ def options():
     parser.add_argument('--checkpoint_dir', type=str, default='./checkpoints', help='Directory for saving/loading checkpoints')
     parser.add_argument('--force_recompute', action='store_true', help='Force retraining even if checkpoint exists')
 
+    parser.add_argument('--skip_poisoning', action='store_true', help='skip computing poison anew and reuse the already saved poison, if present')
 
     return parser

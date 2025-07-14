@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from ..consts import LEN_TRAINSET, LEN_TESTSET
 
 class HG(nn.Module):
     def __init__(self, num_classes, in_channels=3):
@@ -50,7 +51,13 @@ class HG(nn.Module):
             nn.Linear(128, num_classes)
         )
 
+        # self.len_embeddings = None (either LEN_TRAINSET or LEN_TESTSET) 
         self.embeddings = []
+        # self.embeddings_initial_layer= np.zeros(self.len_embeddings, BATCH_SIZE, 64))
+        # self.embeddings_down_block1 = np.zeros(self.len_embeddings, BATCH_SIZE/2, 32))
+        # self.embeddings_down_block2 = np.zeros(self.len_embeddings, BATCH_SIZE/4, 16))
+        # self.embeddings_bottleneck = np.zeros(self.len_embeddings, BATCH_SIZE, 64))
+        # self.embeddings_fc = np.zeros(self.len_embeddings, BATCH_SIZE, 64)
 
     def forward(self, x):
         current_embeddings = dict()
