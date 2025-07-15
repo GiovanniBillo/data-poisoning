@@ -330,11 +330,11 @@ class _Kettle():
                 os.makedirs(os.path.join(path, 'test', name), exist_ok=True)
                 os.makedirs(os.path.join(path, 'targets', name), exist_ok=True)
             for input, label, idx in self.trainset:
-                _save_image(input, label, idx, location=os.path.join(path, 'train', names[label]), train=True)
+               _save_image(input, label, idx, location=os.path.join(path, 'train', names[label]), train=True)
             print('Poisoned training images exported ...')
 
             for input, label, idx in self.validset:
-                _save_image(input, label, idx, location=os.path.join(path, 'test', names[label]), train=False)
+               _save_image(input, label, idx, location=os.path.join(path, 'test', names[label]), train=False)
             print('Unaffected validation images exported ...')
 
             # Save secret targets
@@ -342,6 +342,52 @@ class _Kettle():
                 intended_class = self.poison_setup['intended_class'][enum]
                 _save_image(target, intended_class, idx, location=os.path.join(path, 'targets', names[intended_class]), train=False)
             print('Target images exported with intended class labels ...')
+
+        elif mode == 'only_modified':
+            """Exports only the poisoned images and their clean original counterparts for direct comparison.
+
+            The filenames are enriched with the true and intended (fake) labels for easy identification.
+            """
+            print("Exporting only modified (poisoned) images and their original counterparts...")
+
+            # 1. Define paths for original and poisoned images
+            original_path = os.path.join(path, 'original')
+            poisoned_path = os.path.join(path, 'poisoned')
+            os.makedirs(original_path, exist_ok=True)
+            os.makedirs(poisoned_path, exist_ok=True)
+
+            # 2. Get necessary information from the kettle setup
+            poison_indices = self.poison_ids
+            names = self.trainset.classes
+
+            # For naming, we'll assume all poisons work towards the first intended class.
+            # This is robust for common attacks (e.g., all-to-one).
+            if not self.poison_setup.get('intended_class'):
+                raise ValueError("Cannot determine fake label: 'intended_class' is not defined in poison_setup.")
+            fake_label_idx = self.poison_setup['intended_class'][0]
+            fake_label_name = names[fake_label_idx]
+
+            # 3. Loop through only the poisoned indices
+            for idx_tensor in poison_indices:
+                idx = int(idx_tensor.item()) # Convert tensor to a standard Python integer
+
+                # Retrieve the clean image and its true label directly from the trainset
+                clean_image, true_label_idx, _ = self.trainset[idx]
+                true_label_name = names[true_label_idx]
+
+                # --- Save the original image with its true label in the filename ---
+                original_filename = f'{idx}_true-label-{true_label_name}.png'
+                _torch_to_PIL(clean_image).save(os.path.join(original_path, original_filename))
+
+                # --- Save the poisoned image with the intended (fake) label in the filename ---
+                # Find the poison perturbation from the delta tensor
+                lookup = self.poison_lookup[idx]
+                poisoned_image = clean_image + poison_delta[lookup]
+
+                poisoned_filename = f'{idx}_poisoned-as-{fake_label_name}.png'
+                _torch_to_PIL(poisoned_image).save(os.path.join(poisoned_path, poisoned_filename))
+
+            print(f'Exported {len(poison_indices)} original/poisoned image pairs.')
 
         elif mode in ['automl-upload', 'automl-all', 'automl-baseline']:
             from ..utils import automl_bridge
