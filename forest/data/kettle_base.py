@@ -384,7 +384,7 @@ class _Kettle():
                 lookup = self.poison_lookup[idx]
                 poisoned_image = clean_image + poison_delta[lookup]
 
-                poisoned_filename = f'{idx}_poisoned-as-{fake_label_name}.png'
+                poisoned_filename = f'{idx}_original_label-{fake_label_name}.png'
                 _torch_to_PIL(poisoned_image).save(os.path.join(poisoned_path, poisoned_filename))
 
             print(f'Exported {len(poison_indices)} original/poisoned image pairs.')
