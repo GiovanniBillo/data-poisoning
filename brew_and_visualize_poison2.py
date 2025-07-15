@@ -149,7 +149,7 @@ if __name__ == "__main__":
 
     # Export
     if args.save is not None:
-        data.export_poison(poison_delta, path=args.poison_path, mode=args.save)
+        data.export_poison(poison_delta, path=args.poison_path, mode=args.save, net=args.net, dataset=args.dataset, eps=args.eps)
 
     print(datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p"))
     print('---------------------------------------------------')

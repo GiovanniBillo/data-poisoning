@@ -262,7 +262,7 @@ class _Kettle():
 
     """ EXPORT METHODS """
 
-    def export_poison(self, poison_delta, path=None, mode='automl'):
+    def export_poison(self, poison_delta, net, dataset, eps, path=None, mode='automl'):
         """Export poisons in either packed mode (just ids and raw data) or in full export mode, exporting all images.
 
         In full export mode, export data into folder structure that can be read by a torchvision.datasets.ImageFolder
@@ -323,6 +323,8 @@ class _Kettle():
         elif mode == 'full':
             # Save training set
             names = self.trainset.classes
+            os.makedirs(os.path.join(path,f"{net}_{dataset}_{eps}"), exist_ok=True)
+            path = os.path.join(path,f"{net}_{dataset}_{eps}")
             for name in names:
                 os.makedirs(os.path.join(path, 'train', name), exist_ok=True)
                 os.makedirs(os.path.join(path, 'test', name), exist_ok=True)
