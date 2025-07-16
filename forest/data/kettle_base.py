@@ -344,6 +344,12 @@ class _Kettle():
             print('Target images exported with intended class labels ...')
 
         elif mode == 'only_modified':
+
+            # Save training set
+            names = self.trainset.classes
+            os.makedirs(os.path.join(path,f"{net}_{dataset}_{eps}"), exist_ok=True)
+            path = os.path.join(path,f"{net}_{dataset}_{eps}")
+
             """Exports only the poisoned images and their clean original counterparts for direct comparison.
 
             The filenames are enriched with the true and intended (fake) labels for easy identification.
