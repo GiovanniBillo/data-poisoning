@@ -373,8 +373,14 @@ class _Kettle():
             fake_label_idx = self.poison_setup['intended_class'][0]
             fake_label_name = names[fake_label_idx]
 
+            i = 0
             # 3. Loop through only the poisoned indices
             for idx_tensor in poison_indices:
+
+                i += 1
+                if i >= 15:
+                    break
+
                 idx = int(idx_tensor.item()) # Convert tensor to a standard Python integer
 
                 # Retrieve the clean image and its true label directly from the trainset
