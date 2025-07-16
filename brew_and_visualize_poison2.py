@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
     poison_delta = witch.brew(model, data)
     brew_time = time.time()
-    with open(os.path.join(subfolder, 'poison_indices.pickle'), 'wb+') as file:
+    with open(os.path.join(subfolder,f'{args.net}_{args.dataset}_{args.eps}_poison_indices.pickle'), 'wb+') as file:
         pickle.dump(data.poison_ids, file, protocol=pickle.HIGHEST_PROTOCOL)
     print('Poison ids saved')
 
