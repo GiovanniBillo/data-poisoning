@@ -349,6 +349,9 @@ class _Kettle():
             names = self.trainset.classes
             os.makedirs(os.path.join(path,f"{net}_{dataset}_{eps}"), exist_ok=True)
             path = os.path.join(path,f"{net}_{dataset}_{eps}")
+            for char in ["[","]","'"]:
+                path = path.replace(char, '')
+                path = path.strip()
 
             """Exports only the poisoned images and their clean original counterparts for direct comparison.
 

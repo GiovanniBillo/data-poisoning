@@ -24,6 +24,14 @@ if args.deterministic:
 subfolder = args.modelsave_path
 clean_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_clean_model')
 def_model_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_defended_model')
+
+for char in ["[","]","'"]:
+    clean_path = clean_path.replace(char, '')
+    clean_path = clean_path.strip()
+
+    def_model_path = def_model_path.replace(char, '')
+    def_model_path = def_model_path.strip()
+
 os.makedirs(clean_path, exist_ok=True)
 os.makedirs(def_model_path, exist_ok=True)
 
