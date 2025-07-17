@@ -1,13 +1,21 @@
 import torch
+import torch.nn as nn
+import torch.nn.functional as F
 from forest.victims.models import ResNet, resnet_picker
 
+from forest.victims.HG import HG
+
+import sys
 import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import pickle
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+NUM_CLASSES=10 # modify accordingly: should be set outside or by some other means really.
 
 def generate_plot_centroid(feat_path,model_path,target_class,base_class, poison_ids, title, device):
 
@@ -151,20 +159,69 @@ def generate_plot_pca(feat_path,model_path, target_class,base_class, poison_ids,
     
 
     
+# def bypass_last_layer(model):
+#     """Hacky way of separating features and classification head for many models.
+#     Patch this function if problems appear.
+#     """
+#     layer_cake = list(model.children())
+#     last_layer = layer_cake[-1]
+#     headless_model = torch.nn.Sequential(*(layer_cake[:-1]), torch.nn.Flatten())  # this works most of the time all of the time :<
+#     return headless_model, last_layer
 def bypass_last_layer(model):
     """Hacky way of separating features and classification head for many models.
     Patch this function if problems appear.
+
+    Modified to handle Sequential containing Linear layers.
     """
     layer_cake = list(model.children())
-    last_layer = layer_cake[-1]
-    headless_model = torch.nn.Sequential(*(layer_cake[:-1]), torch.nn.Flatten())  # this works most of the time all of the time :<
+    
+    # Iterate backwards to find the last layer with weights (Linear or Conv)
+    last_layer = None
+    headless_layers = []
+    found_last = False
+
+    for layer in reversed(layer_cake):
+        if isinstance(layer, (nn.Linear, nn.Conv2d)):
+            if not found_last:
+                last_layer = layer
+                found_last = True
+            else:
+                headless_layers.insert(0, layer)
+        elif isinstance(layer, nn.Sequential):
+            # If it's a sequential, look inside for the last linear/conv layer
+            seq_children = list(layer.children())
+            found_in_seq = False
+            temp_seq_layers = []
+            for sub_layer in reversed(seq_children):
+                if isinstance(sub_layer, (nn.Linear, nn.Conv2d)):
+                    if not found_last:
+                        last_layer = sub_layer
+                        found_last = True
+                        found_in_seq = True
+                    else:
+                        temp_seq_layers.insert(0, sub_layer)
+                else:
+                     temp_seq_layers.insert(0, sub_layer)
+            
+            if temp_seq_layers:
+                 headless_layers.insert(0, nn.Sequential(*temp_seq_layers))
+        else:
+             headless_layers.insert(0, layer)
+
+    if last_layer is None:
+        raise ValueError("Could not find a layer with weights in the model.")
+
+    headless_model = torch.nn.Sequential(*headless_layers, torch.nn.Flatten())
+
     return headless_model, last_layer
+
     
 def generate_plot_centroid_3d_labels(feat_path, model_path, target_class,base_class, poison_ids, title, device):
 
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
-    model = resnet_picker('ResNet18', 'CIFAR10')
-    model.load_state_dict(torch.load(model_path), strict=False)
+    # model = resnet_picker('ResNet18', 'CIFAR10')
+    model = HG(num_classes=NUM_CLASSES)
+    model.load_state_dict(torch.load(model_path, map_location=device), strict=False)
     model.to(device)
     headless_model, last_layer  = bypass_last_layer(model)
     last_layer_weights = last_layer.weight.detach().cpu().numpy()
@@ -347,8 +404,9 @@ def generate_plot_lda_patch(feat_path,model_path, target_class,base_class, poiso
 def genplot_centroid_prob_2d_patch(feat_path, model_path, target_class,base_class, poison_ids, title, device):
 
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
-    model = resnet_picker('ResNet18', 'CIFAR10')
-    model.load_state_dict(torch.load(model_path), strict=False)
+    # model = resnet_picker('ResNet18', 'CIFAR10')
+    model = HG(num_classes=NUM_CLASSES)
+    model.load_state_dict(torch.load(model_path, map_location=device), strict=False)
     model.to(device)
     headless_model, last_layer  = bypass_last_layer(model)
     last_layer_weights = last_layer.weight.detach().cpu().numpy()
@@ -428,8 +486,9 @@ def genplot_centroid_prob_2d_patch(feat_path, model_path, target_class,base_clas
 def genplot_centroid_3d_patch(feat_path, model_path, target_class,base_class, poison_ids, title, device):
 
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
-    model = resnet_picker('ResNet18', 'CIFAR10')
-    model.load_state_dict(torch.load(model_path), strict=False)
+    # model = resnet_picker('ResNet18', 'CIFAR10')
+    model = HG(num_classes=NUM_CLASSES)
+    model.load_state_dict(torch.load(model_path, map_location=device), strict=False)
     model.to(device)
     headless_model, last_layer  = bypass_last_layer(model)
     last_layer_weights = last_layer.weight.detach().cpu().numpy()
@@ -561,8 +620,9 @@ def generate_plot_lda(feat_path,model_path, target_class,base_class, poison_ids,
 def genplot_centroid_prob_3d(feat_path, model_path, target_class,base_class, poison_ids, title, device):
 
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
-    model = resnet_picker('ResNet18', 'CIFAR10')
-    model.load_state_dict(torch.load(model_path), strict=False)
+    # model = resnet_picker('ResNet18', 'CIFAR10')
+    model = HG(num_classes=NUM_CLASSES) 
+    model.load_state_dict(torch.load(model_path, map_location=device), strict=False)
     model.to(device)
     headless_model, last_layer  = bypass_last_layer(model)
     last_layer_weights = last_layer.weight.detach().cpu().numpy()
@@ -649,8 +709,9 @@ def genplot_centroid_prob_3d(feat_path, model_path, target_class,base_class, poi
 def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poison_ids, title, device):
 
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
-    model = resnet_picker('ResNet18', 'CIFAR10')
-    model.load_state_dict(torch.load(model_path), strict=False)
+    # model = resnet_picker('ResNet18', 'CIFAR10')
+    model = HG(num_classes=10) 
+    model.load_state_dict(torch.load(model_path, map_location=device), strict=False)
     model.to(device)
     headless_model, last_layer  = bypass_last_layer(model)
     last_layer_weights = last_layer.weight.detach().cpu().numpy()
@@ -730,23 +791,23 @@ def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poi
 def generate_plots(main_path,model_name, plot_function, target_class, base_class,poison_ids,device):
     os.makedirs('./plots/2d', exist_ok=True)
     os.makedirs('./plots/3d', exist_ok=True)
-    feat_path = os.path.join(main_path+'_undefended', 'clean_model','clean_features.pickle')
-    model_path = os.path.join(main_path+'_undefended', 'clean_model','clean.pth')
+    feat_path = os.path.join(main_path+'clean_model','clean_features.pickle')
+    model_path = os.path.join(main_path+'clean_model','clean.pth')
     plot_function(feat_path,model_path, target_class,base_class, poison_ids,
                         model_name + " "+ "undefended", device)
     
-    feat_path = os.path.join(main_path+'_undefended', 'defended_model','def_features.pickle')
-    model_path = os.path.join(main_path+'_undefended', 'defended_model','def.pth')
+    feat_path = os.path.join(main_path+'defended_model','def_features.pickle')
+    model_path = os.path.join(main_path+'defended_model','def.pth')
     plot_function(feat_path,model_path, target_class,base_class, poison_ids,
                            model_name + " "+ "attacked_undefended",device)
     
-    feat_path = os.path.join(main_path+'_defended', 'clean_model','clean_features.pickle')
-    model_path = os.path.join(main_path+'_defended', 'clean_model','clean.pth')
+    feat_path = os.path.join(main_path+'clean_model','clean_features.pickle')
+    model_path = os.path.join(main_path+'clean_model','clean.pth')
     plot_function(feat_path,model_path, target_class,base_class, poison_ids,
                            model_name + " "+ "defended",device)
 
-    feat_path = os.path.join(main_path+'_defended', 'defended_model','def_features.pickle')
-    model_path = os.path.join(main_path+'_defended', 'defended_model','def.pth')
+    feat_path = os.path.join(main_path+'defended_model','def_features.pickle')
+    model_path = os.path.join(main_path+'defended_model','def.pth')
     plot_function(feat_path,model_path, target_class,base_class, poison_ids,
                            model_name + " "+  "attacked_defended",device)
     
