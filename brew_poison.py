@@ -87,10 +87,14 @@ if __name__ == "__main__":
         poison_delta = witch.brew(model, data)
         torch.save(poison_delta, poison_path)
 
-        # Optional: also export full poison data if needed
-        data.export_poison(poison_delta, path=args.modelsave_path, mode="full")
+        # # Optional: also export full poison data if needed
+        # data.export_poison(poison_delta, path=args.modelsave_path, mode="full")
     brew_time = time.time()
-     
+
+    # model validation (after poison brewing so as not to make an all-encompassing poison)
+    # print("validating CLEAN model...")
+    # valid_stats_clean = model.validate(data, poison_delta=None)  
+
     # Optional: apply a filtering defense
     if args.filter_defense != '':
         # Crucially any filtering defense would not have access to the final clean model used by the attacker,

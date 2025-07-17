@@ -2,3 +2,5 @@
 --optimization=custom
 --net=ConvNet
 --deterministic
+--force_recompute
+--save='full'

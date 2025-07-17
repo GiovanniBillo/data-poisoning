@@ -52,15 +52,17 @@ class HG(nn.Module):
         )
 
         # self.len_embeddings = None (either LEN_TRAINSET or LEN_TESTSET) 
-        self.embeddings = []
+                                # len(train), batch_size, num_classes
+        self.embeddings = np.zeros(16200, 16, 10)      
         # self.embeddings_initial_layer= np.zeros(self.len_embeddings, BATCH_SIZE, 64))
         # self.embeddings_down_block1 = np.zeros(self.len_embeddings, BATCH_SIZE/2, 32))
         # self.embeddings_down_block2 = np.zeros(self.len_embeddings, BATCH_SIZE/4, 16))
         # self.embeddings_bottleneck = np.zeros(self.len_embeddings, BATCH_SIZE, 64))
         # self.embeddings_fc = np.zeros(self.len_embeddings, BATCH_SIZE, 64)
+        self.idx = 0
 
     def forward(self, x):
-        current_embeddings = dict()
+        # current_embeddings = dict()
 
         x1 = self.initial_layer(x)
         # current_embeddings['layer1'] = x1.detach().cpu()
@@ -73,15 +75,18 @@ class HG(nn.Module):
 
         x_mid = self.bottleneck(x3)
         # current_embeddings['bottleneck'] = x_mid.detach().cpu()
-
+        
         out = self.pool(x_mid)
         out = torch.flatten(out, 1)
         out = self.fc(out)
-        current_embeddings['fc_out'] = out.detach().cpu()
+        # current_embeddings['fc_out'] = out.detach().cpu()
 
-        self.embeddings.append(current_embeddings)
+        self.embeddings[self.idx] = out.detach().cpu().numpy()
+        self.idx = self.idx + 1
 
-        return out
+        # self.embeddings.append(current_embeddings)
+
+        return out 
 
 # --- Example of usage ---
 if __name__ == "__main__":

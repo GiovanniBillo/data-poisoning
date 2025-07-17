@@ -15,7 +15,7 @@ def training_strategy(model_name, args):
         defaults = PRIVACY_LAPLACIAN
     elif args.optimization == 'adversarial':
         defaults = ADVERSARIAL
-    elif args.optimization == 'custom':
+    elif args.optimization == 'basic':
         defaults = BASIC
     elif args.optimization == 'defensive':
         defaults = DEFENSE
@@ -34,8 +34,9 @@ def training_strategy(model_name, args):
         defs.augmentations = False
     else:
         defs.augmentations = args.data_aug
-    if any(net in model_name.lower() for net in BRITTLE_NETS):
-        defs.lr *= 0.1
+    # TODO: commented out this, as it was overwriting the learning rate in some experiments. But why is it here in the first place?
+    # if any(net in model_name.lower() for net in BRITTLE_NETS):
+    #     defs.lr *= 0.1
 
     # Modifications to gradient noise settings
     if args.gradient_noise is not None:
@@ -155,7 +156,7 @@ This setup resembles the training procedure in MetaPoison.
 CHANGED TO CUSTOM
 """
 BASIC = Hyperparameters(
-    name='custom',
+    name='basic',
     lr=1e-02,
     epochs=100,
     batch_size=16,
@@ -208,7 +209,6 @@ DEFENSE = Hyperparameters(
     adaptive_attack=True,
     defend_features_only=False
 )
-
 """Specify custom hyperparameters for the EUROSAT convnet."""
 CUSTOM = Hyperparameters(
     name = "custom",

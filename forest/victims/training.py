@@ -67,7 +67,7 @@ def run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, schedul
             activate_defenses = False
         else:
             activate_defenses = True
-
+    # create lists to save embeddings directly
     for batch, (inputs, labels, ids) in enumerate(train_loader):
         # Prep Mini-Batch
         optimizer.zero_grad()
@@ -139,6 +139,7 @@ def run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, schedul
         # Do normal model updates, possibly on modified inputs
         # outputs = model(inputs, batch_idx)
         outputs = model(inputs)
+        # print(f"[DEBUG] Model stored {len(model.embeddings)} embedding batches so far.")
         loss, preds = criterion(outputs, labels)
         correct_preds += preds
         
