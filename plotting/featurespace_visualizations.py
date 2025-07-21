@@ -12,8 +12,6 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import pickle
 import numpy as np
-import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
 
 NUM_CLASSES=10 # modify accordingly: should be set outside or by some other means really.
@@ -168,6 +166,7 @@ def generate_plot_pca(feat_path,model_path, target_class,base_class, poison_ids,
 #     last_layer = layer_cake[-1]
 #     headless_model = torch.nn.Sequential(*(layer_cake[:-1]), torch.nn.Flatten())  # this works most of the time all of the time :<
 #     return headless_model, last_layer
+    
 def bypass_last_layer(model):
     """Hacky way of separating features and classification head for many models.
     Patch this function if problems appear.
@@ -709,13 +708,18 @@ def genplot_centroid_prob_3d(feat_path, model_path, target_class,base_class, poi
     
 def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poison_ids, title, device):
 
-    [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
+    # [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) )
+    ops_all, labels_all, ids_all = pickle.load(open(feat_path, "rb"))
+    print("model path:", model_path)
+    print("feat_path:", feat_path)
     # model = resnet_picker('ResNet18', 'CIFAR10')
-    model = HG(num_classes=num_classes) 
+    model = HG(num_classes=NUM_CLASSES) 
     model.load_state_dict(torch.load(model_path, map_location=device), strict=False)
     model.to(device)
     headless_model, last_layer  = bypass_last_layer(model)
     last_layer_weights = last_layer.weight.detach().cpu().numpy()
+    print("ops_all shape:", ops_all.shape)
+    print("last_layer_weights shape:", last_layer_weights.shape)
     logit_matrix = np.matmul(ops_all, last_layer_weights.T)
     softmax_scores = softmax(logit_matrix, theta = 1, axis = 1)
     target_lab_confidence = softmax_scores[:,base_class]

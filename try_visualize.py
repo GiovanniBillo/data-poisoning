@@ -8,8 +8,8 @@ matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc sign
 Or even worse, I get that numpy_.core.numeric is not available, so i can't do anything. 
 """
 MODEL = "HG"
-DATASET = "CIFAR100"
-EPS = 16.0
+DATASET = "CIFAR10"
+EPS = 8.0
 
 import sys
 import os
@@ -19,8 +19,6 @@ from plotting.featurespace_visualizations import *
 import os
 import pickle
 import numpy as np
-import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
 
 print(f"Using numpy version {np.__version__}")
