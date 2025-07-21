@@ -86,7 +86,7 @@ if __name__ == "__main__":
         except FileNotFoundError:
             print("Weight file not found. Please ensure the file path is correct.")
             exit()
-        model.load_state_dict(state_dict)
+        model.model.load_state_dict(state_dict)
     elif args.skip_clean_training:
         print('Skipping clean training...')
         stats_clean = None
