@@ -77,8 +77,19 @@ if __name__ == "__main__":
 
     start_time = time.time()
     if args.pretrained_model:
+        
         print('Loading pretrained model...')
         stats_clean = None
+        model = get_model("HG",args.dataset)
+        try:
+            state_dict = torch.load(os.path.join(clean_path, 'clean.pth'))
+        except FileNotFoundError:
+            print("Weight file not found. Please ensure the file path is correct.")
+            exit()
+            
+            
+            # 4. Apply the weights to the model
+            model.load_state_dict(state_dict)
     elif args.skip_clean_training:
         print('Skipping clean training...')
         stats_clean = None
