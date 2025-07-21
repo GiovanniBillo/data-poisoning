@@ -9,32 +9,12 @@ import time
 import os
 import numpy as np
 import pickle
-from PIL import Image
-import torchvision.transforms as T
-# import random # REMOVED: Not needed as we are not saving random train images
 
 import forest
 from forest.filtering_defenses import get_defense
-
 torch.backends.cudnn.benchmark = forest.consts.BENCHMARK
 torch.multiprocessing.set_sharing_strategy(forest.consts.SHARING_STRATEGY)
-
-# Place this function definition near the top, e.g., after imports
-def unnormalize_img(img_tensor, mean, std):
-    """
-    Unnormalizes a tensor image.
-    Args:
-        img_tensor (torch.Tensor): The normalized image tensor (C, H, W).
-        mean (list or tuple): The mean values used for normalization (per channel).
-        std (list or tuple): The std values used for normalization (per channel).
-    Returns:
-        torch.Tensor: The unnormalized image tensor.
-    """
-    # Ensure mean/std are on the same device as img_tensor for element-wise ops
-    mean = torch.tensor(mean).view(-1, 1, 1).to(img_tensor.device)
-    std = torch.tensor(std).view(-1, 1, 1).to(img_tensor.device)
-    unnormalized_tensor = img_tensor * std + mean
-    return unnormalized_tensor
+import torchvision.transforms as T
 
 # Parse input arguments
 args = forest.options().parse_args()
@@ -46,9 +26,12 @@ subfolder = args.modelsave_path
 clean_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_clean_model')
 def_model_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_defended_model')
 
-for char in ["[", "]", "'"]:
-    clean_path = clean_path.replace(char, '').strip()
-    def_model_path = def_model_path.replace(char, '').strip()
+for char in ["[","]","'"]:
+    clean_path = clean_path.replace(char, '')
+    clean_path = clean_path.strip()
+
+    def_model_path = def_model_path.replace(char, '')
+    def_model_path = def_model_path.strip()
 
 os.makedirs(clean_path, exist_ok=True)
 os.makedirs(def_model_path, exist_ok=True)
@@ -66,7 +49,12 @@ def get_features(model, data, poison_delta):
                 img += poison_delta[lookup, :, :, :]
             img = img.unsqueeze(0).to(**data.setup)
             f = feature_extractor(img).detach().cpu().numpy()
-            feats = np.copy(f) if i == 0 else np.append(feats, f, axis=0)
+            if i == 0:
+                feats = np.copy(f)
+            else:
+                feats = np.append(feats, f, axis=0)
+#             if i%1000==0:
+#                 print(i)
             targets.append(target)
             indices.append(idx)
 
@@ -88,52 +76,25 @@ if __name__ == "__main__":
     witch = forest.Witch(args, setup=setup)
     witch.patch_targets(data)
 
-    # --- Determine Dataset Mean and Std for Unnormalization ---
-    # IMPORTANT: You MUST replace these with the actual mean and std
-    # used by your specific dataset (e.g., CIFAR-10, ImageNet).
-    # Check forest/consts.py or where your dataset's transforms are defined.
-    #
-    # Example for CIFAR-10:
-    # DATASET_MEAN = [0.4914, 0.4822, 0.4465]
-    # DATASET_STD = [0.2023, 0.1994, 0.2010]
-    #
-    # Example for ImageNet (common default if not specified):
-    DATASET_MEAN = [0.485, 0.456, 0.406] # Placeholder, replace with actual values
-    DATASET_STD = [0.229, 0.224, 0.225]   # Placeholder, replace with actual values
+    # Save target image(s)
+    net_str = str(args.net[0] if isinstance(args.net, list) else args.net)
+    dataset_str = str(args.dataset[0] if isinstance(args.dataset, list) else args.dataset)
+    eps_str = str(args.eps)
 
-
-    # Save target image
-    target_img_dir = getattr(args, 'target_save_path', './saved_target')
+    target_img_dir = os.path.join(subfolder, f'{net_str}_{dataset_str}_{eps_str}_target_images')
     os.makedirs(target_img_dir, exist_ok=True)
+
     if len(data.targetset) > 0:
-        target_img_tensor, target_label, _ = data.targetset[0]
-        to_pil = T.ToPILImage()
-
-        # Save the original clamped version (this will likely be the distorted one if normalized)
-        # Renamed to make it clear this is the clamped-only output.
-        target_img_clamped = to_pil(target_img_tensor.cpu().detach().clamp(0, 1))
-        target_img_clamped.save(os.path.join(target_img_dir, 'target_clamped.png'))
-        print(f"[\u2713] Clamped target image saved to {os.path.join(target_img_dir, 'target_clamped.png')}")
-
-        # Save the unnormalized version (this should look correct)
-        unnormalized_target_tensor = unnormalize_img(target_img_tensor.cpu().detach(), DATASET_MEAN, DATASET_STD)
-        # Clamp after unnormalization to ensure values are within [0, 1] for image saving
-        unnormalized_target_tensor = unnormalized_target_tensor.clamp(0, 1)
-        target_img_unnormalized = to_pil(unnormalized_target_tensor)
-        target_img_unnormalized.save(os.path.join(target_img_dir, 'target_unnormalized.png'))
-        print(f"[\u2713] Unnormalized target image saved to {os.path.join(target_img_dir, 'target_unnormalized.png')}")
-
-        # Save tensor statistics for debugging the numerical range
-        with open(os.path.join(target_img_dir, 'target_tensor_stats.txt'), 'w') as file:
-            file.write(f"Tensor Min: {target_img_tensor.min().item()}\n")
-            file.write(f"Tensor Max: {target_img_tensor.max().item()}\n")
-            file.write(f"Tensor Mean: {target_img_tensor.mean().item()}\n")
-            file.write(f"Tensor Std: {target_img_tensor.std().item()}\n")
-            file.write(f"Tensor Shape: {target_img_tensor.shape}\n")
-        print(f"[\u2713] Target image tensor stats saved to {os.path.join(target_img_dir, 'target_tensor_stats.txt')}")
-
+        for idx, (target_img_tensor, target_label, _) in enumerate(data.targetset):
+            to_pil = T.ToPILImage()
+            target_img = to_pil(target_img_tensor.cpu().detach().clamp(0, 1))
+            filename = f"target_{idx}_label_{target_label}.png"
+            target_img.save(os.path.join(target_img_dir, filename))
+        print(f"[✓] Saved {len(data.targetset)} target image(s) to: {target_img_dir}")
     else:
-        print("[!] No target image found to save.")
+        print("[!] No target image(s) found to save.")
+
+
 
     start_time = time.time()
     if args.pretrained_model:
@@ -155,11 +116,15 @@ if __name__ == "__main__":
 
     poison_delta = witch.brew(model, data)
     brew_time = time.time()
-    with open(os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_poison_indices.pickle'), 'wb+') as file:
+    with open(os.path.join(subfolder,f'{args.net}_{args.dataset}_{args.eps}_poison_indices.pickle'), 'wb+') as file:
         pickle.dump(data.poison_ids, file, protocol=pickle.HIGHEST_PROTOCOL)
     print('Poison ids saved')
 
+    # Optional: apply a filtering defense
     if args.filter_defense != '':
+        # Crucially any filtering defense would not have access to the final clean model used by the attacker,
+        # as such we need to retrain a poisoned model to use as basis for a filter defense if we are in the from-scratch
+        # setting where no pretrained feature representation is available to both attacker and defender
         if args.scenario == 'from-scratch':
             model.validate(data, poison_delta)
         print('Attempting to filter poison images...')
@@ -176,10 +141,10 @@ if __name__ == "__main__":
         filter_stats = dict()
 
     if not args.pretrained_model and args.retrain_from_init:
+        # retraining from the same seed is incompatible --pretrained as we do not know the initial seed..
         stats_rerun = model.retrain(data, poison_delta)
     else:
         stats_rerun = None
-
     torch.save(model.model.state_dict(), os.path.join(def_model_path, 'def.pth'))
     model.model.eval()
     feats, targets, indices = get_features(model, data, poison_delta=poison_delta)
@@ -187,33 +152,35 @@ if __name__ == "__main__":
         pickle.dump([feats, targets, indices], file, protocol=pickle.HIGHEST_PROTOCOL)
     model.model.train()
 
-    if args.vnet is not None:
+    if args.vnet is not None:  # Validate the transfer model given by args.vnet
         train_net = args.net
         args.net = args.vnet
         if args.vruns > 0:
-            model = forest.Victim(args, setup=setup)
+            model = forest.Victim(args, setup=setup)  # this instantiates a new model with a different architecture
             stats_results = model.validate(data, poison_delta)
         else:
             stats_results = None
         args.net = train_net
-    else:
+    else:  # Validate the main model
         if args.vruns > 0:
             stats_results = model.validate(data, poison_delta)
         else:
             stats_results = None
-
     test_time = time.time()
+
     timestamps = dict(train_time=str(datetime.timedelta(seconds=train_time - start_time)).replace(',', ''),
                       brew_time=str(datetime.timedelta(seconds=brew_time - train_time)).replace(',', ''),
                       test_time=str(datetime.timedelta(seconds=test_time - brew_time)).replace(',', ''))
-
+    # Save run to table
     results = (stats_clean, stats_rerun, stats_results)
     forest.utils.record_results(data, witch.stat_optimal_loss, results,
                                 args, model.defs, model.model_init_seed, extra_stats={**filter_stats, **timestamps})
 
+    # Export
     if args.save is not None:
         data.export_poison(poison_delta, path=args.poison_path, mode=args.save, net=args.net, dataset=args.dataset, eps=args.eps)
-
+        if args.save == 'export_targets':
+            data.export_poison(poison_delta, path=args.poison_path, mode='export_targets', net=args.net, dataset=args.dataset, eps=args.eps)
     print(datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p"))
     print('---------------------------------------------------')
     print(f'Finished computations with train time: {str(datetime.timedelta(seconds=train_time - start_time))}')
