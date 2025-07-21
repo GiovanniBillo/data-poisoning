@@ -1,0 +1,5 @@
+Tensor Min: -1.9894862174987793
+Tensor Max: 2.0941529273986816
+Tensor Mean: 0.2752645015716553
+Tensor Std: 1.3462365865707397
+Tensor Shape: torch.Size([3, 32, 32])
