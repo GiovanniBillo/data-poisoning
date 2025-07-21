@@ -13,6 +13,7 @@ import pickle
 import forest
 from forest.victims.models import *
 from forest.filtering_defenses import get_defense
+from forest.utils import unwrap_model 
 torch.backends.cudnn.benchmark = forest.consts.BENCHMARK
 torch.multiprocessing.set_sharing_strategy(forest.consts.SHARING_STRATEGY)
 
@@ -40,7 +41,8 @@ def get_features(model, data, poison_delta):
     feats = np.array([])
     targets = []
     indices = []
-    layer_cake = list(model.model.children())
+    model_unwrapped = unwrap_model(model)
+    layer_cake = list(model_unwrapped.children())
     feature_extractor = torch.nn.Sequential(*(layer_cake[:-1]), torch.nn.Flatten())
     with torch.no_grad():
         for i, (img, target, idx) in enumerate(data.trainset):
@@ -71,6 +73,9 @@ if __name__ == "__main__":
     setup = forest.utils.system_startup(args)
 
     model = forest.Victim(args, setup=setup)
+
+    model_unwrapped = unwrap_model(model)
+
     data = forest.Kettle(args, model.defs.batch_size, model.defs.augmentations,
                          model.defs.mixing_method, setup=setup)
     witch = forest.Witch(args, setup=setup)
@@ -86,7 +91,7 @@ if __name__ == "__main__":
         except FileNotFoundError:
             print(f"Weight file not found")
             exit()
-        model.model.load_state_dict(state_dict)
+        model_unwrapped.load_state_dict(state_dict)
     elif args.skip_clean_training:
         print('Skipping clean training...')
         stats_clean = None
@@ -94,12 +99,12 @@ if __name__ == "__main__":
         stats_clean = model.train(data, max_epoch=args.max_epoch)
     train_time = time.time()
 
-    torch.save(model.model.state_dict(), os.path.join(clean_path, 'clean.pth'))
-    model.model.eval()
+    torch.save(model_unwrapped.state_dict(), os.path.join(clean_path, 'clean.pth'))
+    model_unwrapped.eval()
     feats, targets, indices = get_features(model, data, poison_delta=None)
     with open(os.path.join(clean_path, 'clean_features.pickle'), 'wb+') as file:
         pickle.dump([feats, targets, indices], file, protocol=pickle.HIGHEST_PROTOCOL)
-    model.model.train()
+    model_unwrapped.train()
 
     poison_delta = witch.brew(model, data)
     brew_time = time.time()
@@ -132,12 +137,12 @@ if __name__ == "__main__":
         stats_rerun = model.retrain(data, poison_delta)
     else:
         stats_rerun = None
-    torch.save(model.model.state_dict(), os.path.join(def_model_path, 'def.pth'))
-    model.model.eval()
+    torch.save(model_unwrapped.state_dict(), os.path.join(def_model_path, 'def.pth'))
+    model_unwrapped.eval()
     feats, targets, indices = get_features(model, data, poison_delta=poison_delta)
     with open(os.path.join(def_model_path, 'def_features.pickle'), 'wb+') as file:
         pickle.dump([feats, targets, indices], file, protocol=pickle.HIGHEST_PROTOCOL)
-    model.model.train()
+    model_unwrapped.train()
 
     if args.vnet is not None:  # Validate the transfer model given by args.vnet
         train_net = args.net

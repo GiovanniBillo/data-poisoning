@@ -2,8 +2,8 @@
 #SBATCH --job-name=data_poisoning_single
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=48
-#SBATCH --gpus=2
+#SBATCH --cpus-per-task=1
+#SBATCH --gpus=1
 #SBATCH --mem=128G
 #SBATCH --partition=GPU
 #SBATCH --account=dssc
@@ -14,6 +14,26 @@
 # === Environment setup ===
 echo "Activating virtualenv..." >&2
 source ~/dlprojenv/bin/activate
+# === Environment setup ===
+VENV_DIR=~/dlprojenv
+
+echo "Checking Python virtual environment..." >&2
+if [ ! -d "$VENV_DIR" ] || [ ! -f "$VENV_DIR/bin/activate" ]; then
+    echo "[INFO] Virtualenv not found. Creating new environment at $VENV_DIR..." >&2
+    python3 -m venv "$VENV_DIR"
+    source "$VENV_DIR/bin/activate"
+    echo "[INFO] Installing requirements..." >&2
+    pip install --upgrade pip
+    if [ -f requirements.txt ]; then
+        pip install -r requirements.txt
+    else
+        echo "[WARN] No requirements.txt found. Skipping dependency install." >&2
+    fi
+else
+    echo "[INFO] Activating existing virtualenv..." >&2
+    source "$VENV_DIR/bin/activate"
+fi
+
 
 mkdir -p logs
 LOGFILE="logs/env_${SLURM_JOB_ID}.log"
@@ -67,5 +87,5 @@ echo "torchrun --nproc_per_node=$SLURM_GPUS brew_poison.py ${BREW_ARGS[@]}" >> "
 
 # === Launch ===
 torchrun --nproc_per_node=$SLURM_GPUS \
-         brew_poison.py "${BREW_ARGS[@]}" >> "logs/train_${SLURM_JOB_ID}.log" 2>&1
+         brew_and_visualize_poison2.py "${BREW_ARGS[@]}" >> "logs/train_${SLURM_JOB_ID}.log" 2>&1
 

@@ -241,3 +241,11 @@ def set_deterministic():
     """Switch pytorch into a deterministic computation mode."""
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
+
+def unwrap_model(model):
+    """
+    Return the actual model instance in case it is wrapped in DataParallel or DDP.
+    """
+    if isinstance(model, (torch.nn.DataParallel, torch.nn.parallel.DistributedDataParallel)):
+        return model.module
+    return model.model
