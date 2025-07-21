@@ -3,7 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 # from forest.victims.models import ResNet, resnet_picker
 
-from forest.victims.HG import HG
+# from forest.victims.HG import HG
+from HG import HG
 
 import sys
 import os
@@ -710,7 +711,7 @@ def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poi
 
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
     # model = resnet_picker('ResNet18', 'CIFAR10')
-    model = HG(num_classes=10) 
+    model = HG(num_classes=num_classes) 
     model.load_state_dict(torch.load(model_path, map_location=device), strict=False)
     model.to(device)
     headless_model, last_layer  = bypass_last_layer(model)

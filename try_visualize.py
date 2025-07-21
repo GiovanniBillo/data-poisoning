@@ -14,14 +14,6 @@ EPS = 16.0
 import sys
 import os
 
-# Add project root (one level up from this script's directory)
-# project_root = os.path.abspath(os.path.join(os.getcwd(), '..'))
-# project_root = os.path.abspath(os.path.join(os.getcwd()))
-# sys.path.insert(0, project_root)
-
-# Confirm it's now importable
-# print("Project root added to path:", project_root)
-
 import torch
 from plotting.featurespace_visualizations import *
 import os
