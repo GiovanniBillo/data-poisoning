@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from forest.victims.models import ResNet, resnet_picker
+# from forest.victims.models import ResNet, resnet_picker
 
 from forest.victims.HG import HG
 
