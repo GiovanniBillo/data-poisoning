@@ -1,4 +1,11 @@
---dataset=EUROSAT
---optimization=custom
---net=ConvNet
+
+--net HG
+--recipe gradient-matching
+--optimization custom
+--dataset EUROSAT
+--save only_modified
+--epochs 40 
+--restarts 5 
+--eps 16
+--pretrained_model
 --deterministic
