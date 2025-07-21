@@ -83,6 +83,7 @@ if __name__ == "__main__":
         stats_clean = None
         try:
             state_dict = torch.load(os.path.join(clean_path, 'clean.pth'))
+            ptint(state_dict)
         except FileNotFoundError:
             print(f"Weight file not found in directory {state_dict}")
             exit()
