@@ -1,0 +1,89 @@
+Currently evaluating -------------------------------:
+Monday, 21. July 2025 05:35PM
+Namespace(net=['HG'], dataset='EUROSAT', recipe='gradient-matching', threatmodel='single-class', scenario='from-scratch', poisonkey=None, modelkey=None, deterministic=True, eps=16.0, budget=0.01, targets=1, patch_size=8, name='', table_path='tables/', poison_path='poisons/', data_path='~/data', modelsave_path='./models/', mixing_method=None, mixing_disable_correction=True, mixing_strength=None, disable_adaptive_attack=True, defend_features_only=False, gradient_noise=None, gradient_clip=None, defense_type=None, defense_strength=None, defense_steps=None, defense_targets=None, filter_defense='', padversarial=None, pmix=False, attackoptim='signAdam', attackiter=250, init='randn', tau=0.1, scheduling=True, target_criterion='cross-entropy', restarts=5, load_patch='', pbatch=512, pshuffle=False, paugment=True, data_aug='default', full_data=False, ensemble=1, stagger=None, step=False, max_epoch=None, ablation=1.0, loss='similarity', centreg=0, normreg=0, repel=0, nadapt=2, clean_grad=False, vruns=1, vnet=None, retrain_from_init=False, skip_clean_training=False, pretrained_model=True, pretrain_dataset=None, optimization='custom', epochs=40, lr=None, noaugment=False, lmdb_path=None, cache_dataset=False, benchmark='', benchmark_idx=0, dryrun=False, save='only_modified', local_rank=None)
+Currently evaluating -------------------------------:
+Monday, 21. July 2025 05:35PM
+Namespace(net=['HG'], dataset='EUROSAT', recipe='gradient-matching', threatmodel='single-class', scenario='from-scratch', poisonkey=None, modelkey=None, deterministic=True, eps=16.0, budget=0.01, targets=1, patch_size=8, name='', table_path='tables/', poison_path='poisons/', data_path='~/data', modelsave_path='./models/', mixing_method=None, mixing_disable_correction=True, mixing_strength=None, disable_adaptive_attack=True, defend_features_only=False, gradient_noise=None, gradient_clip=None, defense_type=None, defense_strength=None, defense_steps=None, defense_targets=None, filter_defense='', padversarial=None, pmix=False, attackoptim='signAdam', attackiter=250, init='randn', tau=0.1, scheduling=True, target_criterion='cross-entropy', restarts=5, load_patch='', pbatch=512, pshuffle=False, paugment=True, data_aug='default', full_data=False, ensemble=1, stagger=None, step=False, max_epoch=None, ablation=1.0, loss='similarity', centreg=0, normreg=0, repel=0, nadapt=2, clean_grad=False, vruns=1, vnet=None, retrain_from_init=False, skip_clean_training=False, pretrained_model=True, pretrain_dataset=None, optimization='custom', epochs=40, lr=None, noaugment=False, lmdb_path=None, cache_dataset=False, benchmark='', benchmark_idx=0, dryrun=False, save='only_modified', local_rank=None)
+CPUs: 24, GPUs: 2 on gpu003.hpc.rd.areasciencepark.it.
+GPU : Tesla V100-PCIE-32GB
+CPUs: 24, GPUs: 2 on gpu003.hpc.rd.areasciencepark.it.
+GPU : Tesla V100-PCIE-32GB
+HG model initialized with random key 757121701.
+Hyperparameters(name='custom', epochs=40, batch_size=16, optimizer='SGD', lr=0.01, scheduler='plateau', weight_decay=1e-06, augmentations='default', privacy={'clip': None, 'noise': None, 'distribution': None}, validate=5, novel_defense={'type': '', 'strength': 16.0, 'target_selection': 'sep-half', 'steps': 5}, mixing_method={'type': '', 'strength': 0.0, 'correction': True}, adaptive_attack=True, defend_features_only=False)
+HG model initialized with random key 3900173653.
+Hyperparameters(name='custom', epochs=40, batch_size=16, optimizer='SGD', lr=0.01, scheduler='plateau', weight_decay=1e-06, augmentations='default', privacy={'clip': None, 'noise': None, 'distribution': None}, validate=5, novel_defense={'type': '', 'strength': 16.0, 'target_selection': 'sep-half', 'steps': 5}, mixing_method={'type': '', 'strength': 0.0, 'correction': True}, adaptive_attack=True, defend_features_only=False)
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  63%|██████▎   | 10200/16200 [00:00<00:00, 100093.35 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 116704.75 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 115040.85 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 126637.49 examples/s]
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  64%|██████▍   | 10400/16200 [00:00<00:00, 100908.81 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 117369.80 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 116866.74 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 127283.69 examples/s]
+Data mean is [-0.2476285994052887, -0.2903984785079956, -0.11586806178092957], 
+Data std  is [1.0909910202026367, 0.738492488861084, 0.6617345213890076].
+Data mean is [-0.24958693981170654, -0.2929663062095642, -0.11686445027589798], 
+Data std  is [1.0919424295425415, 0.7397100329399109, 0.6631417274475098].
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  75%|███████▌  | 12200/16200 [00:00<00:00, 118441.48 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 128800.11 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 126596.44 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 127436.23 examples/s]
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  75%|███████▌  | 12200/16200 [00:00<00:00, 118503.74 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 126104.92 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 125875.27 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 121013.46 examples/s]
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  76%|███████▌  | 12300/16200 [00:00<00:00, 120973.37 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 128826.73 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 126360.54 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 125806.75 examples/s]
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  74%|███████▍  | 12000/16200 [00:00<00:00, 118909.48 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 130288.36 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 128872.66 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 127632.28 examples/s]
+Data mean is [-0.25110873579978943, -0.29351672530174255, -0.11752905696630478], 
+Data std  is [1.0933339595794678, 0.743097186088562, 0.6664213538169861].
+Data mean is [-0.24099984765052795, -0.2884328067302704, -0.11484361439943314], 
+Data std  is [1.10026216506958, 0.7462280988693237, 0.6685323715209961].
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  76%|███████▌  | 12300/16200 [00:00<00:00, 121177.96 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 131679.09 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 125080.72 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 126640.32 examples/s]
+Data is loaded with 8 workers.
+Initializing Poison data (chosen images, examples, targets, labels) with random seed 642859474
+Poisoning setup generated for threat model single-class and budget of 1.0% - 162 images:
+--Target images drawn from class Herbaceous Vegetation. with ids [1603].
+--Target images assigned intended class Permanent Crop.
+--Poison images drawn from class Permanent Crop.
+Loading pretrained model...
+Traceback (most recent call last):
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/brew_and_visualize_poison2.py", line 94, in <module>
+    model_unwrapped.load_state_dict(state_dict)
+  File "/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for DataParallel:
+	Missing key(s) in state_dict: "module.initial_layer.0.weight", "module.initial_layer.1.weight", "module.initial_layer.1.bias", "module.initial_layer.1.running_mean", "module.initial_layer.1.running_var", "module.down_block1.0.weight", "module.down_block1.1.weight", "module.down_block1.1.bias", "module.down_block1.1.running_mean", "module.down_block1.1.running_var", "module.down_block2.0.weight", "module.down_block2.1.weight", "module.down_block2.1.bias", "module.down_block2.1.running_mean", "module.down_block2.1.running_var", "module.bottleneck.0.weight", "module.bottleneck.1.weight", "module.bottleneck.1.bias", "module.bottleneck.1.running_mean", "module.bottleneck.1.running_var", "module.bottleneck.3.weight", "module.bottleneck.4.weight", "module.bottleneck.4.bias", "module.bottleneck.4.running_mean", "module.bottleneck.4.running_var", "module.fc.0.weight", "module.fc.0.bias", "module.fc.3.weight", "module.fc.3.bias". 
+	Unexpected key(s) in state_dict: "initial_layer.0.weight", "initial_layer.1.weight", "initial_layer.1.bias", "initial_layer.1.running_mean", "initial_layer.1.running_var", "initial_layer.1.num_batches_tracked", "down_block1.0.weight", "down_block1.1.weight", "down_block1.1.bias", "down_block1.1.running_mean", "down_block1.1.running_var", "down_block1.1.num_batches_tracked", "down_block2.0.weight", "down_block2.1.weight", "down_block2.1.bias", "down_block2.1.running_mean", "down_block2.1.running_var", "down_block2.1.num_batches_tracked", "bottleneck.0.weight", "bottleneck.1.weight", "bottleneck.1.bias", "bottleneck.1.running_mean", "bottleneck.1.running_var", "bottleneck.1.num_batches_tracked", "bottleneck.3.weight", "bottleneck.4.weight", "bottleneck.4.bias", "bottleneck.4.running_mean", "bottleneck.4.running_var", "bottleneck.4.num_batches_tracked", "fc.0.weight", "fc.0.bias", "fc.3.weight", "fc.3.bias". 
+W0721 17:35:43.904739 514097 /orfeo/cephfs/home/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 514123 closing signal SIGTERM
+E0721 17:35:44.020370 514097 /orfeo/cephfs/home/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 514122) of binary: /usr/bin/python3
+Traceback (most recent call last):
+  File "/u/ipauser/a.suklan/.local/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+  File "/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+  File "/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+brew_and_visualize_poison2.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-07-21_17:35:43
+  host      : gpu003.hpc.rd.areasciencepark.it
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 514122)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

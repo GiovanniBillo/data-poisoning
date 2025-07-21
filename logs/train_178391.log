@@ -1,0 +1,36 @@
+Currently evaluating -------------------------------:
+Monday, 21. July 2025 05:31PM
+Namespace(net=['HG'], dataset='EUROSAT', recipe='gradient-matching', threatmodel='single-class', scenario='from-scratch', poisonkey=None, modelkey=None, deterministic=True, eps=16.0, budget=0.01, targets=1, patch_size=8, name='', table_path='tables/', poison_path='poisons/', data_path='~/data', modelsave_path='./models/', mixing_method=None, mixing_disable_correction=True, mixing_strength=None, disable_adaptive_attack=True, defend_features_only=False, gradient_noise=None, gradient_clip=None, defense_type=None, defense_strength=None, defense_steps=None, defense_targets=None, filter_defense='', padversarial=None, pmix=False, attackoptim='signAdam', attackiter=250, init='randn', tau=0.1, scheduling=True, target_criterion='cross-entropy', restarts=5, load_patch='', pbatch=512, pshuffle=False, paugment=True, data_aug='default', full_data=False, ensemble=1, stagger=None, step=False, max_epoch=None, ablation=1.0, loss='similarity', centreg=0, normreg=0, repel=0, nadapt=2, clean_grad=False, vruns=1, vnet=None, retrain_from_init=False, skip_clean_training=False, pretrained_model=True, pretrain_dataset=None, optimization='custom', epochs=40, lr=None, noaugment=False, lmdb_path=None, cache_dataset=False, benchmark='', benchmark_idx=0, dryrun=False, save='only_modified', local_rank=None)
+CPUs: 1, GPUs: 1 on gpu003.hpc.rd.areasciencepark.it.
+GPU : Tesla V100-PCIE-32GB
+HG model initialized with random key 2463209174.
+Hyperparameters(name='custom', epochs=40, batch_size=16, optimizer='SGD', lr=0.01, scheduler='plateau', weight_decay=1e-06, augmentations='default', privacy={'clip': None, 'noise': None, 'distribution': None}, validate=5, novel_defense={'type': '', 'strength': 16.0, 'target_selection': 'sep-half', 'steps': 5}, mixing_method={'type': '', 'strength': 0.0, 'correction': True}, adaptive_attack=True, defend_features_only=False)
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  51%|█████     | 8200/16200 [00:00<00:00, 79689.18 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 93764.58 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 90919.18 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 98691.66 examples/s]
+Data mean is [-0.27364209294319153, -0.31252530217170715, -0.13648392260074615], 
+Data std  is [1.0993844270706177, 0.7567270398139954, 0.6817050576210022].
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  57%|█████▋    | 9300/16200 [00:00<00:00, 92079.14 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 100264.61 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 97255.46 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 98449.71 examples/s]
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  58%|█████▊    | 9400/16200 [00:00<00:00, 91132.68 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 101543.79 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 98182.55 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 98021.08 examples/s]
+Data mean is [-0.23076727986335754, -0.27542656660079956, -0.10107919573783875], 
+Data std  is [1.0847362279891968, 0.7290758490562439, 0.6512688994407654].
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  58%|█████▊    | 9400/16200 [00:00<00:00, 90333.59 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 101317.58 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 98693.38 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 99155.69 examples/s]
+Data is loaded with 0 workers.
+Initializing Poison data (chosen images, examples, targets, labels) with random seed 662501920
+Poisoning setup generated for threat model single-class and budget of 1.0% - 162 images:
+--Target images drawn from class SeaLake. with ids [5120].
+--Target images assigned intended class River.
+--Poison images drawn from class River.
+Loading pretrained model...
+Starting brewing procedure ...
+Target Grad Norm is 2128.52001953125
+Iteration 0: Target loss is 0.9398, Poison clean acc is 5.56%
+Iteration 50: Target loss is 0.6941, Poison clean acc is 82.72%
+Iteration 100: Target loss is 0.6392, Poison clean acc is 88.89%
+Iteration 150: Target loss is 0.5617, Poison clean acc is 90.12%

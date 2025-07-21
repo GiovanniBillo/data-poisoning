@@ -1,0 +1,64 @@
+==== SLURM ENVIRONMENT ====
+SLURM_JOB_USER=a.suklan
+SLURM_TASKS_PER_NODE=1
+SLURM_JOB_UID=1159400164
+SLURM_TASK_PID=513485
+SLURM_JOB_GPUS=0
+SLURM_LOCALID=0
+SLURM_SUBMIT_DIR=/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning
+SLURM_JOB_START_TIME=1753111897
+SLURM_CLUSTER_NAME=orfeo
+SLURM_JOB_END_TIME=1753119097
+SLURM_CPUS_ON_NODE=2
+SLURM_JOB_CPUS_PER_NODE=2
+SLURM_GPUS_ON_NODE=1
+SLURM_GTIDS=0
+SLURM_JOB_PARTITION=GPU
+SLURM_TRES_PER_TASK=cpu=1
+SLURM_OOM_KILL_STEP=0
+SLURM_JOB_NUM_NODES=1
+SLURM_JOBID=178391
+SLURM_GPUS=1
+SLURM_JOB_QOS=normal
+SLURM_PROCID=0
+SLURM_CPUS_PER_TASK=1
+SLURM_NTASKS=1
+SLURM_TOPOLOGY_ADDR=gpu003
+SLURM_TOPOLOGY_ADDR_PATTERN=node
+SLURM_MEM_PER_NODE=131072
+SLURM_NODELIST=gpu003
+SLURM_JOB_ACCOUNT=dssc
+SLURM_PRIO_PROCESS=0
+SLURM_NPROCS=1
+SLURM_NNODES=1
+SLURM_SUBMIT_HOST=login01.hpc.rd.areasciencepark.it
+SLURM_JOB_ID=178391
+SLURM_NODEID=0
+SLURM_CONF=/var/spool/slurm/d/conf-cache/slurm.conf
+SLURM_JOB_NAME=data_poisoning_single
+SLURM_JOB_GID=1159400164
+SLURM_JOB_NODELIST=gpu003
+
+==== GPU STATUS ====
+Mon Jul 21 17:31:42 2025       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 545.23.08              Driver Version: 545.23.08    CUDA Version: 12.3     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  Tesla V100-PCIE-32GB           Off | 00000000:3B:00.0 Off |                    0 |
+| N/A   36C    P0              25W / 250W |      0MiB / 32768MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+==== TORCHRUN CMD ====
+torchrun --nproc_per_node=1 brew_poison.py --net=HG --recipe=gradient-matching --optimization=custom --dataset=EUROSAT --save=only_modified --epochs=40 --restarts=5 --eps=16 --pretrained_model --deterministic

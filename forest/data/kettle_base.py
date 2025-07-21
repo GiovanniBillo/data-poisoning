@@ -50,10 +50,10 @@ class _Kettle():
         self.augmentations = augmentations
         self.mixing_method = mixing_method
 
-        self.trainset, self.validset = construct_datasets(self.args.dataset, self.args.data_path, NORMALIZE)
+        self.trainset, self.validset = construct_datasets(self.args.dataset, self.args.data_path, self.args, NORMALIZE)
         if self.args.pretrain_dataset is not None:
             self.pretrain_trainset, self.pretrain_validset = construct_datasets(self.args.pretrain_dataset,
-                                                                                self.args.data_path, NORMALIZE)
+                                                                                self.args.data_path, args, NORMALIZE)
         self.prepare_diff_data_augmentations(normalize=NORMALIZE)
 
         num_workers = self.get_num_workers()
@@ -148,7 +148,7 @@ class _Kettle():
 
     def prepare_diff_data_augmentations(self, normalize=True):
         """Load differentiable data augmentations separately from usual torchvision.transforms."""
-        trainset, validset = construct_datasets(self.args.dataset, self.args.data_path, normalize)
+        trainset, validset = construct_datasets(self.args.dataset, self.args.data_path, self.args, normalize)
 
 
         # Prepare data mean and std for later:

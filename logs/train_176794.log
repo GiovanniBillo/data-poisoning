@@ -1,0 +1,139 @@
+usage: brew_and_visualize_poison2.py [-h] [--net NET]
+                                     [--dataset {CIFAR10,CIFAR100,ImageNet,ImageNet1k,MNIST,TinyImageNet,EUROSAT}]
+                                     [--recipe {gradient-matching,gradient-matching-private,gradient-matching-mt,watermark,poison-frogs,metapoison,hidden-trigger,metapoison-v2,metapoison-v3,bullseye,patch,gradient-matching-hidden,convex-polytope}]
+                                     [--threatmodel {single-class,third-party,random-subset}]
+                                     [--scenario {from-scratch,transfer,finetuning}]
+                                     [--poisonkey POISONKEY]
+                                     [--modelkey MODELKEY] [--deterministic]
+                                     [--eps EPS] [--budget BUDGET]
+                                     [--targets TARGETS]
+                                     [--patch_size PATCH_SIZE] [--name NAME]
+                                     [--table_path TABLE_PATH]
+                                     [--poison_path POISON_PATH]
+                                     [--data_path DATA_PATH]
+                                     [--modelsave_path MODELSAVE_PATH]
+                                     [--mixing_method MIXING_METHOD]
+                                     [--mixing_disable_correction]
+                                     [--mixing_strength MIXING_STRENGTH]
+                                     [--disable_adaptive_attack]
+                                     [--defend_features_only]
+                                     [--gradient_noise GRADIENT_NOISE]
+                                     [--gradient_clip GRADIENT_CLIP]
+                                     [--defense_type DEFENSE_TYPE]
+                                     [--defense_strength DEFENSE_STRENGTH]
+                                     [--defense_steps DEFENSE_STEPS]
+                                     [--defense_targets DEFENSE_TARGETS]
+                                     [--filter_defense {spectral_signatures,deepknn,activation_clustering}]
+                                     [--padversarial PADVERSARIAL] [--pmix]
+                                     [--attackoptim ATTACKOPTIM]
+                                     [--attackiter ATTACKITER] [--init INIT]
+                                     [--tau TAU] [--scheduling]
+                                     [--target_criterion TARGET_CRITERION]
+                                     [--restarts RESTARTS]
+                                     [--load_patch LOAD_PATCH]
+                                     [--pbatch PBATCH] [--pshuffle]
+                                     [--paugment] [--data_aug DATA_AUG]
+                                     [--full_data] [--ensemble ENSEMBLE]
+                                     [--stagger {firstn,full,inbetween}]
+                                     [--step] [--max_epoch MAX_EPOCH]
+                                     [--ablation ABLATION] [--loss LOSS]
+                                     [--centreg CENTREG] [--normreg NORMREG]
+                                     [--repel REPEL] [--nadapt NADAPT]
+                                     [--clean_grad] [--vruns VRUNS]
+                                     [--vnet VNET] [--retrain_from_init]
+                                     [--skip_clean_training]
+                                     [--pretrained_model]
+                                     [--pretrain_dataset {CIFAR10,CIFAR100,ImageNet,ImageNet1k,MNIST,TinyImageNet}]
+                                     [--optimization OPTIMIZATION]
+                                     [--epochs EPOCHS] [--lr LR] [--noaugment]
+                                     [--lmdb_path LMDB_PATH] [--cache_dataset]
+                                     [--benchmark BENCHMARK]
+                                     [--benchmark_idx BENCHMARK_IDX]
+                                     [--dryrun] [--save SAVE]
+                                     [--local_rank LOCAL_RANK]
+brew_and_visualize_poison2.py: error: unrecognized arguments: --net HG --recipe gradient-matching --optimization custom --dataset EUROSAT --save only_modified --epochs 40 --restarts 5 --eps 16
+usage: brew_and_visualize_poison2.py [-h] [--net NET]
+                                     [--dataset {CIFAR10,CIFAR100,ImageNet,ImageNet1k,MNIST,TinyImageNet,EUROSAT}]
+                                     [--recipe {gradient-matching,gradient-matching-private,gradient-matching-mt,watermark,poison-frogs,metapoison,hidden-trigger,metapoison-v2,metapoison-v3,bullseye,patch,gradient-matching-hidden,convex-polytope}]
+                                     [--threatmodel {single-class,third-party,random-subset}]
+                                     [--scenario {from-scratch,transfer,finetuning}]
+                                     [--poisonkey POISONKEY]
+                                     [--modelkey MODELKEY] [--deterministic]
+                                     [--eps EPS] [--budget BUDGET]
+                                     [--targets TARGETS]
+                                     [--patch_size PATCH_SIZE] [--name NAME]
+                                     [--table_path TABLE_PATH]
+                                     [--poison_path POISON_PATH]
+                                     [--data_path DATA_PATH]
+                                     [--modelsave_path MODELSAVE_PATH]
+                                     [--mixing_method MIXING_METHOD]
+                                     [--mixing_disable_correction]
+                                     [--mixing_strength MIXING_STRENGTH]
+                                     [--disable_adaptive_attack]
+                                     [--defend_features_only]
+                                     [--gradient_noise GRADIENT_NOISE]
+                                     [--gradient_clip GRADIENT_CLIP]
+                                     [--defense_type DEFENSE_TYPE]
+                                     [--defense_strength DEFENSE_STRENGTH]
+                                     [--defense_steps DEFENSE_STEPS]
+                                     [--defense_targets DEFENSE_TARGETS]
+                                     [--filter_defense {spectral_signatures,deepknn,activation_clustering}]
+                                     [--padversarial PADVERSARIAL] [--pmix]
+                                     [--attackoptim ATTACKOPTIM]
+                                     [--attackiter ATTACKITER] [--init INIT]
+                                     [--tau TAU] [--scheduling]
+                                     [--target_criterion TARGET_CRITERION]
+                                     [--restarts RESTARTS]
+                                     [--load_patch LOAD_PATCH]
+                                     [--pbatch PBATCH] [--pshuffle]
+                                     [--paugment] [--data_aug DATA_AUG]
+                                     [--full_data] [--ensemble ENSEMBLE]
+                                     [--stagger {firstn,full,inbetween}]
+                                     [--step] [--max_epoch MAX_EPOCH]
+                                     [--ablation ABLATION] [--loss LOSS]
+                                     [--centreg CENTREG] [--normreg NORMREG]
+                                     [--repel REPEL] [--nadapt NADAPT]
+                                     [--clean_grad] [--vruns VRUNS]
+                                     [--vnet VNET] [--retrain_from_init]
+                                     [--skip_clean_training]
+                                     [--pretrained_model]
+                                     [--pretrain_dataset {CIFAR10,CIFAR100,ImageNet,ImageNet1k,MNIST,TinyImageNet}]
+                                     [--optimization OPTIMIZATION]
+                                     [--epochs EPOCHS] [--lr LR] [--noaugment]
+                                     [--lmdb_path LMDB_PATH] [--cache_dataset]
+                                     [--benchmark BENCHMARK]
+                                     [--benchmark_idx BENCHMARK_IDX]
+                                     [--dryrun] [--save SAVE]
+                                     [--local_rank LOCAL_RANK]
+brew_and_visualize_poison2.py: error: unrecognized arguments: --net HG --recipe gradient-matching --optimization custom --dataset EUROSAT --save only_modified --epochs 40 --restarts 5 --eps 16
+W0721 15:59:19.611060 71118 /orfeo/cephfs/home/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 71149 closing signal SIGTERM
+E0721 15:59:19.626910 71118 /orfeo/cephfs/home/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 2) local_rank: 0 (pid: 71148) of binary: /usr/bin/python3
+Traceback (most recent call last):
+  File "/u/ipauser/a.suklan/.local/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+  File "/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+  File "/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+brew_and_visualize_poison2.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-07-21_15:59:19
+  host      : gpu004.hpc.rd.areasciencepark.it
+  rank      : 0 (local_rank: 0)
+  exitcode  : 2 (pid: 71148)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

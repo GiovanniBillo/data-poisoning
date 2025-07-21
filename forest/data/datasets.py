@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore", "(Possibly )?corrupt EXIF data", UserWarning)
 
 from ..EUROSAT_utils import get_EUROSAT
 
-def construct_datasets(dataset, data_path, normalize=True):
+def construct_datasets(dataset, data_path, args, normalize=True):
     """Construct datasets with appropriate transforms."""
     # Compute mean, std:
     if dataset == 'CIFAR100':
@@ -71,7 +71,7 @@ def construct_datasets(dataset, data_path, normalize=True):
             data_mean, data_std = tiny_imagenet_mean, tiny_imagenet_std
     # adding EUROSAT dataset to the options
     elif dataset == 'EUROSAT':
-        trainset = get_EUROSAT(train=True)
+        trainset = get_EUROSAT(train=True, args=args)
 
         if eurosat_mean is None:
             # Compute mean/std safely
@@ -142,7 +142,7 @@ def construct_datasets(dataset, data_path, normalize=True):
 
     # adding EUROSAT dataset to the options
     elif dataset == 'EUROSAT':
-        validset = get_EUROSAT(train=False) 
+        validset = get_EUROSAT(train=False, args=args) 
     if normalize:
         validset.data_mean = data_mean
         validset.data_std = data_std
