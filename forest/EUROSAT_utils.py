@@ -106,24 +106,25 @@ def get_EUROSAT(train=True):
         return EuroSATDataset(ds["train"], transform=train_transform)
         
     else:
-        split = "test" if "test" in ds else "validation"
-        pre-transform = os.path.join(subfolder,"_pre-transform")
-        os.makedirs(pre-transform, exist_ok = True)
-        images_pre_transform = EuroSATDataset(ds[split][1:5], transform=False)
-        tensor_img = images_pre_transform[1:5]
-        image_pre = to_pil(tensor_img)
-        filename_pre = "image_pre.png"
-        image_pre.save(os.path.join(pre_transform, filename_pre))
+        if args.save = "only_modified":
+            split = "test" if "test" in ds else "validation"
+            pre-transform = os.path.join(subfolder,"_pre-transform")
+            os.makedirs(pre-transform, exist_ok = True)
+            images_pre_transform = EuroSATDataset(ds[split][1:5], transform=False)
+            tensor_img = images_pre_transform[1:5]
+            image_pre = to_pil(tensor_img)
+            filename_pre = "image_pre.png"
+            image_pre.save(os.path.join(pre_transform, filename_pre))
 
-        
         dsv = EuroSATDataset(ds[split], transform=test_transform)
-        
-        post-transform = os.path.join(subfolder,"_post-transform")
-        os.makedirs(post-transform, exist_ok = True)
-        tensor_img = dsv[1:5]
-        image_pos = to_pil(tensor_img)
-        filename_post = "image_post.png"
-        image_post.save(os.path.join(post_transform, filename_post))
+
+        if args.save = "only_modified":
+            post-transform = os.path.join(subfolder,"_post-transform")
+            os.makedirs(post-transform, exist_ok = True)
+            tensor_img = dsv[1:5]
+            image_pos = to_pil(tensor_img)
+            filename_post = "image_post.png"
+            image_post.save(os.path.join(post_transform, filename_post))
         
         return dsv
 
