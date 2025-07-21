@@ -1,0 +1,8 @@
+target	goal	poison	poisonkey
+Residential Buildings	Annual Crop	Annual Crop	93254073
+Pasture	River	River	3848316829
+Industrial Buildings	Residential Buildings	Residential Buildings	4254525452
+Forest	Industrial Buildings	Industrial Buildings	674752555
+Pasture	Industrial Buildings	Industrial Buildings	3415637714
+River	Pasture	Pasture	2751573095
+Residential Buildings	Industrial Buildings	Industrial Buildings	870270025
