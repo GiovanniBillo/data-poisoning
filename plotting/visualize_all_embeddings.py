@@ -7,6 +7,11 @@ from mpl_toolkits.mplot3d import Axes3D
 base_class = 0
 target_class = 8
 
+MODEL = "HG"
+DATASET = "EUROSAT"
+EPS = 16.0 
+
+
 def plot_feature_pca_all_classes(feat_path, class_names=None, dim=2, title=None, save_path=None):
     feats, labels, ids = pickle.load(open(feat_path, 'rb'))
 
@@ -78,7 +83,7 @@ eurosat_classes = [
 
 # 2D Clean
 plot_feature_pca_all_classes(
-    feat_path="models/HG_EUROSAT_16.0_clean_model/clean_features.pickle",
+    feat_path=f"models/{MODEL}_{DATASET}_{EPS}_clean_model/clean_features.pickle",
     class_names=eurosat_classes,
     dim=2,
     title="EuroSAT PCA (2D) - Clean",
@@ -87,7 +92,7 @@ plot_feature_pca_all_classes(
 
 # 2D Defended
 plot_feature_pca_all_classes(
-    feat_path="models/HG_EUROSAT_16.0_defended_model/def_features.pickle",
+    feat_path=f"models/{MODEL}_{DATASET}_{EPS}_defended_model/def_features.pickle",
     class_names=eurosat_classes,
     dim=2,
     title="EuroSAT PCA (2D) - Defended",
@@ -96,7 +101,7 @@ plot_feature_pca_all_classes(
 
 # 3D Clean
 plot_feature_pca_all_classes(
-    feat_path="models/HG_EUROSAT_16.0_clean_model/clean_features.pickle",
+    feat_path=f"models/{MODEL}_{DATASET}_{EPS}_clean_model/clean_features.pickle",
     class_names=eurosat_classes,
     dim=3,
     title="EuroSAT PCA (3D) - Clean",
@@ -105,7 +110,7 @@ plot_feature_pca_all_classes(
 
 # 3D Defended
 plot_feature_pca_all_classes(
-    feat_path="models/HG_EUROSAT_16.0_defended_model/def_features.pickle",
+    feat_path=f"models/{MODEL}_{DATASET}_{EPS}_defended_model/def_features.pickle",
     class_names=eurosat_classes,
     dim=3,
     title="EuroSAT PCA (3D) - Defended",
