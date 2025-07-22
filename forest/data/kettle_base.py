@@ -568,29 +568,14 @@ class _Kettle():
 
         def _overlay_heatmap(image_tensor, attribution):
             img = _tensor_to_pil(image_tensor).convert("RGBA")
+            attr_np = attribution.abs().sum(dim=0).cpu().numpy()  # shape (H,W)
 
-            attr_np = attribution.sum(dim=0).cpu().numpy()  # shape (H, W)
-
-            # Normalize attribution to [-1, 1]
-            max_abs = np.max(np.abs(attr_np)) + 1e-8
-            attr_norm = attr_np / max_abs  # Now in [-1, 1]
-
-            # Initialize RGBA heatmap
-            H, W = attr_norm.shape
-            heatmap = np.zeros((H, W, 4), dtype=np.uint8)
-
-            # Positive values: red, Negative: blue
-            pos_mask = attr_norm > 0
-            neg_mask = attr_norm < 0
-
-            # Red channel for positive attribution
-            heatmap[..., 0][pos_mask] = (attr_norm[pos_mask] * 255).astype(np.uint8)
-
-            # Blue channel for negative attribution
-            heatmap[..., 2][neg_mask] = (-attr_norm[neg_mask] * 255).astype(np.uint8)
-
-            # Alpha channel proportional to absolute magnitude
-            heatmap[..., 3] = (np.abs(attr_norm) * 255).astype(np.uint8)
+            # Normalize to [0, 255] and convert to red-tinted heatmap
+            heat = (attr_np - attr_np.min()) / (attr_np.max() - attr_np.min() + 1e-8)
+            heat = (heat * 255).astype(np.uint8)
+            heatmap = np.zeros((*heat.shape, 4), dtype=np.uint8)  # RGBA
+            heatmap[..., 0] = 255    # Red channel
+            heatmap[..., 3] = heat   # Alpha channel from heat
 
             heatmap_img = Image.fromarray(heatmap, mode='RGBA')
             blended = Image.alpha_composite(img, heatmap_img)
@@ -610,9 +595,5 @@ class _Kettle():
             )
             overlay_img = _overlay_heatmap(image, attribution)
             _save_overlay(overlay_img, idx, path, class_name)
-            original_img = _tensor_to_pil(image).convert("RGBA")
-            original_path = os.path.join(path, 'ig_targets', class_name)
-            os.makedirs(original_path, exist_ok=True)
-            original_img.save(os.path.join(original_path, f"{idx}_original.png"))
 
         print(f"Integrated Gradients overlaid images saved to {os.path.join(path, 'ig_targets')}")
