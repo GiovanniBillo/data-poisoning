@@ -28,7 +28,8 @@ def generate_plot_centroid(feat_path,model_path,target_class,base_class, poison_
 
     tags = []
     for i in left_ids:
-        if i in poison_ids:
+        if str(i) in poison_ids:
+            print("entered poison!!!")
             tags.append('poison')
         elif i == 'target':
             tags.append('target')
@@ -104,7 +105,7 @@ def generate_plot_pca(feat_path,model_path, target_class,base_class, poison_ids,
 
     tags = []
     for i in left_ids:
-        if i in poison_ids:
+        if str(i) in poison_ids:
             tags.append('poison')
         elif i == 'target':
             tags.append('target')
@@ -236,7 +237,7 @@ def generate_plot_centroid_3d_labels(feat_path, model_path, target_class,base_cl
 
     tags = []
     for i in left_ids:
-        if i in poison_ids:
+        if str(i) in poison_ids:
             tags.append('poison')
         elif i == 'target':
             tags.append('target')
@@ -356,7 +357,7 @@ def generate_plot_lda_patch(feat_path,model_path, target_class,base_class, poiso
 
     tags = []
     for i in left_ids:
-        if i in poison_ids:
+        if str(i) in poison_ids:
             tags.append('poison')
         elif i == 'target':
             tags.append('target')
@@ -422,7 +423,7 @@ def genplot_centroid_prob_2d_patch(feat_path, model_path, target_class,base_clas
 
     tags = []
     for i in left_ids:
-        if i in poison_ids:
+        if str(i) in poison_ids:
             tags.append('poison')
         elif i == 'target':
             tags.append('target')
@@ -504,7 +505,7 @@ def genplot_centroid_3d_patch(feat_path, model_path, target_class,base_class, po
 
     tags = []
     for i in left_ids:
-        if i in poison_ids:
+        if str(i) in poison_ids:
             tags.append('poison')
         elif i == 'target':
             tags.append('target')
@@ -574,7 +575,7 @@ def generate_plot_lda(feat_path,model_path, target_class,base_class, poison_ids,
 
     tags = []
     for i in left_ids:
-        if i in poison_ids:
+        if str(i) in poison_ids:
             tags.append('poison')
         elif i == 'target':
             tags.append('target')
@@ -665,7 +666,7 @@ def genplot_centroid_prob_3d(feat_path, model_path, target_class,base_class, poi
 
     tags = []
     for i in left_ids:
-        if i in poison_ids:
+        if str(i) in poison_ids:
             tags.append('poison')
         elif i == 'target':
             tags.append('target')
@@ -779,7 +780,7 @@ def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poi
 
     tags = []
     for i in left_ids:
-        if i in poison_ids:
+        if str(i) in poison_ids:
             tags.append('poison')
         elif i == 'target':
             tags.append('target')
@@ -789,8 +790,8 @@ def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poi
             tags.append('poison_class')
 
     tags = np.array(tags)  
-#     print(np.sum(tags == str(target_class)), 
-#           np.sum(tags == str(base_class)), np.sum(tags == str('poison')), np.sum(tags == str('target')))
+    print(np.sum(tags == str(target_class)), 
+          np.sum(tags == str(base_class)), np.sum(tags == str('poison')), np.sum(tags == str('target')))
     
     basefeats = left_ops[tags == str('poison_class')]
     targfeats = left_ops[tags == str('target_class')]
@@ -840,36 +841,53 @@ def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poi
 #     plt.title(title)
     plt.show()
 
-def generate_plots(main_path,model_name, plot_function, target_class, base_class,poison_ids,device):
+def generate_plots(main_path, model_name, plot_function, target_class, base_class, poison_ids, device):
     os.makedirs('./plots/2d', exist_ok=True)
     os.makedirs('./plots/3d', exist_ok=True)
-    feat_path = os.path.join(main_path+'clean_model','clean_features.pickle')
-    model_path = os.path.join(main_path+'clean_model','clean.pth')
-    plot_function(feat_path,model_path, target_class,base_class, poison_ids,
-                        model_name + " "+ "undefended", device)
     
-    feat_path = os.path.join(main_path+'defended_model','def_features.pickle')
-    model_path = os.path.join(main_path+'defended_model','def.pth')
-    plot_function(feat_path,model_path, target_class,base_class, poison_ids,
-                           model_name + " "+ "attacked_undefended",device)
+    # Plot clean model
+    feat_path = os.path.join(main_path+'clean_model', 'clean_features.pickle')
+    model_path = os.path.join(main_path+'clean_model', 'clean.pth')
+    plot_function(feat_path, model_path, target_class, base_class, poison_ids,
+                model_name + " (clean)", device)
     
-    feat_path = os.path.join(main_path+'clean_model','clean_features.pickle')
-    model_path = os.path.join(main_path+'clean_model','clean.pth')
-    plot_function(feat_path,model_path, target_class,base_class, poison_ids,
-                           model_name + " "+ "defended",device)
+    # Plot poisoned model
+    feat_path = os.path.join(main_path+'defended_model', 'def_features.pickle') 
+    model_path = os.path.join(main_path+'defended_model', 'def.pth')
+    plot_function(feat_path, model_path, target_class, base_class, poison_ids,
+                model_name + " (poisoned)", device)
 
-    feat_path = os.path.join(main_path+'defended_model','def_features.pickle')
-    model_path = os.path.join(main_path+'defended_model','def.pth')
-    plot_function(feat_path,model_path, target_class,base_class, poison_ids,
-                           model_name + " "+  "attacked_defended",device)
+# OLD: overkill for our purposes, as we apply no defense
+# def generate_plots(main_path,model_name, plot_function, target_class, base_class,poison_ids,device):
+#     os.makedirs('./plots/2d', exist_ok=True)
+#     os.makedirs('./plots/3d', exist_ok=True)
+#     feat_path = os.path.join(main_path+'clean_model','clean_features.pickle')
+#     model_path = os.path.join(main_path+'clean_model','clean.pth')
+#     plot_function(feat_path,model_path, target_class,base_class, poison_ids,
+#                         model_name + " "+ "undefended", device)
     
-    feat_path = os.path.join(main_path+'_defended_featuresonly', 'defended_model','def_features.pickle')
-    model_path = os.path.join(main_path+'_defended_featuresonly', 'defended_model','def.pth')
-    try:
-        plot_function(feat_path,model_path, target_class,base_class, poison_ids,
-               model_name + " "+ "defended_base",device)
-    except:
-        print('Defended base model is not available')
+#     feat_path = os.path.join(main_path+'defended_model','def_features.pickle')
+#     model_path = os.path.join(main_path+'defended_model','def.pth')
+#     plot_function(feat_path,model_path, target_class,base_class, poison_ids,
+#                            model_name + " "+ "attacked_undefended",device)
+    
+#     feat_path = os.path.join(main_path+'clean_model','clean_features.pickle')
+#     model_path = os.path.join(main_path+'clean_model','clean.pth')
+#     plot_function(feat_path,model_path, target_class,base_class, poison_ids,
+#                            model_name + " "+ "defended",device)
+
+#     feat_path = os.path.join(main_path+'defended_model','def_features.pickle')
+#     model_path = os.path.join(main_path+'defended_model','def.pth')
+#     plot_function(feat_path,model_path, target_class,base_class, poison_ids,
+#                            model_name + " "+  "attacked_defended",device)
+    
+#     feat_path = os.path.join(main_path+'_defended_featuresonly', 'defended_model','def_features.pickle')
+#     model_path = os.path.join(main_path+'_defended_featuresonly', 'defended_model','def.pth')
+#     try:
+#         plot_function(feat_path,model_path, target_class,base_class, poison_ids,
+#                model_name + " "+ "defended_base",device)
+#     except:
+#         print('Defended base model is not available')
 
 
 
