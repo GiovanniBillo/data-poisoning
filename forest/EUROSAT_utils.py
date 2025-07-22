@@ -10,16 +10,16 @@ train_transform = transforms.Compose([
         degrees=0,  # No rotation
         shear=0.2,  # Shear range of 0.2 radians (~11.5 degrees)
         scale=(0.8, 1.2)  # Random zoom between 80%-120%
-    ),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],  # ImageNet stats
-                        std=[0.229, 0.224, 0.225])
+    )
+    #transforms.Normalize(mean=[0.485, 0.456, 0.406],  # ImageNet stats
+    #                    std=[0.229, 0.224, 0.225])
 ])
 
 # Validation transforms (no augmentation)
 test_transform = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                        std=[0.229, 0.224, 0.225])
+    transforms.ToTensor()
+    #transforms.Normalize(mean=[0.485, 0.456, 0.406],
+    #                    std=[0.229, 0.224, 0.225])
 ])
 
 def transform_batch(example, transform):
@@ -96,7 +96,7 @@ class EuroSATDataset(Dataset):
     def __len__(self):
         return len(self.ds)
 
-def get_EUROSAT(args, train=True):
+def get_EUROSAT(args, test_transform=None, train=True):
     ds = load_dataset("blanchon/EuroSAT_RGB", download_mode="force_redownload")
     subfolder = os.path.join(args.modelsave_path, f'{args.net}_{args.dataset}_{args.eps}_validation_images')
     # Correzione: usa la variabile 'subfolder', non la stringa "subfolder"

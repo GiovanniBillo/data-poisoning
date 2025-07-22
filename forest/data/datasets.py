@@ -142,7 +142,7 @@ def construct_datasets(dataset, data_path, args, normalize=True):
 
     # adding EUROSAT dataset to the options
     elif dataset == 'EUROSAT':
-        validset = get_EUROSAT(train=False, args=args) 
+        validset = get_EUROSAT(args=args, test_transform=transform_valid, train=False) 
     if normalize:
         validset.data_mean = data_mean
         validset.data_std = data_std

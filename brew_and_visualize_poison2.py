@@ -105,7 +105,8 @@ if __name__ == "__main__":
     with open(os.path.join(clean_path, 'clean_features.pickle'), 'wb+') as file:
         pickle.dump([feats, targets, indices], file, protocol=pickle.HIGHEST_PROTOCOL)
     model_unwrapped.train()
-
+    if args.save == "utils":
+        save_images(data,args)
     poison_delta = witch.brew(model, data)
     brew_time = time.time()
     with open(os.path.join(subfolder,f'{args.net}_{args.dataset}_{args.eps}_poison_indices.pickle'), 'wb+') as file:
@@ -155,6 +156,8 @@ if __name__ == "__main__":
         args.net = train_net
     else:  # Validate the main model
         if args.vruns > 0:
+            if args.save == "utils":
+                save_images(data,args)
             stats_results = model.validate(data, poison_delta)
         else:
             stats_results = None

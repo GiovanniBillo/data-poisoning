@@ -1,0 +1,312 @@
+srun python brew_and_visualize_poison2.py --net HG --recipe gradient-matching --optimization custom --dataset EUROSAT --epochs 50 --restarts 5 --eps 16
+Currently evaluating -------------------------------:
+Tuesday, 22. July 2025 12:30PM
+Namespace(net=['HG'], dataset='EUROSAT', recipe='gradient-matching', threatmodel='single-class', scenario='from-scratch', poisonkey=None, modelkey=None, deterministic=False, eps=16.0, budget=0.01, targets=1, patch_size=8, name='', table_path='tables/', poison_path='poisons/', data_path='~/data', modelsave_path='./models/', mixing_method=None, mixing_disable_correction=True, mixing_strength=None, disable_adaptive_attack=True, defend_features_only=False, gradient_noise=None, gradient_clip=None, defense_type=None, defense_strength=None, defense_steps=None, defense_targets=None, filter_defense='', padversarial=None, pmix=False, attackoptim='signAdam', attackiter=250, init='randn', tau=0.1, scheduling=True, target_criterion='cross-entropy', restarts=5, load_patch='', pbatch=512, pshuffle=False, paugment=True, data_aug='default', full_data=False, ensemble=1, stagger=None, step=False, max_epoch=None, ablation=1.0, loss='similarity', centreg=0, normreg=0, repel=0, nadapt=2, clean_grad=False, vruns=1, vnet=None, retrain_from_init=False, skip_clean_training=False, pretrained_model=False, pretrain_dataset=None, optimization='custom', epochs=50, lr=None, noaugment=False, lmdb_path=None, cache_dataset=False, benchmark='', benchmark_idx=0, dryrun=False, save=None, local_rank=None)
+CPUs: 2, GPUs: 1 on gpu001.hpc.rd.areasciencepark.it.
+GPU : Tesla V100-PCIE-32GB
+HG model initialized with random key 1082326235.
+Hyperparameters(name='custom', epochs=50, batch_size=16, optimizer='SGD', lr=0.01, scheduler='plateau', weight_decay=1e-06, augmentations='default', privacy={'clip': None, 'noise': None, 'distribution': None}, validate=5, novel_defense={'type': '', 'strength': 16.0, 'target_selection': 'sep-half', 'steps': 5}, mixing_method={'type': '', 'strength': 0.0, 'correction': True}, adaptive_attack=True, defend_features_only=False)
+Traceback (most recent call last):
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/brew_and_visualize_poison2.py", line 79, in <module>
+    data = forest.Kettle(args, model.defs.batch_size, model.defs.augmentations,
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/forest/data/__init__.py", line 20, in Kettle
+    return KettleRandom(args, batch_size, augmentations, mixing_method, setup)
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/forest/data/kettle_base.py", line 53, in __init__
+    self.trainset, self.validset = construct_datasets(self.args.dataset, self.args.data_path, self.args, NORMALIZE)
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/forest/data/datasets.py", line 74, in construct_datasets
+    trainset = get_EUROSAT(train=True, args=args, test_transform=transform_valid)
+UnboundLocalError: local variable 'transform_valid' referenced before assignment
+
+
+a.suklan@login01:~/data-poisoning$ srun python brew_and_visualize_poison2.py --net HG --recipe gradient-matching --optimization custom --dataset EUROSAT --epochs 50 --restarts 5 --eps 16
+Currently evaluating -------------------------------:
+Tuesday, 22. July 2025 12:30PM
+Namespace(net=['HG'], dataset='EUROSAT', recipe='gradient-matching', threatmodel='single-class', scenario='from-scratch', poisonkey=None, modelkey=None, deterministic=False, eps=16.0, budget=0.01, targets=1, patch_size=8, name='', table_path='tables/', poison_path='poisons/', data_path='~/data', modelsave_path='./models/', mixing_method=None, mixing_disable_correction=True, mixing_strength=None, disable_adaptive_attack=True, defend_features_only=False, gradient_noise=None, gradient_clip=None, defense_type=None, defense_strength=None, defense_steps=None, defense_targets=None, filter_defense='', padversarial=None, pmix=False, attackoptim='signAdam', attackiter=250, init='randn', tau=0.1, scheduling=True, target_criterion='cross-entropy', restarts=5, load_patch='', pbatch=512, pshuffle=False, paugment=True, data_aug='default', full_data=False, ensemble=1, stagger=None, step=False, max_epoch=None, ablation=1.0, loss='similarity', centreg=0, normreg=0, repel=0, nadapt=2, clean_grad=False, vruns=1, vnet=None, retrain_from_init=False, skip_clean_training=False, pretrained_model=False, pretrain_dataset=None, optimization='custom', epochs=50, lr=None, noaugment=False, lmdb_path=None, cache_dataset=False, benchmark='', benchmark_idx=0, dryrun=False, save=None, local_rank=None)
+CPUs: 2, GPUs: 1 on gpu001.hpc.rd.areasciencepark.it.
+GPU : Tesla V100-PCIE-32GB
+HG model initialized with random key 4238616563.
+Hyperparameters(name='custom', epochs=50, batch_size=16, optimizer='SGD', lr=0.01, scheduler='plateau', weight_decay=1e-06, augmentations='default', privacy={'clip': None, 'noise': None, 'distribution': None}, validate=5, novel_defense={'type': '', 'strength': 16.0, 'target_selection': 'sep-half', 'steps': 5}, mixing_method={'type': '', 'strength': 0.0, 'correction': True}, adaptive_attack=True, defend_features_only=False)
+Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 51440.90 examples/s]
+Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 75633.11 examples/s]
+Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 66624.63 examples/s]
+Data mean is [0.4265153110027313, 0.3894726037979126, 0.37882623076438904],
+Data std  is [0.25029605627059937, 0.1664104014635086, 0.14993128180503845].
+Traceback (most recent call last):
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/brew_and_visualize_poison2.py", line 79, in <module>
+    data = forest.Kettle(args, model.defs.batch_size, model.defs.augmentations,
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/forest/data/__init__.py", line 20, in Kettle
+    return KettleRandom(args, batch_size, augmentations, mixing_method, setup)
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/forest/data/kettle_base.py", line 53, in __init__
+    self.trainset, self.validset = construct_datasets(self.args.dataset, self.args.data_path, self.args, NORMALIZE)
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/forest/data/datasets.py", line 145, in construct_datasets
+    validset = get_EUROSAT(args=args, test_tranform=transform_valid, train=False)
+TypeError: get_EUROSAT() got an unexpected keyword argument 'test_tranform'
+srun: error: gpu001: task 0: Exited with exit code 1
+
+
+a.suklan@login01:~/data-poisoning$ srun python brew_and_visualize_poison2.py --net HG --recipe gradient-matching --optimization custom --dataset EUROSAT --epochs 50 --restarts 5 --eps 16
+Currently evaluating -------------------------------:
+Tuesday, 22. July 2025 12:32PM
+Namespace(net=['HG'], dataset='EUROSAT', recipe='gradient-matching', threatmodel='single-class', scenario='from-scratch', poisonkey=None, modelkey=None, deterministic=False, eps=16.0, budget=0.01, targets=1, patch_size=8, name='', table_path='tables/', poison_path='poisons/', data_path='~/data', modelsave_path='./models/', mixing_method=None, mixing_disable_correction=True, mixing_strength=None, disable_adaptive_attack=True, defend_features_only=False, gradient_noise=None, gradient_clip=None, defense_type=None, defense_strength=None, defense_steps=None, defense_targets=None, filter_defense='', padversarial=None, pmix=False, attackoptim='signAdam', attackiter=250, init='randn', tau=0.1, scheduling=True, target_criterion='cross-entropy', restarts=5, load_patch='', pbatch=512, pshuffle=False, paugment=True, data_aug='default', full_data=False, ensemble=1, stagger=None, step=False, max_epoch=None, ablation=1.0, loss='similarity', centreg=0, normreg=0, repel=0, nadapt=2, clean_grad=False, vruns=1, vnet=None, retrain_from_init=False, skip_clean_training=False, pretrained_model=False, pretrain_dataset=None, optimization='custom', epochs=50, lr=None, noaugment=False, lmdb_path=None, cache_dataset=False, benchmark='', benchmark_idx=0, dryrun=False, save=None, local_rank=None)
+CPUs: 2, GPUs: 1 on gpu001.hpc.rd.areasciencepark.it.
+GPU : Tesla V100-PCIE-32GB
+HG model initialized with random key 3322347224.
+Hyperparameters(name='custom', epochs=50, batch_size=16, optimizer='SGD', lr=0.01, scheduler='plateau', weight_decay=1e-06, augmentations='default', privacy={'clip': None, 'noise': None, 'distribution': None}, validate=5, novel_defense={'type': '', 'strength': 16.0, 'target_selection': 'sep-half', 'steps': 5}, mixing_method={'type': '', 'strength': 0.0, 'correction': True}, adaptive_attack=True, defend_features_only=False)
+Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 61818.88 examples/s]
+Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 80839.91 examples/s]
+Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 60108.02 examples/s]
+Data mean is [0.4306198060512543, 0.39264410734176636, 0.3815171420574188],
+Data std  is [0.2501734793186188, 0.1649090200662613, 0.14808149635791779].
+Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 63848.04 examples/s]
+Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 49324.55 examples/s]
+Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 48886.24 examples/s]
+Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 45604.98 examples/s]
+Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 61366.59 examples/s]
+Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 52944.40 examples/s]
+Data mean is [0.42985254526138306, 0.3928561508655548, 0.3821618854999542],
+Data std  is [0.24851851165294647, 0.1635313779115677, 0.1467982679605484].
+Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 54091.19 examples/s]
+Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 37766.11 examples/s]
+Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 34160.21 examples/s]
+/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/utils/data/dataloader.py:626: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+Data is loaded with 4 workers.
+Initializing Poison data (chosen images, examples, targets, labels) with random seed 98657181
+Poisoning setup generated for threat model single-class and budget of 1.0% - 162 images:
+--Target images drawn from class Highway. with ids [2196].
+--Target images assigned intended class Annual Crop.
+--Poison images drawn from class Annual Crop.
+Starting clean training ...
+Epoch: 0  | lr: 0.0100 | Training    loss is  1.2676, train acc:  55.28% | Validation   loss is  0.7896, valid acc:  71.62% |
+Epoch: 0  | lr: 0.0100 | Target adv. loss is  2.5404, fool  acc:   0.00% | Target orig. loss is  0.7735, orig. acc: 100.00% |
+Epoch: 1  | lr: 0.0100 | Training    loss is  0.9258, train acc:  67.99% |
+Epoch: 2  | lr: 0.0100 | Training    loss is  0.7935, train acc:  73.34% |
+Epoch: 3  | lr: 0.0100 | Training    loss is  0.7030, train acc:  76.51% |
+Epoch: 4  | lr: 0.0100 | Training    loss is  0.6349, train acc:  78.92% |
+Epoch: 5  | lr: 0.0100 | Training    loss is  0.5630, train acc:  81.56% | Validation   loss is  0.6512, valid acc:  80.29% |
+Epoch: 5  | lr: 0.0100 | Target adv. loss is  6.3160, fool  acc:   0.00% | Target orig. loss is  0.0314, orig. acc: 100.00% |
+Epoch: 6  | lr: 0.0100 | Training    loss is  0.5082, train acc:  83.18% |
+Epoch: 7  | lr: 0.0100 | Training    loss is  0.4422, train acc:  85.63% |
+^Csrun: interrupt (one more within 1 sec to abort)
+srun: StepId=184778.8 task 0: running
+^Csrun: sending Ctrl-C to StepId=184778.8
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+Traceback (most recent call last):
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/brew_and_visualize_poison2.py", line 99, in <module>
+    stats_clean = model.train(data, max_epoch=args.max_epoch)
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/forest/victims/victim_base.py", line 101, in train
+    stats_clean = self._iterate(kettle, poison_delta=None, max_epoch=max_epoch,
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/forest/victims/victim_single.py", line 105, in _iterate
+    self._step(kettle, poison_delta, self.epoch, stats, *single_setup, pretraining_phase)
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/forest/victims/victim_base.py", line 189, in _step
+    run_step(kettle, poison_delta, epoch, stats, model, defs, optimizer, scheduler,
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/forest/victims/training.py", line 119, in run_step
+    loss, preds = criterion(outputs, labels)
+  File "/orfeo/cephfs/home/ipauser/a.suklan/data-poisoning/forest/victims/training.py", line 105, in criterion
+    correct_preds = (predictions == labels).sum().item()
+KeyboardInterrupt
+slurmstepd: error: *** STEP 184778.8 ON gpu001 CANCELLED AT 2025-07-22T12:36:52 ***
+a.suklan@login01:~/data-poisoning$ srun python brew_and_visualize_poison2.py --net HG --recipe gradient-matching --optimization custom --dataset EUROSAT --epochs 50 --restarts 5 --eps 16 --save only_modified
+Currently evaluating -------------------------------:
+Tuesday, 22. July 2025 12:37PM
+Namespace(net=['HG'], dataset='EUROSAT', recipe='gradient-matching', threatmodel='single-class', scenario='from-scratch', poisonkey=None, modelkey=None, deterministic=False, eps=16.0, budget=0.01, targets=1, patch_size=8, name='', table_path='tables/', poison_path='poisons/', data_path='~/data', modelsave_path='./models/', mixing_method=None, mixing_disable_correction=True, mixing_strength=None, disable_adaptive_attack=True, defend_features_only=False, gradient_noise=None, gradient_clip=None, defense_type=None, defense_strength=None, defense_steps=None, defense_targets=None, filter_defense='', padversarial=None, pmix=False, attackoptim='signAdam', attackiter=250, init='randn', tau=0.1, scheduling=True, target_criterion='cross-entropy', restarts=5, load_patch='', pbatch=512, pshuffle=False, paugment=True, data_aug='default', full_data=False, ensemble=1, stagger=None, step=False, max_epoch=None, ablation=1.0, loss='similarity', centreg=0, normreg=0, repel=0, nadapt=2, clean_grad=False, vruns=1, vnet=None, retrain_from_init=False, skip_clean_training=False, pretrained_model=False, pretrain_dataset=None, optimization='custom', epochs=50, lr=None, noaugment=False, lmdb_path=None, cache_dataset=False, benchmark='', benchmark_idx=0, dryrun=False, save='only_modified', local_rank=None)
+CPUs: 2, GPUs: 1 on gpu001.hpc.rd.areasciencepark.it.
+GPU : Tesla V100-PCIE-32GB
+HG model initialized with random key 2736821155.
+Hyperparameters(name='custom', epochs=50, batch_size=16, optimizer='SGD', lr=0.01, scheduler='plateau', weight_decay=1e-06, augmentations='default', privacy={'clip': None, 'noise': None, 'distribution': None}, validate=5, novel_defense={'type': '', 'strength': 16.0, 'target_selection': 'sep-half', 'steps': 5}, mixing_method={'type': '', 'strength': 0.0, 'correction': True}, adaptive_attack=True, defend_features_only=False)
+Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 53199.87 examples/s]
+Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 57666.29 examples/s]
+Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 45515.14 examples/s]
+Data mean is [0.42784833908081055, 0.39017847180366516, 0.37928229570388794],
+Data std  is [0.250219464302063, 0.16633844375610352, 0.14987550675868988].
+Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 60790.39 examples/s]
+Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 71359.34 examples/s]
+Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 59791.45 examples/s]
+Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 70659.57 examples/s]
+Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 76011.05 examples/s]
+Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 58906.01 examples/s]
+Data mean is [0.4241631329059601, 0.3873514235019684, 0.3766424059867859],
+Data std  is [0.2515645921230316, 0.16874538362026215, 0.15258467197418213].
+Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 30714.49 examples/s]
+Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 61955.29 examples/s]
+Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 85129.60 examples/s]
+/u/ipauser/a.suklan/.local/lib/python3.9/site-packages/torch/utils/data/dataloader.py:626: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+Data is loaded with 4 workers.
+Initializing Poison data (chosen images, examples, targets, labels) with random seed 758535040
+Poisoning setup generated for threat model single-class and budget of 1.0% - 162 images:
+--Target images drawn from class Permanent Crop. with ids [3556].
+--Target images assigned intended class River.
+--Poison images drawn from class River.
+Starting clean training ...
+Epoch: 0  | lr: 0.0100 | Training    loss is  1.2586, train acc:  55.52% | Validation   loss is  1.0210, valid acc:  64.47% |
+Epoch: 0  | lr: 0.0100 | Target adv. loss is  4.6789, fool  acc:   0.00% | Target orig. loss is  0.8636, orig. acc: 100.00% |
+Epoch: 1  | lr: 0.0100 | Training    loss is  0.9466, train acc:  66.82% |
+Epoch: 2  | lr: 0.0100 | Training    loss is  0.8012, train acc:  72.76% |
+Epoch: 3  | lr: 0.0100 | Training    loss is  0.7007, train acc:  76.46% |
+Epoch: 4  | lr: 0.0100 | Training    loss is  0.6301, train acc:  78.90% |
+Epoch: 5  | lr: 0.0100 | Training    loss is  0.5771, train acc:  80.95% | Validation   loss is  0.3287, valid acc:  88.52% |
+Epoch: 5  | lr: 0.0100 | Target adv. loss is  9.1567, fool  acc:   0.00% | Target orig. loss is  0.0131, orig. acc: 100.00% |
+Epoch: 6  | lr: 0.0100 | Training    loss is  0.5240, train acc:  82.73% |
+Epoch: 7  | lr: 0.0100 | Training    loss is  0.4747, train acc:  84.66% |
+Epoch: 8  | lr: 0.0100 | Training    loss is  0.4170, train acc:  86.31% |
+Epoch: 9  | lr: 0.0100 | Training    loss is  0.3945, train acc:  86.88% |
+Epoch: 10 | lr: 0.0100 | Training    loss is  0.3593, train acc:  88.67% | Validation   loss is  0.2374, valid acc:  92.17% |
+Epoch: 10 | lr: 0.0100 | Target adv. loss is  9.5637, fool  acc:   0.00% | Target orig. loss is  0.0076, orig. acc: 100.00% |
+Epoch: 11 | lr: 0.0100 | Training    loss is  0.3428, train acc:  88.83% |
+Epoch: 12 | lr: 0.0100 | Training    loss is  0.3144, train acc:  89.88% |
+Epoch: 13 | lr: 0.0100 | Training    loss is  0.2950, train acc:  90.40% |
+Epoch: 14 | lr: 0.0100 | Training    loss is  0.2904, train acc:  90.52% |
+Epoch: 15 | lr: 0.0100 | Training    loss is  0.2628, train acc:  91.40% | Validation   loss is  0.1653, valid acc:  94.61% |
+Epoch: 15 | lr: 0.0100 | Target adv. loss is 10.2045, fool  acc:   0.00% | Target orig. loss is  0.0068, orig. acc: 100.00% |
+Epoch: 16 | lr: 0.0100 | Training    loss is  0.2460, train acc:  91.95% |
+Epoch: 17 | lr: 0.0100 | Training    loss is  0.2375, train acc:  92.36% |
+Epoch: 18 | lr: 0.0100 | Training    loss is  0.2309, train acc:  92.49% |
+Epoch: 19 | lr: 0.0100 | Training    loss is  0.2214, train acc:  93.21% |
+Epoch: 20 | lr: 0.0100 | Training    loss is  0.2078, train acc:  93.36% | Validation   loss is  0.1193, valid acc:  96.17% |
+Epoch: 20 | lr: 0.0100 | Target adv. loss is 16.8374, fool  acc:   0.00% | Target orig. loss is  0.0002, orig. acc: 100.00% |
+Epoch: 21 | lr: 0.0100 | Training    loss is  0.2016, train acc:  93.31% |
+Epoch: 22 | lr: 0.0100 | Training    loss is  0.1930, train acc:  93.83% |
+Epoch: 23 | lr: 0.0100 | Training    loss is  0.1832, train acc:  94.18% |
+Epoch: 24 | lr: 0.0100 | Training    loss is  0.1799, train acc:  94.17% |
+Epoch: 25 | lr: 0.0100 | Training    loss is  0.1696, train acc:  94.57% | Validation   loss is  0.1588, valid acc:  94.96% |
+Epoch: 25 | lr: 0.0100 | Target adv. loss is 19.8392, fool  acc:   0.00% | Target orig. loss is  0.0000, orig. acc: 100.00% |
+Epoch: 26 | lr: 0.0100 | Training    loss is  0.1719, train acc:  94.59% |
+Epoch: 27 | lr: 0.0100 | Training    loss is  0.1644, train acc:  94.64% |
+Epoch: 28 | lr: 0.0100 | Training    loss is  0.1605, train acc:  94.69% |
+Epoch: 29 | lr: 0.0100 | Training    loss is  0.1551, train acc:  95.02% |
+Epoch: 30 | lr: 0.0100 | Training    loss is  0.1469, train acc:  95.38% | Validation   loss is  0.1036, valid acc:  96.52% |
+Epoch: 30 | lr: 0.0100 | Target adv. loss is 18.0354, fool  acc:   0.00% | Target orig. loss is  0.0000, orig. acc: 100.00% |
+Epoch: 31 | lr: 0.0100 | Training    loss is  0.1375, train acc:  95.43% |
+Epoch: 32 | lr: 0.0100 | Training    loss is  0.1400, train acc:  95.28% |
+Epoch: 33 | lr: 0.0100 | Training    loss is  0.1388, train acc:  95.48% |
+Epoch: 34 | lr: 0.0100 | Training    loss is  0.1312, train acc:  95.67% |
+Epoch: 35 | lr: 0.0100 | Training    loss is  0.1376, train acc:  95.59% | Validation   loss is  0.1258, valid acc:  95.91% |
+Epoch: 35 | lr: 0.0100 | Target adv. loss is 16.3004, fool  acc:   0.00% | Target orig. loss is  0.0001, orig. acc: 100.00% |
+Epoch: 36 | lr: 0.0100 | Training    loss is  0.1255, train acc:  96.00% |
+Epoch: 37 | lr: 0.0100 | Training    loss is  0.1285, train acc:  95.88% |
+Epoch: 38 | lr: 0.0100 | Training    loss is  0.1204, train acc:  96.17% |
+Epoch: 39 | lr: 0.0100 | Training    loss is  0.1167, train acc:  96.26% |
+Epoch: 40 | lr: 0.0100 | Training    loss is  0.1188, train acc:  96.21% | Validation   loss is  0.0810, valid acc:  97.26% |
+Epoch: 40 | lr: 0.0100 | Target adv. loss is 20.2901, fool  acc:   0.00% | Target orig. loss is  0.0000, orig. acc: 100.00% |
+Epoch: 41 | lr: 0.0100 | Training    loss is  0.1085, train acc:  96.42% |
+Epoch: 42 | lr: 0.0100 | Training    loss is  0.1183, train acc:  96.22% |
+Epoch: 43 | lr: 0.0100 | Training    loss is  0.1088, train acc:  96.46% |
+Epoch: 44 | lr: 0.0100 | Training    loss is  0.1070, train acc:  96.51% |
+Epoch: 45 | lr: 0.0100 | Training    loss is  0.1112, train acc:  96.30% | Validation   loss is  0.1265, valid acc:  95.96% |
+Epoch: 45 | lr: 0.0100 | Target adv. loss is 18.2164, fool  acc:   0.00% | Target orig. loss is  0.0000, orig. acc: 100.00% |
+Epoch: 46 | lr: 0.0100 | Training    loss is  0.1012, train acc:  96.60% |
+Epoch: 47 | lr: 0.0100 | Training    loss is  0.1006, train acc:  96.81% |
+Epoch: 48 | lr: 0.0100 | Training    loss is  0.0923, train acc:  96.90% |
+Epoch: 49 | lr: 0.0100 | Training    loss is  0.1061, train acc:  96.44% | Validation   loss is  0.0946, valid acc:  97.13% |
+Epoch: 49 | lr: 0.0100 | Target adv. loss is 20.9678, fool  acc:   0.00% | Target orig. loss is  0.0000, orig. acc: 100.00% |
+Starting brewing procedure ...
+Target Grad Norm is 128.67506408691406
+Iteration 0: Target loss is 0.9031, Poison clean acc is 11.73%
+Iteration 50: Target loss is 0.0496, Poison clean acc is 41.36%
+Iteration 100: Target loss is 0.0455, Poison clean acc is 53.09%
+Iteration 150: Target loss is 0.0408, Poison clean acc is 58.64%
+Iteration 200: Target loss is 0.0418, Poison clean acc is 59.88%
+Iteration 249: Target loss is 0.0379, Poison clean acc is 59.88%
+Iteration 0: Target loss is 0.9285, Poison clean acc is 14.20%
+Iteration 50: Target loss is 0.0531, Poison clean acc is 38.89%
+Iteration 100: Target loss is 0.0510, Poison clean acc is 50.00%
+Iteration 150: Target loss is 0.0398, Poison clean acc is 58.64%
+Iteration 200: Target loss is 0.0396, Poison clean acc is 59.88%
+Iteration 249: Target loss is 0.0401, Poison clean acc is 59.88%
+Iteration 0: Target loss is 0.9214, Poison clean acc is 13.58%
+Iteration 50: Target loss is 0.0506, Poison clean acc is 42.59%
+Iteration 100: Target loss is 0.0432, Poison clean acc is 54.32%
+Iteration 150: Target loss is 0.0411, Poison clean acc is 60.49%
+Iteration 200: Target loss is 0.0396, Poison clean acc is 61.11%
+Iteration 249: Target loss is 0.0410, Poison clean acc is 61.11%
+Iteration 0: Target loss is 0.9218, Poison clean acc is 15.43%
+Iteration 50: Target loss is 0.0530, Poison clean acc is 44.44%
+Iteration 100: Target loss is 0.0496, Poison clean acc is 52.47%
+Iteration 150: Target loss is 0.0392, Poison clean acc is 58.64%
+Iteration 200: Target loss is 0.0420, Poison clean acc is 59.26%
+Iteration 249: Target loss is 0.0406, Poison clean acc is 59.26%
+Iteration 0: Target loss is 0.9301, Poison clean acc is 9.88%
+Iteration 50: Target loss is 0.0497, Poison clean acc is 44.44%
+Iteration 100: Target loss is 0.0468, Poison clean acc is 53.70%
+Iteration 150: Target loss is 0.0387, Poison clean acc is 59.26%
+Iteration 200: Target loss is 0.0388, Poison clean acc is 61.11%
+Iteration 249: Target loss is 0.0388, Poison clean acc is 61.73%
+Poisons with minimal target loss 3.7935e-02 selected.
+Poison ids saved
+HG model initialized with random key 2724111372.
+Hyperparameters(name='custom', epochs=50, batch_size=16, optimizer='SGD', lr=0.01, scheduler='plateau', weight_decay=1e-06, augmentations='default', privacy={'clip': None, 'noise': None, 'distribution': None}, validate=5, novel_defense={'type': '', 'strength': 16.0, 'target_selection': 'sep-half', 'steps': 5}, mixing_method={'type': '', 'strength': 0.0, 'correction': True}, adaptive_attack=True, defend_features_only=False)
+Model reinitialized to random seed.
+Epoch: 0  | lr: 0.0100 | Training    loss is  1.2854, train acc:  54.17% | Validation   loss is  1.3525, valid acc:  56.83% |
+Epoch: 0  | lr: 0.0100 | Target adv. loss is  4.4319, fool  acc:   0.00% | Target orig. loss is  0.5350, orig. acc: 100.00% |
+Epoch: 1  | lr: 0.0100 | Training    loss is  0.9745, train acc:  66.15% |
+Epoch: 2  | lr: 0.0100 | Training    loss is  0.8159, train acc:  71.89% |
+Epoch: 3  | lr: 0.0100 | Training    loss is  0.7222, train acc:  75.93% |
+Epoch: 4  | lr: 0.0100 | Training    loss is  0.6335, train acc:  79.36% |
+Epoch: 5  | lr: 0.0100 | Training    loss is  0.5857, train acc:  81.01% | Validation   loss is  0.5780, valid acc:  80.59% |
+Epoch: 5  | lr: 0.0100 | Target adv. loss is  1.3701, fool  acc:   0.00% | Target orig. loss is  1.1029, orig. acc: 100.00% |
+Epoch: 6  | lr: 0.0100 | Training    loss is  0.5106, train acc:  83.56% |
+Epoch: 7  | lr: 0.0100 | Training    loss is  0.4635, train acc:  84.85% |
+Epoch: 8  | lr: 0.0100 | Training    loss is  0.4407, train acc:  85.74% |
+Epoch: 9  | lr: 0.0100 | Training    loss is  0.3859, train acc:  87.51% |
+Epoch: 10 | lr: 0.0100 | Training    loss is  0.3760, train acc:  87.85% | Validation   loss is  0.2821, valid acc:  90.20% |
+Epoch: 10 | lr: 0.0100 | Target adv. loss is  1.1739, fool  acc:   0.00% | Target orig. loss is  0.5057, orig. acc: 100.00% |
+Epoch: 11 | lr: 0.0100 | Training    loss is  0.3282, train acc:  89.43% |
+Epoch: 12 | lr: 0.0100 | Training    loss is  0.3194, train acc:  89.81% |
+Epoch: 13 | lr: 0.0100 | Training    loss is  0.2845, train acc:  90.67% |
+Epoch: 14 | lr: 0.0100 | Training    loss is  0.2793, train acc:  91.02% |
+Epoch: 15 | lr: 0.0100 | Training    loss is  0.2635, train acc:  91.46% | Validation   loss is  0.1743, valid acc:  94.33% |
+Epoch: 15 | lr: 0.0100 | Target adv. loss is  0.5432, fool  acc: 100.00% | Target orig. loss is  1.1257, orig. acc:   0.00% |
+Epoch: 16 | lr: 0.0100 | Training    loss is  0.2521, train acc:  91.69% |
+Epoch: 17 | lr: 0.0100 | Training    loss is  0.2278, train acc:  92.55% |
+Epoch: 18 | lr: 0.0100 | Training    loss is  0.2241, train acc:  92.69% |
+Epoch: 19 | lr: 0.0100 | Training    loss is  0.2139, train acc:  93.18% |
+Epoch: 20 | lr: 0.0100 | Training    loss is  0.2014, train acc:  93.38% | Validation   loss is  0.2003, valid acc:  93.30% |
+Epoch: 20 | lr: 0.0100 | Target adv. loss is  0.1086, fool  acc: 100.00% | Target orig. loss is  2.4713, orig. acc:   0.00% |
+Epoch: 21 | lr: 0.0100 | Training    loss is  0.2039, train acc:  93.47% |
+Epoch: 22 | lr: 0.0100 | Training    loss is  0.1915, train acc:  93.56% |
+Epoch: 23 | lr: 0.0100 | Training    loss is  0.1872, train acc:  93.94% |
+Epoch: 24 | lr: 0.0100 | Training    loss is  0.1766, train acc:  94.46% |
+Epoch: 25 | lr: 0.0100 | Training    loss is  0.1756, train acc:  94.20% | Validation   loss is  0.1341, valid acc:  95.81% |
+Epoch: 25 | lr: 0.0100 | Target adv. loss is  5.9106, fool  acc:   0.00% | Target orig. loss is  0.0053, orig. acc: 100.00% |
+Epoch: 26 | lr: 0.0100 | Training    loss is  0.1673, train acc:  94.22% |
+Epoch: 27 | lr: 0.0100 | Training    loss is  0.1600, train acc:  94.83% |
+Epoch: 28 | lr: 0.0100 | Training    loss is  0.1596, train acc:  94.72% |
+Epoch: 29 | lr: 0.0100 | Training    loss is  0.1522, train acc:  95.15% |
+Epoch: 30 | lr: 0.0100 | Training    loss is  0.1570, train acc:  95.03% | Validation   loss is  0.1445, valid acc:  95.54% |
+Epoch: 30 | lr: 0.0100 | Target adv. loss is  3.1412, fool  acc:   0.00% | Target orig. loss is  0.0520, orig. acc: 100.00% |
+Epoch: 31 | lr: 0.0100 | Training    loss is  0.1533, train acc:  95.17% |
+Epoch: 32 | lr: 0.0100 | Training    loss is  0.1436, train acc:  95.28% |
+Epoch: 33 | lr: 0.0100 | Training    loss is  0.1407, train acc:  95.49% |
+Epoch: 34 | lr: 0.0100 | Training    loss is  0.1382, train acc:  95.55% |
+Epoch: 35 | lr: 0.0100 | Training    loss is  0.1301, train acc:  95.81% | Validation   loss is  0.0935, valid acc:  96.89% |
+Epoch: 35 | lr: 0.0100 | Target adv. loss is  0.1161, fool  acc: 100.00% | Target orig. loss is  2.2396, orig. acc:   0.00% |
+Epoch: 36 | lr: 0.0100 | Training    loss is  0.1330, train acc:  95.61% |
+Epoch: 37 | lr: 0.0100 | Training    loss is  0.1258, train acc:  95.86% |
+Epoch: 38 | lr: 0.0100 | Training    loss is  0.1213, train acc:  96.06% |
+Epoch: 39 | lr: 0.0100 | Training    loss is  0.1169, train acc:  96.27% |
+Epoch: 40 | lr: 0.0100 | Training    loss is  0.1204, train acc:  96.07% | Validation   loss is  0.1002, valid acc:  97.02% |
+Epoch: 40 | lr: 0.0100 | Target adv. loss is  0.1899, fool  acc: 100.00% | Target orig. loss is  1.7808, orig. acc:   0.00% |
+Epoch: 41 | lr: 0.0100 | Training    loss is  0.1185, train acc:  96.30% |
+Epoch: 42 | lr: 0.0100 | Training    loss is  0.1096, train acc:  96.57% |
+Epoch: 43 | lr: 0.0100 | Training    loss is  0.1133, train acc:  96.30% |
+Epoch: 44 | lr: 0.0100 | Training    loss is  0.1100, train acc:  96.34% |
+Epoch: 45 | lr: 0.0100 | Training    loss is  0.1033, train acc:  96.49% | Validation   loss is  0.0997, valid acc:  97.13% |
+Epoch: 45 | lr: 0.0100 | Target adv. loss is  0.0847, fool  acc: 100.00% | Target orig. loss is  2.5248, orig. acc:   0.00% |
+Epoch: 46 | lr: 0.0100 | Training    loss is  0.1046, train acc:  96.56% |
+Epoch: 47 | lr: 0.0100 | Training    loss is  0.0966, train acc:  96.78% |
+Epoch: 48 | lr: 0.0100 | Training    loss is  0.0975, train acc:  96.81% |
+Epoch: 49 | lr: 0.0100 | Training    loss is  0.0992, train acc:  96.81% | Validation   loss is  0.1054, valid acc:  96.57% |
+Epoch: 49 | lr: 0.0100 | Target adv. loss is  0.0695, fool  acc: 100.00% | Target orig. loss is  2.7097, orig. acc:   0.00% |
+
+Results saved to tables/table_HG_single-class_from-scratch_.csv.
+Exporting only modified (poisoned) images and their original counterparts...
+Exported 162 original/poisoned image pairs.
+Dataset fully exported.
+Tuesday, 22. July 2025 01:32PM
+---------------------------------------------------
+Finished computations with train time: 0:20:12.732177
+--------------------------- brew time: 0:13:21.722019
+--------------------------- test time: 0:20:56.823390
+-------------Job finished.-------------------------
