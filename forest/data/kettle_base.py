@@ -9,10 +9,9 @@ import datetime
 import os
 import random
 import PIL
-
+from PIL import Image, ImageOps, ImageEnhance
 from .datasets import construct_datasets, Subset
 from .cached_dataset import CachedDataset
-
 from .diff_data_augmentation import RandomTransform
 from .mixing_data_augmentations import Mixup, Cutout, Cutmix, Maxup
 
@@ -261,6 +260,45 @@ class _Kettle():
         return poison_slices, batch_positions
 
     """ EXPORT METHODS """
+    def export_target(self, net, dataset, eps, path=None, mode='full'):
+        """
+        Export target images (clean, no poison delta applied).
+
+        Args:
+            net: model (unused here, but for interface compatibility)
+            dataset: dataset object (unused here)
+            eps: epsilon value (unused here)
+            path: directory to export targets to
+            mode: unused but kept for interface compatibility
+        """
+        if path is None:
+            path = self.args.target_path
+
+        dm = torch.tensor(self.trainset.data_mean)[:, None, None]
+        ds = torch.tensor(self.trainset.data_std)[:, None, None]
+
+        def _torch_to_PIL(image_tensor):
+            """Convert normalized torch tensor to PIL Image."""
+            image_denormalized = torch.clamp(image_tensor * ds + dm, 0, 1)
+            image_uint8 = image_denormalized.mul(255).add_(0.5).clamp_(0, 255).permute(1, 2, 0).to('cpu', torch.uint8)
+            return PIL.Image.fromarray(image_uint8.numpy())
+
+        def _save_image(image_tensor, class_name, idx, base_path):
+            save_dir = os.path.join(base_path, 'targets', class_name)
+            os.makedirs(save_dir, exist_ok=True)
+            filename = os.path.join(save_dir, f"{idx}.png")
+            image_pil = _torch_to_PIL(image_tensor)
+            image_pil.save(filename)
+
+        class_names = self.targetset.classes
+
+        for enum, (image, _, idx) in enumerate(self.targetset):
+            intended_class_idx = self.poison_setup['intended_class'][enum]
+            class_name = class_names[intended_class_idx]
+            _save_image(image, class_name, idx, path)
+
+        print(f"Target images exported to {os.path.join(path, 'targets')}")
+
 
     def export_poison(self, poison_delta, net, dataset, eps, path=None, mode='automl'):
         """Export poisons in either packed mode (just ids and raw data) or in full export mode, exporting all images.
@@ -461,8 +499,120 @@ class _Kettle():
             # Indices
             with open(os.path.join(sub_path, 'base_indices.pickle'), 'wb+') as file:
                 pickle.dump(self.poison_ids, file, protocol=pickle.HIGHEST_PROTOCOL)
-
+        elif mode == 'shaptarget':
+            self.export_integrated_gradients(net=net)
         else:
             raise NotImplementedError()
 
         print('Dataset fully exported.')
+
+
+    def integrated_gradients(self, model, input_tensor, target_label, baseline=None, steps=50):
+        """
+        Compute Integrated Gradients for a single input image and target label.
+
+        Args:
+            model: PyTorch model (eval mode)
+            input_tensor: normalized input image tensor (C,H,W), float
+            target_label: int, target class index
+            baseline: tensor same shape as input_tensor or None (if None, zero baseline)
+            steps: number of steps for Riemann approximation of integral
+
+        Returns:
+            attribution: tensor same shape as input_tensor, Integrated Gradients
+        """
+        if baseline is None:
+            baseline = torch.zeros_like(input_tensor)
+
+        # Scale inputs and compute gradients
+        scaled_inputs = [baseline + (float(i) / steps) * (input_tensor - baseline) for i in range(steps + 1)]
+        grads = []
+
+        model.zero_grad()
+        for scaled_input in scaled_inputs:
+            scaled_input = scaled_input.unsqueeze(0).to(self.setup['device'])
+            scaled_input.requires_grad = True
+
+            output = model(scaled_input)
+            target_score = output[0, target_label]
+            target_score.backward(retain_graph=True)
+
+            grad = scaled_input.grad.detach().cpu()
+            grads.append(grad.squeeze(0))
+
+        grads = torch.stack(grads)  # (steps+1, C, H, W)
+        avg_grads = (grads[:-1] + grads[1:]) / 2.0  # trapezoidal approx
+        avg_grad = avg_grads.mean(dim=0)  # (C,H,W)
+
+        integrated_gradients = (input_tensor.cpu() - baseline.cpu()) * avg_grad  # element-wise product
+        return integrated_gradients
+
+    def export_integrated_gradients(self, net, path=None, steps=50):
+        if path is None:
+            path = self.args.poison_path
+
+        model = net.eval().to(self.setup['device'])
+        dm = torch.tensor(self.trainset.data_mean)[:, None, None].to(self.setup['device'])
+        ds = torch.tensor(self.trainset.data_std)[:, None, None].to(self.setup['device'])
+        class_names = self.targetset.classes
+
+        def _tensor_to_pil(image_tensor):
+            """Convert normalized torch tensor to PIL Image."""
+            device = image_tensor.device
+            local_dm = dm.to(device)
+            local_ds = ds.to(device)
+
+            image_denorm = torch.clamp(image_tensor * local_ds + local_dm, 0, 1)
+            image_uint8 = image_denorm.mul(255).add_(0.5).clamp_(0, 255).permute(1, 2, 0).to('cpu', torch.uint8)
+            return Image.fromarray(image_uint8.numpy())
+
+        def _overlay_heatmap(image_tensor, attribution):
+            img = _tensor_to_pil(image_tensor).convert("RGBA")
+
+            attr_np = attribution.sum(dim=0).cpu().numpy()  # shape (H, W)
+
+            # Normalize attribution to [-1, 1]
+            max_abs = np.max(np.abs(attr_np)) + 1e-8
+            attr_norm = attr_np / max_abs  # Now in [-1, 1]
+
+            # Initialize RGBA heatmap
+            H, W = attr_norm.shape
+            heatmap = np.zeros((H, W, 4), dtype=np.uint8)
+
+            # Positive values: red, Negative: blue
+            pos_mask = attr_norm > 0
+            neg_mask = attr_norm < 0
+
+            # Red channel for positive attribution
+            heatmap[..., 0][pos_mask] = (attr_norm[pos_mask] * 255).astype(np.uint8)
+
+            # Blue channel for negative attribution
+            heatmap[..., 2][neg_mask] = (-attr_norm[neg_mask] * 255).astype(np.uint8)
+
+            # Alpha channel proportional to absolute magnitude
+            heatmap[..., 3] = (np.abs(attr_norm) * 255).astype(np.uint8)
+
+            heatmap_img = Image.fromarray(heatmap, mode='RGBA')
+            blended = Image.alpha_composite(img, heatmap_img)
+            return blended
+
+        def _save_overlay(pil_image, idx, base_path, class_name):
+            save_dir = os.path.join(base_path, 'ig_targets', class_name)
+            os.makedirs(save_dir, exist_ok=True)
+            pil_image.save(os.path.join(save_dir, f"{idx}.png"))
+
+        for enum, (image, _, idx) in enumerate(self.targetset):
+            intended_class_idx = self.poison_setup['intended_class'][enum]
+            class_name = class_names[intended_class_idx]
+
+            attribution = self.integrated_gradients(
+                model, image.to(self.setup['device']), intended_class_idx, steps=steps
+            )
+            overlay_img = _overlay_heatmap(image, attribution)
+            _save_overlay(overlay_img, idx, path, class_name)
+            original_img = _tensor_to_pil(image).convert("RGBA")
+            original_path = os.path.join(path, 'ig_targets', class_name)
+            os.makedirs(original_path, exist_ok=True)
+            original_img.save(os.path.join(original_path, f"{idx}_original.png"))
+
+        print(f"Integrated Gradients overlaid images saved to {os.path.join(path, 'ig_targets')}")

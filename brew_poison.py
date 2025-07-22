@@ -57,9 +57,9 @@ if __name__ == "__main__":
 
     # If the image is a tensor, unnormalize and convert to PIL Image
     if isinstance(img, torch.Tensor):
-        mean = torch.tensor([0.485, 0.456, 0.406])
-        std = torch.tensor([0.229, 0.224, 0.225])
-        img = img * std[:, None, None] + mean[:, None, None]  # unnormalize
+        # mean = torch.tensor([0.485, 0.456, 0.406])
+        # std = torch.tensor([0.229, 0.224, 0.225])
+        # img = img * std[:, None, None] + mean[:, None, None]  # unnormalize
         img = torch.clamp(img, 0, 1)
         img = F.to_pil_image(img)  # convert to PIL Image
 

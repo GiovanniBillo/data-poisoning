@@ -81,6 +81,9 @@ if __name__ == "__main__":
     witch = forest.Witch(args, setup=setup)
     witch.patch_targets(data)
 
+    if args.save == 'target':
+        data.export_target(path='./exported_targets',net=args.net, dataset=args.dataset, eps=args.eps),
+    
     start_time = time.time()
     if args.pretrained_model:
         
@@ -168,9 +171,13 @@ if __name__ == "__main__":
     forest.utils.record_results(data, witch.stat_optimal_loss, results,
                                 args, model.defs, model.model_init_seed, extra_stats={**filter_stats, **timestamps})
 
+    print("DEBUG net type:", type(args.net))
+    print("DEBUG net contents:", args.net)
+
     # Export
-    if args.save is not None:
-        data.export_poison(poison_delta, path=args.poison_path, mode=args.save, net=args.net, dataset=args.dataset, eps=args.eps)
+    if args.save is not None and args.save != 'target':
+        data.export_poison(poison_delta, path=args.poison_path, mode=args.save, net=model_unwrapped if args.save=='shaptarget' else args.net, dataset=args.dataset, eps=args.eps)
+
 
     print(datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p"))
     print('---------------------------------------------------')
