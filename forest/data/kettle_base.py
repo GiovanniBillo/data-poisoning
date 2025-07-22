@@ -73,8 +73,10 @@ class _Kettle():
 
 
         # Generate loaders:
+
         self.trainloader = torch.utils.data.DataLoader(self.trainset, batch_size=min(self.batch_size, len(self.trainset)),
                                                        shuffle=True, drop_last=False, num_workers=num_workers, pin_memory=PIN_MEMORY)
+        
         self.validloader = torch.utils.data.DataLoader(self.validset, batch_size=min(self.batch_size, len(self.validset)),
                                                        shuffle=False, drop_last=False, num_workers=num_workers, pin_memory=PIN_MEMORY)
         validated_batch_size = max(min(args.pbatch, len(self.poisonset)), 1)
