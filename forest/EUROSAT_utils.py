@@ -97,53 +97,15 @@ class EuroSATDataset(Dataset):
         return len(self.ds)
 
 def get_EUROSAT(args, test_transform=None, train=True):
+
     ds = load_dataset("blanchon/EuroSAT_RGB", download_mode="force_redownload")
-    subfolder = os.path.join(args.modelsave_path, f'{args.net}_{args.dataset}_{args.eps}_validation_images')
-    # Correzione: usa la variabile 'subfolder', non la stringa "subfolder"
-    os.makedirs(subfolder, exist_ok = True)
-    to_pil = transforms.ToPILImage()
 
     if train:
         return EuroSATDataset(ds["train"], transform=train_transform)
     else:
-        # La variabile 'split' viene definita qui per essere accessibile in tutto il blocco 'else'
+
         split = "test" if "test" in ds else "validation"
-
-        # Correzione: si usa '==' per il confronto, non '='
-        if args.save == "only_modified":
-            # Correzione: i nomi delle variabili non possono contenere '-'
-            pre_transform_folder = os.path.join(subfolder,"_pre-transform")
-            os.makedirs(pre_transform_folder, exist_ok = True)
-            for char in ["[","]","'"]:
-                pre_transform_folder = pre_transform_folder.replace(char, '')
-                pre_transform_folder = pre_transform_folder.strip()
-
-
-            # Itera per salvare le prime 5 immagini una per una
-            for i in range(5):
-                # Estrae l'immagine originale (solitamente già un oggetto PIL)
-                image_pre = ds[split][i]['image']
-                filename_pre = f"image_pre_{i}.png"
-                image_pre.save(os.path.join(pre_transform_folder, filename_pre))
-
         dsv = EuroSATDataset(ds[split], transform=test_transform)
-
-        # Correzione: si usa '==' per il confronto, non '='
-        if args.save == "only_modified":
-            # Correzione: i nomi delle variabili non possono contenere '-'
-            post_transform_folder = os.path.join(subfolder,"_post-transform")
-            os.makedirs(post_transform_folder, exist_ok = True)
-            for char in ["[","]","'"]:
-                post_transform_folder = post_transform_folder.replace(char, '')
-                post_transform_folder = post_transform_folder.strip()
-
-            # Itera per salvare le prime 5 immagini trasformate
-            for i in range(5):
-                # Estrae l'immagine trasformata (un tensore)
-                tensor_img = dsv[i][0]
-                image_post = to_pil(tensor_img)
-                filename_post = f"image_post_{i}.png"
-                image_post.save(os.path.join(post_transform_folder, filename_post))
 
         return dsv
 
