@@ -9,7 +9,7 @@ target_class = 8
 
 MODEL = "HG"
 DATASET = "EUROSAT"
-EPS = 16.0 
+EPS = 8.0 
 
 
 def plot_feature_pca_all_classes(feat_path, class_names=None, dim=2, title=None, save_path=None):
@@ -96,7 +96,7 @@ plot_feature_pca_all_classes(
     class_names=eurosat_classes,
     dim=2,
     title="EuroSAT PCA (2D) - Defended",
-    save_path="plots/pca_defended_2d.pdf"
+    save_path="plots/pca_poisoned_2d.pdf"
 )
 
 # 3D Clean
@@ -108,12 +108,11 @@ plot_feature_pca_all_classes(
     save_path="plots/pca_clean_3d.pdf"
 )
 
-# 3D Defended
+# 3D Defended 
 plot_feature_pca_all_classes(
     feat_path=f"models/{MODEL}_{DATASET}_{EPS}_defended_model/def_features.pickle",
     class_names=eurosat_classes,
     dim=3,
-    title="EuroSAT PCA (3D) - Defended",
-    save_path="plots/pca_defended_3d.pdf"
+    title="EuroSAT PCA (3D) - Clean",
+    save_path="plots/pca_poisoned_3d.pdf"
 )
-
