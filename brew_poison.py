@@ -26,6 +26,11 @@ from forest.filtering_defenses import get_defense
 torch.backends.cudnn.benchmark = forest.consts.BENCHMARK
 torch.multiprocessing.set_sharing_strategy(forest.consts.SHARING_STRATEGY)
 
+
+import os
+import torchvision.transforms.functional as F
+from PIL import Image
+
 # Parse input arguments
 args = forest.options().parse_args()
 # 100% reproducibility?
@@ -41,7 +46,34 @@ if __name__ == "__main__":
     data = forest.Kettle(args, model.defs.batch_size, model.defs.augmentations,
                          model.defs.mixing_method, setup=setup)
     witch = forest.Witch(args, setup=setup)
+    
     witch.patch_targets(data)
+
+    # Assuming you have 'data' object and 'target' index available
+    target_idx = data.targetset[0][1]  # or whatever holds the target index
+
+    # Get image, label, idx from your dataset
+    img, target_label, target_id = data.targetset[0]
+
+    # If the image is a tensor, unnormalize and convert to PIL Image
+    if isinstance(img, torch.Tensor):
+        mean = torch.tensor([0.485, 0.456, 0.406])
+        std = torch.tensor([0.229, 0.224, 0.225])
+        img = img * std[:, None, None] + mean[:, None, None]  # unnormalize
+        img = torch.clamp(img, 0, 1)
+        img = F.to_pil_image(img)  # convert to PIL Image
+
+    # Define output folder and filename
+    output_folder = "saved_images"
+    os.makedirs(output_folder, exist_ok=True)
+
+    filename = f"target_image_idx{target_idx}_label{target_label}.png"
+    filepath = os.path.join(output_folder, filename)
+
+    # Save the image
+    img.save(filepath)
+    print(f"Saved target image to {filepath}")
+
 
     start_time = time.time()
     if args.pretrained_model:
