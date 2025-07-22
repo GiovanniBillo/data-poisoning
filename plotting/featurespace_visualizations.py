@@ -619,14 +619,41 @@ def generate_plot_lda(feat_path,model_path, target_class,base_class, poison_ids,
 
 def genplot_centroid_prob_3d(feat_path, model_path, target_class,base_class, poison_ids, title, device):
 
-    [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
+    ## [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) )
+    ops_all, labels_all, ids_all = pickle.load(open(feat_path, "rb"))
+
+    # # sketchy
+    # ops_all = ops_all[:, :128]
+    # # labels_all = labels_all[:, :128]
+    # labels_all = np.array(labels_all)
+    # # ids_all = ids_all[:, :128]
+    # ids_all = np.array(ids_all)
+
+    print("model path:", model_path)
+    print("feat_path:", feat_path)
+
     # model = resnet_picker('ResNet18', 'CIFAR10')
     model = HG(num_classes=NUM_CLASSES) 
     model.load_state_dict(torch.load(model_path, map_location=device), strict=False)
     model.to(device)
     headless_model, last_layer  = bypass_last_layer(model)
     last_layer_weights = last_layer.weight.detach().cpu().numpy()
-    logit_matrix = np.matmul(ops_all, last_layer_weights.T)
+
+    # Get the intermediate projection block: Linear(256→128) + ReLU + Dropout
+    projection_block = torch.nn.Sequential(*list(model.fc.children())[:3])
+    projection_block.to(device)
+    projection_block.eval()
+
+    # Project the 256-dim features to 128-dim
+    with torch.no_grad():
+        features_tensor = torch.tensor(ops_all, dtype=torch.float32).to(device)
+        projected_features = projection_block(features_tensor).cpu().numpy()
+
+    print("ops_all shape:", ops_all.shape)
+    print("projected features shape:", projected_features.shape)
+    print("last_layer_weights shape:", last_layer_weights.shape)
+
+    logit_matrix = np.matmul(projected_features, last_layer_weights.T)
     softmax_scores = softmax(logit_matrix, theta = 1, axis = 1)
     target_lab_confidence = softmax_scores[:,base_class]
     
@@ -710,6 +737,13 @@ def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poi
 
     # [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) )
     ops_all, labels_all, ids_all = pickle.load(open(feat_path, "rb"))
+    # # sketchy
+    # ops_all = ops_all[:, :128]
+    # # labels_all = labels_all[:, :128]
+    # labels_all = np.array(labels_all)
+    # # ids_all = ids_all[:, :128]
+    # ids_all = np.array(ids_all)
+
     print("model path:", model_path)
     print("feat_path:", feat_path)
     # model = resnet_picker('ResNet18', 'CIFAR10')
@@ -718,9 +752,22 @@ def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poi
     model.to(device)
     headless_model, last_layer  = bypass_last_layer(model)
     last_layer_weights = last_layer.weight.detach().cpu().numpy()
+
+    # Get the intermediate projection block: Linear(256→128) + ReLU + Dropout
+    projection_block = torch.nn.Sequential(*list(model.fc.children())[:3])
+    projection_block.to(device)
+    projection_block.eval()
+
+    # Project the 256-dim features to 128-dim
+    with torch.no_grad():
+        features_tensor = torch.tensor(ops_all, dtype=torch.float32).to(device)
+        projected_features = projection_block(features_tensor).cpu().numpy()
+
     print("ops_all shape:", ops_all.shape)
+    print("projected features shape:", projected_features.shape)
     print("last_layer_weights shape:", last_layer_weights.shape)
-    logit_matrix = np.matmul(ops_all, last_layer_weights.T)
+
+    logit_matrix = np.matmul(projected_features, last_layer_weights.T)
     softmax_scores = softmax(logit_matrix, theta = 1, axis = 1)
     target_lab_confidence = softmax_scores[:,base_class]
     

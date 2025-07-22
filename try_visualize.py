@@ -1,15 +1,10 @@
 # -*- coding: utf-8 -*-
 """try_visualize.ipynb
-What i am trying to do with this file is visualize the embeddings and the poisons.
-However I am getting the same problems cyclically: there seems to be some issue with the shapes of the embeddings still.
-This is the error I get
-matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc signature (n?,k),(k,m?)->(n?,m?) (size 128 is different from 256)
-
-Or even worse, I get that numpy_.core.numeric is not available, so i can't do anything. 
+Directly visualize poisoning
 """
 MODEL = "HG"
-DATASET = "CIFAR10"
-EPS = 8.0
+DATASET = "EUROSAT"
+EPS = 16.0 
 
 import sys
 import os
@@ -28,9 +23,22 @@ print("Is cuda GPU available? ", use_cuda)
 device = torch.device("cuda:0" if use_cuda else "cpu")
 torch.backends.cudnn.benchmark = True
 
-# TODO: setup with actually meaningful classes
-base_class = 8
-target_class = 0
+# Set the class you actually want to visualize
+# | Index | Class Name           |
+# | ----- | -------------------- |
+# | 0     | AnnualCrop           |
+# | 1     | Forest               |
+# | 2     | HerbaceousVegetation |
+# | 3     | Highway              |
+# | 4     | Industrial           |
+# | 5     | Pasture              |
+# | 6     | PermanentCrop        |
+# | 7     | Residential          |
+# | 8     | River                |
+# | 9     | SeaLake              |
+
+base_class = 7
+target_class = 2
 
 # poison_ids = pickle.load( open( "models/HG_EUROSAT_16.0_poison_indices.pickle", "rb" ) ).cpu().numpy()
 poison_ids = pickle.load( open( f"models/{MODEL}_{DATASET}_{EPS}_poison_indices.pickle", "rb" ) ).cpu().numpy()
@@ -44,4 +52,8 @@ poison_ids = list(map(str, poison_ids))
 generate_plots(f'models/{MODEL}_{DATASET}_{EPS}_',"gm_fromscratch",genplot_centroid_prob_2d, target_class, base_class,poison_ids, device)
 
 generate_plots(f'models/{MODEL}_{DATASET}_{EPS}_',"gm_fromscratch",genplot_centroid_prob_3d, target_class, base_class,poison_ids, device)
+
+generate_plots(f'models/{MODEL}_{DATASET}_{EPS}_',"gm_fromscratch",generate_plot_centroid, target_class, base_class,poison_ids, device)
+
+generate_plots(f'models/{MODEL}_{DATASET}_{EPS}_',"gm_fromscratch",generate_plot_pca, target_class, base_class,poison_ids, device)
 
