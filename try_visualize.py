@@ -4,7 +4,7 @@ Directly visualize poisoning
 """
 MODEL = "HG"
 DATASET = "EUROSAT"
-EPS = 16.0 
+EPS = 32.0 
 
 import sys
 import os
@@ -60,10 +60,11 @@ generate_plots(main_path,model_name,genplot_centroid_prob_3d, target_class, base
 
 print("Generating plots for ALL embeddings (2D and 3D)")
 generate_all_embeddings_plots(main_path, model_name, base_class, target_class, embeddings_save_path)
-# print("Generating CENTROID PLOT ")
-# generate_plots(main_path,model_name,generate_plot_centroid, target_class, base_class,poison_ids, device)
 
-# print("Generating PCA PLOT")
-# generate_plots(main_path,model_name,generate_plot_pca, target_class, base_class,poison_ids, device)
+print("Generating CENTROID PLOT ")
+generate_plots(main_path,model_name,generate_plot_centroid, target_class, base_class,poison_ids, device)
+
+print("Generating PCA PLOT")
+generate_plots(main_path,model_name,generate_plot_pca, target_class, base_class,poison_ids, device)
 
 

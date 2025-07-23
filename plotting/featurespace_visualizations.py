@@ -37,7 +37,6 @@ def generate_plot_centroid(feat_path,model_path,target_class,base_class, poison_
     tags = []
     for i in left_ids:
         if str(i) in poison_ids:
-            print("entered poison!!!")
             tags.append('poison')
         elif i == 'target':
             tags.append('target')
