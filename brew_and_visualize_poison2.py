@@ -80,6 +80,9 @@ if __name__ == "__main__":
                          model.defs.mixing_method, setup=setup)
     witch = forest.Witch(args, setup=setup)
     witch.patch_targets(data)
+    
+    if args.save is not None:
+        data.export_target(net=args.net,dataset=args.dataset,eps=args.eps, path=clean_path, mode='full')
 
     start_time = time.time()
     if args.pretrained_model:
