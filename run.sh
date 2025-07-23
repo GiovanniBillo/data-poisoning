@@ -67,6 +67,18 @@ if ! printf '%s\n' "${BREW_ARGS[@]}" | grep -q -- "--deterministic"; then
     BREW_ARGS+=("--deterministic=False")
 fi
 
+# === Inject per-job poisonkey and eps ===
+GRID_FILE="param_grid.csv"
+TASK_INDEX=$((SLURM_ARRAY_TASK_ID + 1))  # skip header
+
+IFS=, read -r eps poisonkey < <(tail -n +$((TASK_INDEX + 1)) "$GRID_FILE" | head -n1)
+
+echo "[INFO] Running SLURM_ARRAY_TASK_ID=$SLURM_ARRAY_TASK_ID -> eps=$eps, poisonkey=$poisonkey" >&2
+
+# Inject into args
+BREW_ARGS+=("--eps=$eps")
+BREW_ARGS+=("--poisonkey=$poisonkey")
+
 # === Thread settings ===
 THREADS_PER_GPU=$(( SLURM_CPUS_PER_TASK / SLURM_GPUS ))
 export OMP_NUM_THREADS=$THREADS_PER_GPU
