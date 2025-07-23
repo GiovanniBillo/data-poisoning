@@ -5,4 +5,3 @@
 --save=only_modified
 --epochs=40 
 --restarts=5 
---deterministic

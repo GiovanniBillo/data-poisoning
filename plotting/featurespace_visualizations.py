@@ -482,9 +482,9 @@ def genplot_centroid_prob_2d_patch(feat_path, model_path, target_class,base_clas
     plt.xlabel('distance along centroids',fontsize=15,fontweight='medium',fontvariant='small-caps')
     plt.ylabel('distance orthonormal',fontsize=15,fontweight='medium',fontvariant='small-caps')
     figname = title.replace(" ", "_")+ "_2d.pdf"
+    plt.title(title)
     plt.savefig(os.path.join('./plots/2d', figname), bbox_inches='tight')
     #     plt.legend(loc='best', shadow=False, scatterpoints=1)
-#     plt.title(title)
     plt.show()
     
 def genplot_centroid_3d_patch(feat_path, model_path, target_class,base_class, poison_ids, title, device):
@@ -563,8 +563,8 @@ def genplot_centroid_3d_patch(feat_path, model_path, target_class,base_class, po
     ax.set_ylabel('distance orthonormal',fontsize=15,fontweight='bold',fontvariant='small-caps')
     ax.set_zlabel('poison class probability',fontsize=15,fontweight='bold',fontvariant='small-caps')
     figname = title.replace(" ", "_")+ "_3d.pdf"
+    plt.title(title)
     plt.savefig(os.path.join('./plots', figname), bbox_inches='tight')
-#     plt.title(title)
     plt.show()
     
 def generate_plot_lda(feat_path,model_path, target_class,base_class, poison_ids, title, device):
@@ -615,22 +615,15 @@ def generate_plot_lda(feat_path,model_path, target_class,base_class, poison_ids,
     plt.xlabel('LD1',fontsize=15,fontweight='medium',fontvariant='small-caps')
     plt.ylabel('LD2',fontsize=15,fontweight='medium',fontvariant='small-caps')
     figname = title.replace(" ", "_")+ "_3d_lda.pdf"
+    plt.title(title)
     plt.savefig(os.path.join('./plots', figname), bbox_inches='tight')
     #     plt.legend(loc='best', shadow=False, scatterpoints=1)
-#     plt.title(title)
     plt.show()
 
 def genplot_centroid_prob_3d(feat_path, model_path, target_class,base_class, poison_ids, title, device):
 
     ## [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) )
     ops_all, labels_all, ids_all = pickle.load(open(feat_path, "rb"))
-
-    # # sketchy
-    # ops_all = ops_all[:, :128]
-    # # labels_all = labels_all[:, :128]
-    # labels_all = np.array(labels_all)
-    # # ids_all = ids_all[:, :128]
-    # ids_all = np.array(ids_all)
 
     print("model path:", model_path)
     print("feat_path:", feat_path)
@@ -730,8 +723,8 @@ def genplot_centroid_prob_3d(feat_path, model_path, target_class,base_class, poi
     ax.set_ylabel('distance orthonormal',fontsize=15,fontweight='bold',fontvariant='small-caps')
     ax.set_zlabel('poison class probability',fontsize=15,fontweight='bold',fontvariant='small-caps')
     figname = title.replace(" ", "_")+ "_3d.pdf"
+    plt.title(title)
     plt.savefig(os.path.join('./plots/3d', figname), bbox_inches='tight')
-#     plt.title(title)
     plt.show()
     
     
@@ -836,9 +829,9 @@ def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poi
     plt.xlabel('distance along centroids',fontsize=15,fontweight='medium',fontvariant='small-caps')
     plt.ylabel('distance orthonormal',fontsize=15,fontweight='medium',fontvariant='small-caps')
     figname = title.replace(" ", "_")+ "_2d.pdf"
+    plt.title(title)
     plt.savefig(os.path.join('./plots/2d', figname), bbox_inches='tight')
     #     plt.legend(loc='best', shadow=False, scatterpoints=1)
-#     plt.title(title)
     plt.show()
 
 def plot_feature_pca_all_classes(feat_path, base_class, target_class, class_names=None, dim=2, title=None, save_path=None):

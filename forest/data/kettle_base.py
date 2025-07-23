@@ -151,7 +151,7 @@ class _Kettle():
             intended_class = class_names[intended_class_idx]
             _save_image(image, original_class, intended_class, idx, path)
 
-        print(f"Target images exported to {os.path.join(path, 'targets')}")
+        print(f"Target images exported to {os.path.join(path,'targets')}")
 
     """ STATUS METHODS """
     def print_status(self):

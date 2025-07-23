@@ -36,6 +36,9 @@ for _, row in param_df.iterrows():
         print(f"[WARN] Unknown class name(s): {target_name}, {goal_name}")
         continue
 
+    # triangle should be among the blue dots in clean training, among the red ones in poisoned training (when the poison actually works). 
+    # targets are originally from the blue class
+    # poisons are originally from the green class
     base_class = CLASS_TO_IDX[target_name]
     target_class = CLASS_TO_IDX[goal_name]
 
