@@ -82,11 +82,11 @@ class _Kettle():
             g = torch.Generator()
             g.manual_seed(int(args.poisonkey))
             self.trainloader = torch.utils.data.DataLoader(self.trainset, batch_size=min(self.batch_size, len(self.trainset)),
-                                                       shuffle=True, drop_last=False, num_workers=num_workers, pin_memory=PIN_MEMORY)
+                                                       shuffle=True, drop_last=False, num_workers=num_workers, pin_memory=PIN_MEMORY, worker_init_fn=seed_worker, generator=g)
         else:
             self.trainloader = torch.utils.data.DataLoader(self.trainset, batch_size=min(self.batch_size, len(self.trainset)),
                                                        shuffle=True, drop_last=False, num_workers=num_workers,
-                                                       pin_memory=PIN_MEMORY, worker_init_fn=seed_worker, generator=g)
+                                                       pin_memory=PIN_MEMORY)
         self.validloader = torch.utils.data.DataLoader(self.validset, batch_size=min(self.batch_size, len(self.validset)),
                                                        shuffle=False, drop_last=False, num_workers=num_workers, pin_memory=PIN_MEMORY)
         validated_batch_size = max(min(args.pbatch, len(self.poisonset)), 1)
@@ -111,9 +111,49 @@ class _Kettle():
         # Finally: status
         self.print_status()
 
+    def export_target(self, net, dataset, eps, path=None, mode='full'):
+        """
+        Export target images (clean, no poison delta applied).
+
+        Args:
+            net: model (unused here, but for interface compatibility)
+            dataset: dataset object (unused here)
+            eps: epsilon value (unused here)
+            path: directory to export targets to
+            mode: unused but kept for interface compatibility
+        """
+        if path is None:
+            path = self.args.target_path
+
+        dm = torch.tensor(self.trainset.data_mean)[:, None, None]
+        ds = torch.tensor(self.trainset.data_std)[:, None, None]
+
+        def _torch_to_PIL(image_tensor):
+            """Convert normalized torch tensor to PIL Image."""
+            image_denormalized = torch.clamp(image_tensor * ds + dm, 0, 1)
+            image_uint8 = image_denormalized.mul(255).add_(0.5).clamp_(0, 255).permute(1, 2, 0).to('cpu', torch.uint8)
+            return PIL.Image.fromarray(image_uint8.numpy())
+
+        def _save_image(image_tensor, original_class, intended_class, idx, base_path):
+            save_dir = os.path.join(base_path, 'targets')
+            os.makedirs(save_dir, exist_ok=True)
+            filename = os.path.join(save_dir, f"{idx}original{original_class}intended{intended_class}.png")
+            image_pil = _torch_to_PIL(image_tensor)
+            image_pil.save(filename)
+
+        class_names = self.targetset.classes
+
+        for enum, (image, _, idx) in enumerate(self.targetset):
+            original_class_idx = self.targetset[enum][1] 
+            original_class = class_names[original_class_idx]
+            print("DEBUG: original_class is:", original_class)
+            intended_class_idx = self.poison_setup['intended_class'][enum]
+            intended_class = class_names[intended_class_idx]
+            _save_image(image, original_class, intended_class, idx, path)
+
+        print(f"Target images exported to {os.path.join(path, 'targets')}")
 
     """ STATUS METHODS """
-
     def print_status(self):
         class_names = self.trainset.classes
         print(

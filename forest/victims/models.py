@@ -15,8 +15,8 @@ from .HG import HG
 def get_model(model_name, dataset_name, pretrained=False):
     """Retrieve an appropriate architecture."""
     if 'CIFAR' in dataset_name or 'MNIST' in dataset_name:
-        if pretrained:
-            raise ValueError('Loading pretrained models is only supported for ImageNet.')
+        #if pretrained:
+         #   raise ValueError('Loading pretrained models is only supported for ImageNet.')
         in_channels = 1 if dataset_name == 'MNIST' else 3
         num_classes = 10 if dataset_name in ['CIFAR10', 'MNIST'] else 100
         if 'ResNet' in model_name:
