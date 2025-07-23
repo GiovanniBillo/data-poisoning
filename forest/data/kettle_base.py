@@ -21,6 +21,11 @@ from ..consts import PIN_MEMORY, NORMALIZE, BENCHMARK, DISTRIBUTED_BACKEND, SHAR
 torch.backends.cudnn.benchmark = BENCHMARK
 torch.multiprocessing.set_sharing_strategy(SHARING_STRATEGY)
 
+def seed_worker(worker_id):
+    worker_seed = torch.initial_seed() % 2**32
+    np.random.seed(worker_seed)
+    random.seed(worker_seed)
+
 class _Kettle():
     """Brew poison with given arguments.
 
@@ -73,10 +78,15 @@ class _Kettle():
 
 
         # Generate loaders:
-
-        self.trainloader = torch.utils.data.DataLoader(self.trainset, batch_size=min(self.batch_size, len(self.trainset)),
+        if args.poisonkey is not None:
+            g = torch.Generator()
+            g.manual_seed(int(args.poisonkey))
+            self.trainloader = torch.utils.data.DataLoader(self.trainset, batch_size=min(self.batch_size, len(self.trainset)),
                                                        shuffle=True, drop_last=False, num_workers=num_workers, pin_memory=PIN_MEMORY)
-        
+        else:
+            self.trainloader = torch.utils.data.DataLoader(self.trainset, batch_size=min(self.batch_size, len(self.trainset)),
+                                                       shuffle=True, drop_last=False, num_workers=num_workers,
+                                                       pin_memory=PIN_MEMORY, worker_init_fn=seed_worker, generator=g)
         self.validloader = torch.utils.data.DataLoader(self.validset, batch_size=min(self.batch_size, len(self.validset)),
                                                        shuffle=False, drop_last=False, num_workers=num_workers, pin_memory=PIN_MEMORY)
         validated_batch_size = max(min(args.pbatch, len(self.poisonset)), 1)
