@@ -1,10 +1,10 @@
-eps, poisonkey
-8, 4254525452
-8, 870270025
-8, 2724111372
-16, 4254525452
-16, 870270025
-16, 2724111372
-32, 4254525452
-32, 870270025
-32, 2724111372
+eps,poisonkey,target,goal
+8,4254525452,"Residential Buildings","Industrial Buildings"
+8,870270025,"Industrial Buildings","Residential Buildings"
+8,2724111372,"Annual Crop","River"
+16,4254525452,"Residential Buildings","Industrial Buildings"
+16,870270025,"Industrial Buildings","Residential Buildings"
+16,2724111372,"Annual Crop","River"
+32,4254525452,"Residential Buildings","Industrial Buildings"
+32,870270025,"Industrial Buildings","Residential Buildings"
+32,2724111372,"Annual Crop","River"

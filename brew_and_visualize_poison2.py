@@ -24,8 +24,8 @@ if args.deterministic:
     forest.utils.set_deterministic()
 
 subfolder = args.modelsave_path
-clean_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_clean_model')
-def_model_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_defended_model')
+clean_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_{args.poisonkey}_clean_model')
+def_model_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_{args.poisonkey}_defended_model')
 
 for char in ["[","]","'"]:
     clean_path = clean_path.replace(char, '')
@@ -109,7 +109,7 @@ if __name__ == "__main__":
         save_images(data,args)
     poison_delta = witch.brew(model, data)
     brew_time = time.time()
-    with open(os.path.join(subfolder,f'{args.net}_{args.dataset}_{args.eps}_poison_indices.pickle'), 'wb+') as file:
+    with open(os.path.join(subfolder,f'{args.net}_{args.dataset}_{args.eps}_{args.poisonkey}_poison_indices.pickle'), 'wb+') as file:
         pickle.dump(data.poison_ids, file, protocol=pickle.HIGHEST_PROTOCOL)
     print('Poison ids saved')
 
@@ -138,6 +138,7 @@ if __name__ == "__main__":
         stats_rerun = model.retrain(data, poison_delta)
     else:
         stats_rerun = None
+
     torch.save(model_unwrapped.state_dict(), os.path.join(def_model_path, 'def.pth'))
     model_unwrapped.eval()
     feats, targets, indices = get_features(model, data, poison_delta=poison_delta)

@@ -3,7 +3,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=48
-#SBATCH --gpus=2
+#SBATCH --gpus=1
 #SBATCH --mem=128G
 #SBATCH --partition=GPU
 #SBATCH --account=dssc
