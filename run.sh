@@ -36,6 +36,7 @@ fi
 
 
 mkdir -p logs
+TIMESTAMP=$(date "+%Y%m%dS")
 LOGFILE="logs/env_${SLURM_JOB_ID}.log"
 PARAMS_FILE="brew_params.txt"
 
