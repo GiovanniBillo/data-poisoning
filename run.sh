@@ -55,26 +55,13 @@ while IFS= read -r line; do
     BREW_ARGS+=("$line")
 done < "$PARAMS_FILE"
 
-if [[ ${#BREW_ARGS[@]} -lt 3 ]]; then
-    echo "[WARN] Using defaults: --net=ResNet18 --dataset=CIFAR10 --optimization=conservative" >&2
-    BREW_ARGS+=(
-        "--dataset=CIFAR10"
-        "--optimization=conservative"
-        "--net=ResNet18"
-    )
-fi
-
-if ! printf '%s\n' "${BREW_ARGS[@]}" | grep -q -- "--deterministic"; then
-    BREW_ARGS+=("--deterministic=False")
-fi
-
 # === Inject per-job poisonkey and eps ===
 GRID_FILE="param_grid.csv"
 TASK_INDEX=$((SLURM_ARRAY_TASK_ID + 1))  # skip header
 
-IFS=, read -r eps poisonkey < <(tail -n +$((TASK_INDEX + 1)) "$GRID_FILE" | head -n1)
+IFS=, read -r eps poisonkey target goal < <(tail -n +$((TASK_INDEX + 1)) "$GRID_FILE" | head -n1)
 
-echo "[INFO] Running SLURM_ARRAY_TASK_ID=$SLURM_ARRAY_TASK_ID -> eps=$eps, poisonkey=$poisonkey" >&2
+echo "[INFO] Running SLURM_ARRAY_TASK_ID=$SLURM_ARRAY_TASK_ID -> eps=$eps, poisonkey=$poisonkey (target=$target, goal=$goal)" >&2
 
 # Inject into args
 BREW_ARGS+=("--eps=$eps")
