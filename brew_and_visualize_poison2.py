@@ -26,6 +26,7 @@ if args.deterministic:
 subfolder = args.modelsave_path
 clean_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_{args.poisonkey}_clean_model')
 def_model_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_{args.poisonkey}_defended_model')
+pois_model_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_{args.poisonkey}_poisoned_model')
 
 for char in ["[","]","'"]:
     clean_path = clean_path.replace(char, '')
@@ -34,8 +35,13 @@ for char in ["[","]","'"]:
     def_model_path = def_model_path.replace(char, '')
     def_model_path = def_model_path.strip()
 
+    pois_model_path = pois_model_path.replace(char, '')
+    pois_model_path = pois_model_path.strip()
+
 os.makedirs(clean_path, exist_ok=True)
 os.makedirs(def_model_path, exist_ok=True)
+os.makedirs(pois_model_path, exist_ok=True)
+
 
 def get_features(model, data, poison_delta):
     feats = np.array([])
@@ -166,6 +172,13 @@ if __name__ == "__main__":
         else:
             stats_results = None
     test_time = time.time()
+
+    model_unwrapped = unwrap_model(model)
+    torch.save(model_unwrapped.state_dict(), os.path.join(pois_model_path, 'pois.pth'))
+
+    feats, targets, indices = get_features(model, data, poison_delta=poison_delta)
+    with open(os.path.join(pois_model_path, 'poisoned_features.pickle'), 'wb+') as file:
+        pickle.dump([feats, targets, indices], file, protocol=pickle.HIGHEST_PROTOCOL)
 
     timestamps = dict(train_time=str(datetime.timedelta(seconds=train_time - start_time)).replace(',', ''),
                       brew_time=str(datetime.timedelta(seconds=brew_time - train_time)).replace(',', ''),
