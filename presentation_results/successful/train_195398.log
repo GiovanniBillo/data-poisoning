@@ -1,0 +1,178 @@
+Currently evaluating -------------------------------:
+Thursday, 24. July 2025 08:46AM
+Namespace(net=['HG'], dataset='EUROSAT', recipe='gradient-matching', threatmodel='single-class', scenario='from-scratch', poisonkey='4254525452', modelkey=None, deterministic=False, eps=32.0, budget=0.01, targets=1, patch_size=8, name='', table_path='tables/', poison_path='poisons/', data_path='~/data', modelsave_path='./models/', mixing_method=None, mixing_disable_correction=True, mixing_strength=None, disable_adaptive_attack=True, defend_features_only=False, gradient_noise=None, gradient_clip=None, defense_type=None, defense_strength=None, defense_steps=None, defense_targets=None, filter_defense='', padversarial=None, pmix=False, attackoptim='signAdam', attackiter=250, init='randn', tau=0.1, scheduling=True, target_criterion='cross-entropy', restarts=5, load_patch='', pbatch=512, pshuffle=False, paugment=True, data_aug='default', full_data=False, ensemble=1, stagger=None, step=False, max_epoch=None, ablation=1.0, loss='similarity', centreg=0, normreg=0, repel=0, nadapt=2, clean_grad=False, vruns=1, vnet=None, retrain_from_init=False, skip_clean_training=False, pretrained_model=False, pretrain_dataset=None, optimization='custom', epochs=40, lr=None, noaugment=False, lmdb_path=None, cache_dataset=False, benchmark='', benchmark_idx=0, dryrun=False, save='only_modified', local_rank=None)
+CPUs: 24, GPUs: 1 on gpu002.hpc.rd.areasciencepark.it.
+GPU : Tesla V100-PCIE-32GB
+HG model initialized with random key 2727476580.
+Hyperparameters(name='custom', epochs=40, batch_size=16, optimizer='SGD', lr=0.01, scheduler='plateau', weight_decay=1e-06, augmentations='default', privacy={'clip': None, 'noise': None, 'distribution': None}, validate=5, novel_defense={'type': '', 'strength': 32.0, 'target_selection': 'sep-half', 'steps': 5}, mixing_method={'type': '', 'strength': 0.0, 'correction': True}, adaptive_attack=True, defend_features_only=False)
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  63%|██████▎   | 10200/16200 [00:00<00:00, 100406.49 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 117684.28 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 116704.75 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 124283.18 examples/s]
+Data mean is [0.43013086915016174, 0.39238590002059937, 0.38153475522994995], 
+Data std  is [0.24866436421871185, 0.16426284611225128, 0.1475733071565628].
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  74%|███████▍  | 12000/16200 [00:00<00:00, 116497.66 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 129062.13 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 127190.05 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 129157.07 examples/s]
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  79%|███████▉  | 12800/16200 [00:00<00:00, 126640.21 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 136980.61 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 126306.28 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 126867.32 examples/s]
+Data mean is [0.4287702143192291, 0.39191335439682007, 0.38114622235298157], 
+Data std  is [0.24894218146800995, 0.1645052582025528, 0.14789916574954987].
+Generating train split:   0%|          | 0/16200 [00:00<?, ? examples/s]Generating train split:  76%|███████▌  | 12300/16200 [00:00<00:00, 121572.31 examples/s]Generating train split: 100%|██████████| 16200/16200 [00:00<00:00, 133092.26 examples/s]
+Generating test split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 5400/5400 [00:00<00:00, 129015.81 examples/s]
+Generating validation split:   0%|          | 0/5400 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 5400/5400 [00:00<00:00, 129578.25 examples/s]
+Data is loaded with 4 workers.
+Initializing Poison data (chosen images, examples, targets, labels) with random seed 4254525452
+Poisoning setup generated for threat model single-class and budget of 1.0% - 162 images:
+--Target images drawn from class Industrial Buildings. with ids [2307].
+--Target images assigned intended class Residential Buildings.
+--Poison images drawn from class Residential Buildings.
+DEBUG: original_class is: Industrial Buildings
+Target images exported to ./models/HG_EUROSAT_32.0_4254525452_clean_model/targets
+Starting clean training ...
+Epoch: 0  | lr: 0.0100 | Training    loss is  1.2688, train acc:  55.59% | Validation   loss is  0.8847, valid acc:  67.38% | 
+Epoch: 0  | lr: 0.0100 | Target adv. loss is  0.0214, fool  acc: 100.00% | Target orig. loss is  4.0795, orig. acc:   0.00% | 
+Epoch: 1  | lr: 0.0100 | Training    loss is  0.9632, train acc:  66.91% | 
+Epoch: 2  | lr: 0.0100 | Training    loss is  0.8209, train acc:  72.20% | 
+Epoch: 3  | lr: 0.0100 | Training    loss is  0.7247, train acc:  75.83% | 
+Epoch: 4  | lr: 0.0100 | Training    loss is  0.6318, train acc:  79.14% | 
+Epoch: 5  | lr: 0.0100 | Training    loss is  0.5667, train acc:  81.38% | Validation   loss is  0.4417, valid acc:  86.09% | 
+Epoch: 5  | lr: 0.0100 | Target adv. loss is  0.0345, fool  acc: 100.00% | Target orig. loss is  3.8777, orig. acc:   0.00% | 
+Epoch: 6  | lr: 0.0100 | Training    loss is  0.5158, train acc:  83.15% | 
+Epoch: 7  | lr: 0.0100 | Training    loss is  0.4762, train acc:  84.57% | 
+Epoch: 8  | lr: 0.0100 | Training    loss is  0.4111, train acc:  86.88% | 
+Epoch: 9  | lr: 0.0100 | Training    loss is  0.3827, train acc:  87.54% | 
+Epoch: 10 | lr: 0.0100 | Training    loss is  0.3575, train acc:  88.43% | Validation   loss is  0.3053, valid acc:  89.74% | 
+Epoch: 10 | lr: 0.0100 | Target adv. loss is  2.0743, fool  acc:   0.00% | Target orig. loss is  0.3287, orig. acc: 100.00% | 
+Epoch: 11 | lr: 0.0100 | Training    loss is  0.3333, train acc:  89.28% | 
+Epoch: 12 | lr: 0.0100 | Training    loss is  0.3116, train acc:  90.01% | 
+Epoch: 13 | lr: 0.0100 | Training    loss is  0.2797, train acc:  90.90% | 
+Epoch: 14 | lr: 0.0100 | Training    loss is  0.2679, train acc:  91.45% | 
+Epoch: 15 | lr: 0.0100 | Training    loss is  0.2627, train acc:  91.49% | Validation   loss is  0.2127, valid acc:  92.76% | 
+Epoch: 15 | lr: 0.0100 | Target adv. loss is  2.0409, fool  acc:   0.00% | Target orig. loss is  1.1328, orig. acc:   0.00% | 
+Epoch: 16 | lr: 0.0100 | Training    loss is  0.2445, train acc:  92.37% | 
+Epoch: 17 | lr: 0.0100 | Training    loss is  0.2357, train acc:  92.45% | 
+Epoch: 18 | lr: 0.0100 | Training    loss is  0.2203, train acc:  92.89% | 
+Epoch: 19 | lr: 0.0100 | Training    loss is  0.2136, train acc:  93.00% | 
+Epoch: 20 | lr: 0.0100 | Training    loss is  0.2054, train acc:  93.32% | Validation   loss is  0.1552, valid acc:  95.02% | 
+Epoch: 20 | lr: 0.0100 | Target adv. loss is  4.9645, fool  acc:   0.00% | Target orig. loss is  0.0138, orig. acc: 100.00% | 
+Epoch: 21 | lr: 0.0100 | Training    loss is  0.1952, train acc:  93.69% | 
+Epoch: 22 | lr: 0.0100 | Training    loss is  0.1904, train acc:  93.80% | 
+Epoch: 23 | lr: 0.0100 | Training    loss is  0.1872, train acc:  93.98% | 
+Epoch: 24 | lr: 0.0100 | Training    loss is  0.1698, train acc:  94.65% | 
+Epoch: 25 | lr: 0.0100 | Training    loss is  0.1719, train acc:  94.50% | Validation   loss is  0.1172, valid acc:  96.26% | 
+Epoch: 25 | lr: 0.0100 | Target adv. loss is  3.7846, fool  acc:   0.00% | Target orig. loss is  0.0415, orig. acc: 100.00% | 
+Epoch: 26 | lr: 0.0100 | Training    loss is  0.1762, train acc:  94.15% | 
+Epoch: 27 | lr: 0.0100 | Training    loss is  0.1575, train acc:  94.88% | 
+Epoch: 28 | lr: 0.0100 | Training    loss is  0.1650, train acc:  94.81% | 
+Epoch: 29 | lr: 0.0100 | Training    loss is  0.1560, train acc:  95.18% | 
+Epoch: 30 | lr: 0.0100 | Training    loss is  0.1426, train acc:  95.26% | Validation   loss is  0.1072, valid acc:  96.76% | 
+Epoch: 30 | lr: 0.0100 | Target adv. loss is  3.4371, fool  acc:   0.00% | Target orig. loss is  0.0554, orig. acc: 100.00% | 
+Epoch: 31 | lr: 0.0100 | Training    loss is  0.1475, train acc:  95.28% | 
+Epoch: 32 | lr: 0.0100 | Training    loss is  0.1475, train acc:  95.16% | 
+Epoch: 33 | lr: 0.0100 | Training    loss is  0.1369, train acc:  95.73% | 
+Epoch: 34 | lr: 0.0100 | Training    loss is  0.1293, train acc:  95.67% | 
+Epoch: 35 | lr: 0.0100 | Training    loss is  0.1305, train acc:  95.98% | Validation   loss is  0.1072, valid acc:  96.72% | 
+Epoch: 35 | lr: 0.0100 | Target adv. loss is  1.3915, fool  acc:   0.00% | Target orig. loss is  0.4529, orig. acc: 100.00% | 
+Epoch: 36 | lr: 0.0100 | Training    loss is  0.1289, train acc:  95.73% | 
+Epoch: 37 | lr: 0.0100 | Training    loss is  0.1295, train acc:  95.79% | 
+Epoch: 38 | lr: 0.0100 | Training    loss is  0.1214, train acc:  95.93% | 
+Epoch: 39 | lr: 0.0100 | Training    loss is  0.1180, train acc:  96.17% | Validation   loss is  0.1421, valid acc:  95.72% | 
+Epoch: 39 | lr: 0.0100 | Target adv. loss is  2.1662, fool  acc:   0.00% | Target orig. loss is  0.1582, orig. acc: 100.00% | 
+Starting brewing procedure ...
+Target Grad Norm is 52.3664665222168
+Iteration 0: Target loss is 0.8870, Poison clean acc is 100.00%
+Iteration 50: Target loss is 0.1761, Poison clean acc is 79.63%
+Iteration 100: Target loss is 0.1624, Poison clean acc is 80.86%
+Iteration 150: Target loss is 0.1231, Poison clean acc is 82.72%
+Iteration 200: Target loss is 0.1200, Poison clean acc is 82.72%
+Iteration 249: Target loss is 0.2361, Poison clean acc is 80.86%
+Iteration 0: Target loss is 0.9298, Poison clean acc is 99.38%
+Iteration 50: Target loss is 0.1387, Poison clean acc is 80.25%
+Iteration 100: Target loss is 0.1632, Poison clean acc is 80.86%
+Iteration 150: Target loss is 0.1244, Poison clean acc is 82.72%
+Iteration 200: Target loss is 0.1232, Poison clean acc is 82.10%
+Iteration 249: Target loss is 0.1304, Poison clean acc is 82.72%
+Iteration 0: Target loss is 0.8696, Poison clean acc is 100.00%
+Iteration 50: Target loss is 0.1372, Poison clean acc is 83.33%
+Iteration 100: Target loss is 0.1611, Poison clean acc is 85.80%
+Iteration 150: Target loss is 0.1251, Poison clean acc is 84.57%
+Iteration 200: Target loss is 0.1236, Poison clean acc is 85.80%
+Iteration 249: Target loss is 0.1181, Poison clean acc is 85.80%
+Iteration 0: Target loss is 0.8891, Poison clean acc is 96.91%
+Iteration 50: Target loss is 0.1824, Poison clean acc is 83.95%
+Iteration 100: Target loss is 0.1542, Poison clean acc is 80.86%
+Iteration 150: Target loss is 0.1365, Poison clean acc is 80.25%
+Iteration 200: Target loss is 0.1295, Poison clean acc is 79.63%
+Iteration 249: Target loss is 0.1219, Poison clean acc is 80.86%
+Iteration 0: Target loss is 0.8867, Poison clean acc is 100.00%
+Iteration 50: Target loss is 0.3765, Poison clean acc is 83.95%
+Iteration 100: Target loss is 0.1802, Poison clean acc is 84.57%
+Iteration 150: Target loss is 0.1559, Poison clean acc is 82.72%
+Iteration 200: Target loss is 0.1497, Poison clean acc is 83.33%
+Iteration 249: Target loss is 0.1722, Poison clean acc is 82.10%
+Poisons with minimal target loss 1.1811e-01 selected.
+Poison ids saved
+HG model initialized with random key 1079539030.
+Hyperparameters(name='custom', epochs=40, batch_size=16, optimizer='SGD', lr=0.01, scheduler='plateau', weight_decay=1e-06, augmentations='default', privacy={'clip': None, 'noise': None, 'distribution': None}, validate=5, novel_defense={'type': '', 'strength': 32.0, 'target_selection': 'sep-half', 'steps': 5}, mixing_method={'type': '', 'strength': 0.0, 'correction': True}, adaptive_attack=True, defend_features_only=False)
+Model reinitialized to random seed.
+Epoch: 0  | lr: 0.0100 | Training    loss is  1.2708, train acc:  54.95% | Validation   loss is  0.9667, valid acc:  64.70% | 
+Epoch: 0  | lr: 0.0100 | Target adv. loss is  0.0734, fool  acc: 100.00% | Target orig. loss is  2.8136, orig. acc:   0.00% | 
+Epoch: 1  | lr: 0.0100 | Training    loss is  0.9418, train acc:  67.10% | 
+Epoch: 2  | lr: 0.0100 | Training    loss is  0.8167, train acc:  71.80% | 
+Epoch: 3  | lr: 0.0100 | Training    loss is  0.7242, train acc:  75.59% | 
+Epoch: 4  | lr: 0.0100 | Training    loss is  0.6421, train acc:  79.01% | 
+Epoch: 5  | lr: 0.0100 | Training    loss is  0.5814, train acc:  80.88% | Validation   loss is  0.4840, valid acc:  83.90% | 
+Epoch: 5  | lr: 0.0100 | Target adv. loss is  0.2000, fool  acc: 100.00% | Target orig. loss is  2.4762, orig. acc:   0.00% | 
+Epoch: 6  | lr: 0.0100 | Training    loss is  0.5284, train acc:  82.81% | 
+Epoch: 7  | lr: 0.0100 | Training    loss is  0.4817, train acc:  84.27% | 
+Epoch: 8  | lr: 0.0100 | Training    loss is  0.4460, train acc:  85.44% | 
+Epoch: 9  | lr: 0.0100 | Training    loss is  0.3934, train acc:  87.18% | 
+Epoch: 10 | lr: 0.0100 | Training    loss is  0.3716, train acc:  88.23% | Validation   loss is  0.2699, valid acc:  91.24% | 
+Epoch: 10 | lr: 0.0100 | Target adv. loss is  4.5063, fool  acc:   0.00% | Target orig. loss is  0.0224, orig. acc: 100.00% | 
+Epoch: 11 | lr: 0.0100 | Training    loss is  0.3324, train acc:  89.20% | 
+Epoch: 12 | lr: 0.0100 | Training    loss is  0.3170, train acc:  89.54% | 
+Epoch: 13 | lr: 0.0100 | Training    loss is  0.3055, train acc:  90.13% | 
+Epoch: 14 | lr: 0.0100 | Training    loss is  0.2782, train acc:  90.91% | 
+Epoch: 15 | lr: 0.0100 | Training    loss is  0.2689, train acc:  91.20% | Validation   loss is  0.3794, valid acc:  89.11% | 
+Epoch: 15 | lr: 0.0100 | Target adv. loss is  0.0024, fool  acc: 100.00% | Target orig. loss is  6.3579, orig. acc:   0.00% | 
+Epoch: 16 | lr: 0.0100 | Training    loss is  0.2466, train acc:  91.73% | 
+Epoch: 17 | lr: 0.0100 | Training    loss is  0.2392, train acc:  92.36% | 
+Epoch: 18 | lr: 0.0100 | Training    loss is  0.2221, train acc:  92.56% | 
+Epoch: 19 | lr: 0.0100 | Training    loss is  0.2217, train acc:  92.78% | 
+Epoch: 20 | lr: 0.0100 | Training    loss is  0.2113, train acc:  93.14% | Validation   loss is  0.1811, valid acc:  93.67% | 
+Epoch: 20 | lr: 0.0100 | Target adv. loss is  2.2280, fool  acc:   0.00% | Target orig. loss is  0.2066, orig. acc: 100.00% | 
+Epoch: 21 | lr: 0.0100 | Training    loss is  0.1955, train acc:  93.54% | 
+Epoch: 22 | lr: 0.0100 | Training    loss is  0.1940, train acc:  93.65% | 
+Epoch: 23 | lr: 0.0100 | Training    loss is  0.1805, train acc:  94.06% | 
+Epoch: 24 | lr: 0.0100 | Training    loss is  0.1829, train acc:  93.99% | 
+Epoch: 25 | lr: 0.0100 | Training    loss is  0.1807, train acc:  94.24% | Validation   loss is  0.1263, valid acc:  96.05% | 
+Epoch: 25 | lr: 0.0100 | Target adv. loss is  3.8890, fool  acc:   0.00% | Target orig. loss is  0.0587, orig. acc: 100.00% | 
+Epoch: 26 | lr: 0.0100 | Training    loss is  0.1704, train acc:  94.40% | 
+Epoch: 27 | lr: 0.0100 | Training    loss is  0.1631, train acc:  94.51% | 
+Epoch: 28 | lr: 0.0100 | Training    loss is  0.1536, train acc:  95.06% | 
+Epoch: 29 | lr: 0.0100 | Training    loss is  0.1578, train acc:  94.90% | 
+Epoch: 30 | lr: 0.0100 | Training    loss is  0.1541, train acc:  95.02% | Validation   loss is  0.1237, valid acc:  96.20% | 
+Epoch: 30 | lr: 0.0100 | Target adv. loss is  2.3932, fool  acc:   0.00% | Target orig. loss is  0.2392, orig. acc: 100.00% | 
+Epoch: 31 | lr: 0.0100 | Training    loss is  0.1553, train acc:  95.04% | 
+Epoch: 32 | lr: 0.0100 | Training    loss is  0.1393, train acc:  95.41% | 
+Epoch: 33 | lr: 0.0100 | Training    loss is  0.1391, train acc:  95.50% | 
+Epoch: 34 | lr: 0.0100 | Training    loss is  0.1346, train acc:  95.54% | 
+Epoch: 35 | lr: 0.0100 | Training    loss is  0.1347, train acc:  95.64% | Validation   loss is  0.1173, valid acc:  96.05% | 
+Epoch: 35 | lr: 0.0100 | Target adv. loss is  1.2392, fool  acc:   0.00% | Target orig. loss is  0.3596, orig. acc: 100.00% | 
+Epoch: 36 | lr: 0.0100 | Training    loss is  0.1318, train acc:  95.70% | 
+Epoch: 37 | lr: 0.0100 | Training    loss is  0.1236, train acc:  95.98% | 
+Epoch: 38 | lr: 0.0100 | Training    loss is  0.1234, train acc:  95.96% | 
+Epoch: 39 | lr: 0.0100 | Training    loss is  0.1213, train acc:  96.13% | Validation   loss is  0.2082, valid acc:  93.96% | 
+Epoch: 39 | lr: 0.0100 | Target adv. loss is  0.1379, fool  acc: 100.00% | Target orig. loss is  2.1528, orig. acc:   0.00% | 
+
+Results saved to tables/table_HG_single-class_from-scratch_.csv.
+Exporting only modified (poisoned) images and their original counterparts...
+Exported 162 original/poisoned image pairs.
+Dataset fully exported.
+Thursday, 24. July 2025 09:11AM
+---------------------------------------------------
+Finished computations with train time: 0:06:29.486771
+--------------------------- brew time: 0:11:34.007948
+--------------------------- test time: 0:07:11.294278
+-------------Job finished.-------------------------
