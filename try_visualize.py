@@ -39,8 +39,8 @@ for _, row in param_df.iterrows():
     # triangle should be among the blue dots in clean training, among the red ones in poisoned training (when the poison actually works). 
     # targets are originally from the blue class
     # poisons are originally from the green class
-    base_class = CLASS_TO_IDX[target_name]
-    target_class = CLASS_TO_IDX[goal_name]
+    base_class = CLASS_TO_IDX[goal_name]
+    target_class = CLASS_TO_IDX[target_name]
 
     model_name = f"{MODEL}_{DATASET}_{eps}_{poisonkey}"
     main_path = f"models/{model_name}_"
@@ -54,25 +54,50 @@ for _, row in param_df.iterrows():
     print(f"[INFO] Generating plots for EPS={eps}, PoisonKey={poisonkey}")
     print(f"[INFO] Base class: {target_name} -> {base_class}")
     print(f"[INFO] Target class: {goal_name} -> {target_class}")
+    
+    try:
+        poison_ids = pickle.load(open(poison_path, "rb")).cpu().numpy()
+        poison_ids = list(map(str, poison_ids))
 
-    poison_ids = pickle.load(open(poison_path, "rb")).cpu().numpy()
-    poison_ids = list(map(str, poison_ids))
+    except Exception as e:
+        print(f"[ERROR] Failed to generate plots for EPS={eps}, PoisonKey={poisonkey}: {e}")
+        continue
+    # try:
+    #     print("  → CENTROID PROBABILITY (2D)")
+    #     generate_plots(main_path, model_name, genplot_centroid_prob_2d, target_class, base_class, poison_ids, DEVICE)
 
-    print("  → CENTROID PROBABILITY (2D)")
-    generate_plots(main_path, model_name, genplot_centroid_prob_2d, target_class, base_class, poison_ids, DEVICE)
+    # except Exception as e:
+    #     print(f"[ERROR] Failed to generate plots for EPS={eps}, PoisonKey={poisonkey}: {e}")
+    #     continue
+    try:
+        print("  → CENTROID PROBABILITY (3D)")
+        # WATCH OUT: switched base and pargets to have the right visualization for the river-crop experiment
+        generate_plots(main_path, model_name, genplot_centroid_prob_3d, base_class, target_class, poison_ids, DEVICE)
 
-    print("  → CENTROID PROBABILITY (3D)")
-    generate_plots(main_path, model_name, genplot_centroid_prob_3d, target_class, base_class, poison_ids, DEVICE)
+    except Exception as e:
+        print(f"[ERROR] Failed to generate plots for EPS={eps}, PoisonKey={poisonkey}: {e}")
+        continue
+    try:
+        print("  → ALL EMBEDDINGS (2D/3D)")
+        generate_all_embeddings_plots(main_path, model_name, base_class, target_class, embeddings_save_path)
 
-    print("  → ALL EMBEDDINGS (2D/3D)")
-    generate_all_embeddings_plots(main_path, model_name, base_class, target_class, embeddings_save_path)
+    except Exception as e:
+        print(f"[ERROR] Failed to generate plots for EPS={eps}, PoisonKey={poisonkey}: {e}")
+        continue
 
-    print("  → CENTROID PLOT")
-    generate_plots(main_path, model_name, generate_plot_centroid, target_class, base_class, poison_ids, DEVICE)
+    try:
+        print("  → CENTROID PLOT")
+        generate_plots(main_path, model_name, generate_plot_centroid, target_class, base_class, poison_ids, DEVICE)
 
-    print("  → PCA PLOT")
-    generate_plots(main_path, model_name, generate_plot_pca, target_class, base_class, poison_ids, DEVICE)
-
+    except Exception as e:
+        print(f"[ERROR] Failed to generate plots for EPS={eps}, PoisonKey={poisonkey}: {e}")
+        continue
+    # try:
+    #     print("  → PCA PLOT")
+    #     generate_plots(main_path, model_name, generate_plot_pca, target_class, base_class, poison_ids, DEVICE)
+    # except Exception as e:
+    #     print(f"[ERROR] Failed to generate plots for EPS={eps}, PoisonKey={poisonkey}: {e}")
+    #     continue
 # # -*- coding: utf-8 -*-
 # """try_visualize.ipynb
 # Directly visualize poisoning
