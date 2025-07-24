@@ -39,8 +39,8 @@ for _, row in param_df.iterrows():
     # triangle should be among the blue dots in clean training, among the red ones in poisoned training (when the poison actually works). 
     # targets are originally from the blue class
     # poisons are originally from the green class
-    base_class = CLASS_TO_IDX[goal_name]
-    target_class = CLASS_TO_IDX[target_name]
+    base_class = CLASS_TO_IDX[target_name]
+    target_class = CLASS_TO_IDX[goal_name]
 
     model_name = f"{MODEL}_{DATASET}_{eps}_{poisonkey}"
     main_path = f"models/{model_name}_"
@@ -72,7 +72,7 @@ for _, row in param_df.iterrows():
     try:
         print("  → CENTROID PROBABILITY (3D)")
         # WATCH OUT: switched base and pargets to have the right visualization for the river-crop experiment
-        generate_plots(main_path, model_name, genplot_centroid_prob_3d, base_class, target_class, poison_ids, DEVICE)
+        generate_plots(main_path, model_name, genplot_centroid_prob_3d, target_class, base_class, poison_ids, DEVICE)
 
     except Exception as e:
         print(f"[ERROR] Failed to generate plots for EPS={eps}, PoisonKey={poisonkey}: {e}")

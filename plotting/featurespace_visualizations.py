@@ -908,8 +908,8 @@ def generate_plots(main_path, model_name, plot_function, target_class, base_clas
                 model_name + " (clean)", device)
     
     # Plot poisoned model
-    feat_path = os.path.join(main_path+'defended_model', 'def_features.pickle') 
-    model_path = os.path.join(main_path+'defended_model', 'def.pth')
+    feat_path = os.path.join(main_path+'poisoned_model', 'poisoned_features.pickle') 
+    model_path = os.path.join(main_path+'poisoned_model', 'pois.pth')
     plot_function(feat_path, model_path, target_class, base_class, poison_ids,
                 model_name+ " (poisoned)", device)
 
@@ -941,7 +941,7 @@ def generate_all_embeddings_plots(main_path, model_name, base_class, target_clas
 
     # Validate paths first
     clean_feat_path = os.path.join(main_path+'clean_model', 'clean_features.pickle')
-    poisoned_feat_path = os.path.join(main_path+'defended_model', 'def_features.pickle')
+    poisoned_feat_path = os.path.join(main_path+'poisoned_model', 'poisoned_features.pickle')
     
     if not all(os.path.exists(p) for p in [clean_feat_path, poisoned_feat_path]):
         missing = [p for p in [clean_feat_path, poisoned_feat_path] if not os.path.exists(p)]
