@@ -25,7 +25,6 @@ if args.deterministic:
 
 subfolder = args.modelsave_path
 clean_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_{args.poisonkey}_clean_model')
-load_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_clean_model')
 def_model_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_{args.poisonkey}_defended_model')
 pois_model_path = os.path.join(subfolder, f'{args.net}_{args.dataset}_{args.eps}_{args.poisonkey}_poisoned_model')
 
@@ -97,7 +96,7 @@ if __name__ == "__main__":
         print('Loading pretrained model...')
         stats_clean = None
         try:
-            state_dict = torch.load(os.path.join(load_path, 'clean.pth'))
+            state_dict = torch.load(os.path.join(clean_path, 'clean.pth'))
         except FileNotFoundError:
             print(f"Weight file not found")
             exit()
