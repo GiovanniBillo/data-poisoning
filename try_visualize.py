@@ -4,6 +4,7 @@ import torch
 import pickle
 from plotting.featurespace_visualizations import *
 import os
+import argparse
 
 MODEL = "HG"
 DATASET = "EUROSAT"
@@ -22,6 +23,11 @@ CLASS_TO_IDX = {
     "River": 8,
     "Sea Lake": 9
 }
+
+# === Parse CLI args ===
+parser = argparse.ArgumentParser(description="Visualize clean and poisoned embeddings.")
+parser.add_argument("--show", action="store_true", help="Show plots interactively (default saves only)")
+args = parser.parse_args()
 
 # === Load param grid ===
 param_df = pd.read_csv("param_grid.csv")
@@ -72,14 +78,14 @@ for _, row in param_df.iterrows():
     try:
         print("  → CENTROID PROBABILITY (3D)")
         # WATCH OUT: switched base and pargets to have the right visualization for the river-crop experiment
-        generate_plots(main_path, model_name, genplot_centroid_prob_3d, target_class, base_class, poison_ids, DEVICE)
+        generate_plots(main_path, model_name, genplot_centroid_prob_3d, target_class, base_class, poison_ids, DEVICE, show=args.show)
 
     except Exception as e:
         print(f"[ERROR] Failed to generate plots for EPS={eps}, PoisonKey={poisonkey}: {e}")
         continue
     try:
         print("  → ALL EMBEDDINGS (2D/3D)")
-        generate_all_embeddings_plots(main_path, model_name, base_class, target_class, embeddings_save_path)
+        generate_all_embeddings_plots(main_path, model_name, target_class, base_class, embeddings_save_path, show=args.show)
 
     except Exception as e:
         print(f"[ERROR] Failed to generate plots for EPS={eps}, PoisonKey={poisonkey}: {e}")
@@ -87,7 +93,7 @@ for _, row in param_df.iterrows():
 
     try:
         print("  → CENTROID PLOT")
-        generate_plots(main_path, model_name, generate_plot_centroid, target_class, base_class, poison_ids, DEVICE)
+        generate_plots(main_path, model_name, generate_plot_centroid, target_class, base_class, poison_ids, DEVICE, show=args.show)
 
     except Exception as e:
         print(f"[ERROR] Failed to generate plots for EPS={eps}, PoisonKey={poisonkey}: {e}")

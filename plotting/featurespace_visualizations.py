@@ -24,7 +24,7 @@ eurosat_classes = [
     "Pasture", "PermanentCrop", "Residential", "River", "SeaLake"
 ]
 
-def generate_plot_centroid(feat_path,model_path,target_class,base_class, poison_ids, title, device):
+def generate_plot_centroid(feat_path,model_path,target_class,base_class, poison_ids, title, device, show=True):
 
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
     
@@ -97,9 +97,11 @@ def generate_plot_centroid(feat_path,model_path,target_class,base_class, poison_
     plt.title(title)
 #     plt.text(-5, 5, 'target class')
 #     plt.text(2,5, 'base class')
-    plt.show()
-    
-def generate_plot_pca(feat_path,model_path, target_class,base_class, poison_ids, title, device):
+    if show:
+        plt.show()
+    else:
+        plt.close()
+def generate_plot_pca(feat_path,model_path, target_class,base_class, poison_ids, title, device, show=True):
 
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
     
@@ -160,8 +162,10 @@ def generate_plot_pca(feat_path,model_path, target_class,base_class, poison_ids,
     plt.title(title)
     plt.text(-5, 5, 'target class')
     plt.text(2,5, 'base class')
-    plt.show()
-    
+    if show:
+        plt.show()
+    else:
+        plt.close()
 
     
 # def bypass_last_layer(model):
@@ -222,7 +226,7 @@ def bypass_last_layer(model):
     return headless_model, last_layer
 
     
-def generate_plot_centroid_3d_labels(feat_path, model_path, target_class,base_class, poison_ids, title, device):
+def generate_plot_centroid_3d_labels(feat_path, model_path, target_class,base_class, poison_ids, title, device, show=True):
 
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
     # model = resnet_picker('ResNet18', 'CIFAR10')
@@ -306,7 +310,10 @@ def generate_plot_centroid_3d_labels(feat_path, model_path, target_class,base_cl
 
 #     plt.legend(loc='best', shadow=False, scatterpoints=1)
     plt.title(title)
-    plt.show()
+    if show:
+        plt.show()
+    else:
+        plt.close()
     
 def softmax(X, theta = 1.0, axis = None):
     """
@@ -351,7 +358,7 @@ def softmax(X, theta = 1.0, axis = None):
 
     return p    
     
-def generate_plot_lda_patch(feat_path,model_path, target_class,base_class, poison_ids, title, device):
+def generate_plot_lda_patch(feat_path,model_path, target_class,base_class, poison_ids, title, device, show=True):
     
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
     left_labels = np.array(labels_all)[np.in1d(labels_all,[target_class,base_class])]
@@ -404,9 +411,12 @@ def generate_plot_lda_patch(feat_path,model_path, target_class,base_class, poiso
                     label='target',s=5)
     plt.legend(loc='best', shadow=False, scatterpoints=1)
     plt.title(title)
-    plt.show()
+    if show:
+        plt.show()
+    else:
+        plt.close()
     
-def genplot_centroid_prob_2d_patch(feat_path, model_path, target_class,base_class, poison_ids, title, device):
+def genplot_centroid_prob_2d_patch(feat_path, model_path, target_class,base_class, poison_ids, title, device, show=True):
 
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
     # model = resnet_picker('ResNet18', 'CIFAR10')
@@ -485,9 +495,12 @@ def genplot_centroid_prob_2d_patch(feat_path, model_path, target_class,base_clas
     plt.title(title)
     plt.savefig(os.path.join('./plots/2d', figname), bbox_inches='tight')
     #     plt.legend(loc='best', shadow=False, scatterpoints=1)
-    plt.show()
+    if show:
+        plt.show()
+    else:
+        plt.close()
     
-def genplot_centroid_3d_patch(feat_path, model_path, target_class,base_class, poison_ids, title, device):
+def genplot_centroid_3d_patch(feat_path, model_path, target_class,base_class, poison_ids, title, device, show=True):
 
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
     # model = resnet_picker('ResNet18', 'CIFAR10')
@@ -565,9 +578,12 @@ def genplot_centroid_3d_patch(feat_path, model_path, target_class,base_class, po
     figname = title.replace(" ", "_")+ "_3d.pdf"
     plt.title(title)
     plt.savefig(os.path.join('./plots', figname), bbox_inches='tight')
-    plt.show()
+    if show:
+        plt.show()
+    else:
+        plt.close()
     
-def generate_plot_lda(feat_path,model_path, target_class,base_class, poison_ids, title, device):
+def generate_plot_lda(feat_path,model_path, target_class,base_class, poison_ids, title, device, show=True):
     
     [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) ) 
     left_labels = np.array(labels_all)[np.in1d(labels_all,[target_class,base_class])]
@@ -618,9 +634,12 @@ def generate_plot_lda(feat_path,model_path, target_class,base_class, poison_ids,
     plt.title(title)
     plt.savefig(os.path.join('./plots', figname), bbox_inches='tight')
     #     plt.legend(loc='best', shadow=False, scatterpoints=1)
-    plt.show()
+    if show:
+        plt.show()
+    else:
+        plt.close()
 
-def genplot_centroid_prob_3d(feat_path, model_path, target_class,base_class, poison_ids, title, device):
+def genplot_centroid_prob_3d(feat_path, model_path, target_class,base_class, poison_ids, title, device, show=True):
 
     ## [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) )
     ops_all, labels_all, ids_all = pickle.load(open(feat_path, "rb"))
@@ -725,10 +744,13 @@ def genplot_centroid_prob_3d(feat_path, model_path, target_class,base_class, poi
     figname = title.replace(" ", "_")+ "_3d.pdf"
     plt.title(title)
     plt.savefig(os.path.join('./plots/3d', figname), bbox_inches='tight')
-    plt.show()
+    if show:
+        plt.show()
+    else:
+        plt.close()
     
     
-def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poison_ids, title, device):
+def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poison_ids, title, device, show=True):
 
     # [ops_all, labels_all, ids_all] = pickle.load( open( feat_path, "rb" ) )
     ops_all, labels_all, ids_all = pickle.load(open(feat_path, "rb"))
@@ -832,9 +854,12 @@ def genplot_centroid_prob_2d(feat_path, model_path, target_class,base_class, poi
     plt.title(title)
     plt.savefig(os.path.join('./plots/2d', figname), bbox_inches='tight')
     #     plt.legend(loc='best', shadow=False, scatterpoints=1)
-    plt.show()
+    if show:
+        plt.show()
+    else:
+        plt.close()
 
-def plot_feature_pca_all_classes(feat_path, base_class, target_class, class_names=None, dim=2, title=None, save_path=None):
+def plot_feature_pca_all_classes(feat_path, base_class, target_class, class_names=None, dim=2, title=None, save_path=None, show=True):
     feats, labels, ids = pickle.load(open(feat_path, 'rb'))
 
     labels = np.array(labels)
@@ -895,9 +920,12 @@ def plot_feature_pca_all_classes(feat_path, base_class, target_class, class_name
         plt.title(title)
     if save_path:
         plt.savefig(save_path, bbox_inches='tight')
-    plt.show()
+    if show:
+        plt.show()
+    else:
+        plt.close()
 
-def generate_plots(main_path, model_name, plot_function, target_class, base_class, poison_ids, device):
+def generate_plots(main_path, model_name, plot_function, target_class, base_class, poison_ids, device, show=True):
     os.makedirs('./plots/2d', exist_ok=True)
     os.makedirs('./plots/3d', exist_ok=True)
     
@@ -905,13 +933,13 @@ def generate_plots(main_path, model_name, plot_function, target_class, base_clas
     feat_path = os.path.join(main_path+'clean_model', 'clean_features.pickle')
     model_path = os.path.join(main_path+'clean_model', 'clean.pth')
     plot_function(feat_path, model_path, target_class, base_class, poison_ids,
-                model_name + " (clean)", device)
+                model_name + " (clean)", device, show=show)
     
     # Plot poisoned model
     feat_path = os.path.join(main_path+'poisoned_model', 'poisoned_features.pickle') 
     model_path = os.path.join(main_path+'poisoned_model', 'pois.pth')
     plot_function(feat_path, model_path, target_class, base_class, poison_ids,
-                model_name+ " (poisoned)", device)
+                model_name+ " (poisoned)", device, show=show)
 
 # def generate_all_embeddings_plots(main_path, model_name, base_class, target_class, save_path):  
 #     os.makedirs(save_path, exist_ok=True)
@@ -935,7 +963,7 @@ def generate_plots(main_path, model_name, plot_function, target_class, base_clas
 #             title=f"{model_name} PCA (2D) - Poisoned",
 #             save_path=os.path.join(save_path, f"pca_poisoned_{dim}d.pdf")
 #         )
-def generate_all_embeddings_plots(main_path, model_name, base_class, target_class, save_path):
+def generate_all_embeddings_plots(main_path, model_name, base_class, target_class, save_path, show=True):
     """Generate 2D and 3D PCA plots for both clean and poisoned models."""
     os.makedirs(save_path, exist_ok=True)
 
@@ -956,7 +984,8 @@ def generate_all_embeddings_plots(main_path, model_name, base_class, target_clas
             class_names=eurosat_classes,
             dim=dim,
             title=f"{model_name} PCA ({dim}D) - Clean",
-            save_path=os.path.join(save_path, f'pca_clean_{dim}d.pdf')
+            save_path=os.path.join(save_path, f'pca_clean_{model_name}_{dim}d.pdf'),
+            show=show
         )
 
         # Poisoned model plot
@@ -967,5 +996,6 @@ def generate_all_embeddings_plots(main_path, model_name, base_class, target_clas
             class_names=eurosat_classes,
             dim=dim,
             title=f"{model_name} PCA ({dim}D) - Poisoned",
-            save_path=os.path.join(save_path, f'pca_poisoned_{dim}d.pdf')
+            save_path=os.path.join(save_path, f'pca_poisoned_{model_name}_{dim}d.pdf'),
+            show=show
         )    
